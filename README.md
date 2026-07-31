@@ -73,3 +73,15 @@ src/
 ```jsx
 import Button from '@/components/Button'
 ```
+
+## 브랜치 네이밍
+
+작업 목적에 맞는 접두사와 간결한 작업명을 사용합니다.
+
+| 브랜치 형식         | 용도                     | 예시                   |
+| ------------------- | ------------------------ | ---------------------- |
+| `feat/기능명`       | 신규 기능 개발           | `feat/login`           |
+| `fix/버그명`        | 버그 수정                | `fix/header-layout`    |
+| `chore/설정-작업명` | 설정, 빌드 등 유지보수   | `chore/project-setup`  |
+| `refactor/대상명`   | 기능 변경 없는 코드 개선 | `refactor/api-client`  |
+| `docs/문서명`       | 문서 작성 및 수정        | `docs/branch-strategy` |
