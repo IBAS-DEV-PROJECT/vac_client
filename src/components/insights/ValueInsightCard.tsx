@@ -1,17 +1,35 @@
-import { CATEGORY_CONFIG, VALUE_LABELS } from '@/constants/insights'
+import {
+  CATEGORY_CONFIG,
+  VALUE_LABELS,
+  type CategoryKey,
+  type ValueKey,
+} from '@/constants/insights'
 
-function CategoryInsightCard({
+interface ValueEntry {
+  key: ValueKey
+  percent: number
+}
+
+interface ValueInsightCardProps {
+  categoryKey: CategoryKey
+  title: string
+  values: ValueEntry[]
+  recordCount: number
+  onRecordClick?: () => void
+}
+
+function ValueInsightCard({
   categoryKey,
   title,
   values,
   recordCount,
   onRecordClick,
-}) {
+}: ValueInsightCardProps) {
   const emoji = CATEGORY_CONFIG[categoryKey]?.emoji ?? '📋'
   const topValue = values[0]
 
   return (
-    <div className="w-[210px] rounded-[14px] bg-white border border-gray-100 shadow-sm flex flex-col px-4 pt-4 pb-4">
+    <div className="w-52.5 rounded-[14px] bg-white border border-gray-100 shadow-sm flex flex-col px-4 pt-4 pb-4">
       <div className="flex items-center gap-2">
         <div className="w-9 h-9 rounded-full bg-[color-mix(in_srgb,var(--color-growth)_12%,white)] flex items-center justify-center">
           <span className="text-lg leading-none">{emoji}</span>
@@ -20,7 +38,7 @@ function CategoryInsightCard({
       </div>
 
       <div className="mt-3">
-        <div className="w-[113px] h-[22px] rounded-[7px] bg-[color-mix(in_srgb,var(--color-growth)_15%,white)] flex items-center justify-center">
+        <div className="w-28.25 h-5.5 rounded-[7px] bg-[color-mix(in_srgb,var(--color-growth)_15%,white)] flex items-center justify-center">
           <span
             className="text-[11px] font-medium"
             style={{ color: 'var(--color-growth)' }}
@@ -35,7 +53,7 @@ function CategoryInsightCard({
           className="text-[20px] font-bold leading-tight"
           style={{ color: `var(--color-${topValue?.key ?? 'growth'})` }}
         >
-          {VALUE_LABELS[topValue?.key] ?? topValue?.key}
+          {topValue ? VALUE_LABELS[topValue.key] : ''}
         </span>
       </div>
 
@@ -44,11 +62,11 @@ function CategoryInsightCard({
           <div key={v.key}>
             <div className="flex justify-between items-center mb-1">
               <span className="text-[12px] text-gray-700">
-                {VALUE_LABELS[v.key] ?? v.key}
+                {VALUE_LABELS[v.key]}
               </span>
               <span className="text-[12px] text-gray-400">{v.percent}%</span>
             </div>
-            <div className="h-[5px] bg-blue-100 rounded-full overflow-hidden">
+            <div className="h-1.25 bg-blue-100 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -65,7 +83,7 @@ function CategoryInsightCard({
         <button
           type="button"
           onClick={onRecordClick}
-          className="w-[70px] h-[22px] rounded-[7px] bg-[color-mix(in_srgb,var(--color-growth)_15%,white)] flex items-center justify-center cursor-pointer"
+          className="w-17.5 h-5.5 rounded-[7px] bg-[color-mix(in_srgb,var(--color-growth)_15%,white)] flex items-center justify-center cursor-pointer"
         >
           <span
             className="text-[11px] font-medium"
@@ -79,4 +97,4 @@ function CategoryInsightCard({
   )
 }
 
-export default CategoryInsightCard
+export default ValueInsightCard
