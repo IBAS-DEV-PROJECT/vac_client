@@ -2,15 +2,16 @@ import { useState } from 'react'
 import FilterButton from '@/components/insights/FilterButton'
 import ValueButton from '@/components/insights/ValueButton'
 import CategoryInsightCard from '@/components/insights/ValueInsightCard'
+import TrendInsightCard from '@/components/insights/TrendInsightCard'
 
 const MOCK_CARD = {
-  categoryKey: 'work',
+  categoryKey: 'work' as const,
   title: '일·진로',
   values: [
-    { key: 'growth', percent: 62 },
-    { key: 'stability', percent: 20 },
-    { key: 'autonomy', percent: 12 },
-    { key: 'connection', percent: 6 },
+    { key: 'growth' as const, percent: 62 },
+    { key: 'stability' as const, percent: 20 },
+    { key: 'autonomy' as const, percent: 12 },
+    { key: 'connection' as const, percent: 6 },
   ],
   recordCount: 12,
 }
@@ -55,6 +56,36 @@ function Test2() {
           ValueInsightCard
         </h2>
         <CategoryInsightCard {...MOCK_CARD} />
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">
+          TrendInsightCard
+        </h2>
+        <div className="flex gap-3 flex-wrap">
+          <TrendInsightCard
+            type="increase"
+            values={[{ key: 'growth', change: 16 }]}
+          />
+          <TrendInsightCard
+            type="decrease"
+            values={[{ key: 'stability', change: -8 }]}
+          />
+          <TrendInsightCard
+            type="increase"
+            values={[
+              { key: 'growth', change: 8 },
+              { key: 'fun', change: 8 },
+            ]}
+          />
+          <TrendInsightCard
+            type="decrease"
+            values={[
+              { key: 'stability', change: -5 },
+              { key: 'connection', change: -5 },
+            ]}
+          />
+        </div>
       </section>
 
       <section className="flex flex-col gap-3">
