@@ -4,6 +4,7 @@ import ValueButton from '@/components/insights/ValueButton'
 import CategoryInsightCard from '@/components/insights/ValueInsightCard'
 import TrendInsightCard from '@/components/insights/TrendInsightCard'
 import SettingsTab from '@/components/settings/SettingsTab'
+import ErrorToast from '@/components/common/ErrorToast'
 
 const MOCK_CARD = {
   categoryKey: 'work' as const,
@@ -37,7 +38,7 @@ function Test2() {
   const [activeValue, setActiveValue] = useState('growth')
 
   return (
-    <div className="p-10 flex flex-col gap-8">
+    <div className="p-4 flex flex-col gap-8">
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-gray-500">FilterButton</h2>
         <div className="flex gap-2">
@@ -87,6 +88,12 @@ function Test2() {
             ]}
           />
         </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">ErrorToast</h2>
+        <ErrorToast message="모든 항목을 입력해주세요." />
+        <ErrorToast message="아이디 또는 비밀번호를 다시 확인해주세요." />
       </section>
 
       <section className="flex flex-col gap-3">
