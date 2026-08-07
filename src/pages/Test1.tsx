@@ -33,7 +33,7 @@ const VALUES = [
   { category: 'responsibility', label: '책임' },
 ]
 
-function Test2() {
+function Test1() {
   const [activeFilter, setActiveFilter] = useState('최근 7일')
   const [activeValue, setActiveValue] = useState('growth')
 
@@ -121,4 +121,4 @@ function Test2() {
   )
 }
 
-export default Test2
+export default Test1
