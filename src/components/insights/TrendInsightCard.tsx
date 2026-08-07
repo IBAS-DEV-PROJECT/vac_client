@@ -23,7 +23,7 @@ function TrendInsightCard({ type, values }: TrendInsightCardProps) {
   const displayTitle = isTie
     ? `${baseTitle} (동률 ${values.length}개)`
     : baseTitle
-  const isPositive = (values[0]?.change ?? 0) >= 0
+  const isIncrease = type === 'increase'
 
   return (
     <div className="w-43 rounded-xl bg-white border border-gray-200 flex flex-col px-4 py-3.5">
@@ -41,10 +41,10 @@ function TrendInsightCard({ type, values }: TrendInsightCardProps) {
             </span>
             <span
               className="text-[14px] font-semibold"
-              style={{ color: isPositive ? 'var(--color-growth)' : '#ef4444' }}
+              style={{ color: isIncrease ? 'var(--color-growth)' : '#ef4444' }}
             >
-              {isPositive ? '+' : ''}
-              {v.change}%p
+              {isIncrease ? '+' : '-'}
+              {Math.abs(v.change)}%p
             </span>
           </div>
         ))}
