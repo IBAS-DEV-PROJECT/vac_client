@@ -26,7 +26,7 @@ function TrendInsightCard({ type, values }: TrendInsightCardProps) {
   const isPositive = (values[0]?.change ?? 0) >= 0
 
   return (
-    <div className="w-43 rounded-[12px] bg-white border border-gray-200 flex flex-col px-4 py-3.5">
+    <div className="w-43 rounded-xl bg-white border border-gray-200 flex flex-col px-4 py-3.5">
       <span className="text-[12px] text-gray-400">{displayTitle}</span>
 
       <div className="mt-1.5 flex flex-col gap-1">
