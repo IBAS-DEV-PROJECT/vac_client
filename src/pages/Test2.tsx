@@ -4,7 +4,7 @@ import ValueButton from '@/components/insights/ValueButton'
 import CategoryInsightCard from '@/components/insights/ValueInsightCard'
 import TrendInsightCard from '@/components/insights/TrendInsightCard'
 import SettingsTab from '@/components/settings/SettingsTab'
-import ErrorToast from '@/components/common/ErrorToast'
+import ErrorToast from '@/components/auth/ErrorToast'
 
 const MOCK_CARD = {
   categoryKey: 'work' as const,
