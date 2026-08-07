@@ -1,4 +1,10 @@
-function FilterButton({ label, isActive = false, onClick }) {
+interface FilterButtonProps {
+  label: string
+  isActive?: boolean
+  onClick?: () => void
+}
+
+function FilterButton({ label, isActive = false, onClick }: FilterButtonProps) {
   return (
     <button
       type="button"

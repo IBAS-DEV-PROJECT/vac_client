@@ -1,4 +1,15 @@
-const COLOR_KEYS = [
+import { type ValueKey } from '@/constants/insights'
+
+type ValueButtonCategory = ValueKey | 'all'
+
+interface ValueButtonProps {
+  category: ValueButtonCategory
+  label: string
+  isActive?: boolean
+  onClick?: () => void
+}
+
+const COLOR_KEYS: ValueButtonCategory[] = [
   'all',
   'growth',
   'stability',
@@ -11,14 +22,21 @@ const COLOR_KEYS = [
   'responsibility',
 ]
 
-function ValueButton({ category, label, isActive = false, onClick }) {
+function ValueButton({
+  category,
+  label,
+  isActive = false,
+  onClick,
+}: ValueButtonProps) {
   if (!COLOR_KEYS.includes(category)) return null
 
   return (
     <button
       type="button"
       onClick={onClick}
-      style={{ '--btn-color': `var(--color-${category})` }}
+      style={
+        { '--btn-color': `var(--color-${category})` } as React.CSSProperties
+      }
       className={`w-full flex items-center gap-2.5 pl-2.5 py-2.25 pr-3 rounded-lg border transition-colors cursor-pointer ${
         isActive
           ? 'border-(--btn-color) bg-[color-mix(in_srgb,var(--btn-color)_15%,white)]'
