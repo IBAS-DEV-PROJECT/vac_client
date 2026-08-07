@@ -3,6 +3,7 @@ import FilterButton from '@/components/insights/FilterButton'
 import ValueButton from '@/components/insights/ValueButton'
 import CategoryInsightCard from '@/components/insights/ValueInsightCard'
 import TrendInsightCard from '@/components/insights/TrendInsightCard'
+import SettingsTab from '@/components/settings/SettingsTab'
 
 const MOCK_CARD = {
   categoryKey: 'work' as const,
@@ -86,6 +87,13 @@ function Test2() {
             ]}
           />
         </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">SettingsTab</h2>
+        <SettingsTab label="프로필 수정" />
+        <SettingsTab label="알림 설정" isHighlighted />
+        <SettingsTab label="회원 탈퇴" />
       </section>
 
       <section className="flex flex-col gap-3">
