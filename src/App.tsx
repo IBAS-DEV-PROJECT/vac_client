@@ -1,7 +1,7 @@
-import Test1 from '@/pages/Test1'
+import Test2 from '@/pages/Test2'
 
 function App() {
-  return <Test1 />
+  return <Test2 />
 }
 
 export default App
