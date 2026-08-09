@@ -14,7 +14,7 @@ const borderStyles: Record<InputStatus, string> = {
 }
 
 const messageStyles: Record<InputStatus, string> = {
-  default: 'text-#5C6B72]',
+  default: 'text-[#5C6B72]',
   success: 'text-[#3AB0D9]',
   error: 'text-[#C4520E]',
 }
