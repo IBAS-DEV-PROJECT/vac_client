@@ -4,8 +4,8 @@ export const TOPIC_LABELS: Record<TopicKey, string> = {
   일: '일·진로',
   관계: '관계',
   돈: '돈',
-  건강: '건강',
-  나: '나',
+  건강: '건강·몸',
+  나: '나 자신',
   기타: '기타',
 }
 
