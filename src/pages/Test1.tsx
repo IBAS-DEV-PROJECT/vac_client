@@ -5,6 +5,7 @@ import CategoryInsightCard from '@/components/insights/ValueInsightCard'
 import TrendInsightCard from '@/components/insights/TrendInsightCard'
 import SettingsTab from '@/components/settings/SettingsTab'
 import ErrorToast from '@/components/auth/ErrorToast'
+import ConcernItem from '@/components/home/ConcernItem'
 
 const MOCK_CARD = {
   categoryKey: 'work' as const,
@@ -31,7 +32,7 @@ const VALUES = [
   { category: 'efficiency', label: '효율' },
   { category: 'meaning', label: '의미' },
   { category: 'responsibility', label: '책임' },
-]
+] as const
 
 function Test1() {
   const [activeFilter, setActiveFilter] = useState('최근 7일')
@@ -86,6 +87,23 @@ function Test1() {
               { key: 'stability', change: -5 },
               { key: 'connection', change: -5 },
             ]}
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">ConcernItem</h2>
+        <div className="w-80">
+          <ConcernItem
+            title="A사 vs B사"
+            topic="일"
+            lastRecordDate="2026-07-24"
+            recordCount={4}
+          />
+          <ConcernItem
+            title="헬스 다시 시작할까"
+            topic="건강"
+            lastRecordDate="2026-07-18"
           />
         </div>
       </section>

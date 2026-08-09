@@ -1,3 +1,14 @@
+export type TopicKey = '일' | '관계' | '돈' | '건강' | '나' | '기타'
+
+export const TOPIC_LABELS: Record<TopicKey, string> = {
+  일: '일·진로',
+  관계: '관계',
+  돈: '돈',
+  건강: '건강',
+  나: '나',
+  기타: '기타',
+}
+
 export type ValueKey =
   | 'growth'
   | 'stability'
