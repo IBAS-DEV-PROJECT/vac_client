@@ -5,6 +5,9 @@ import CategoryInsightCard from '@/components/insights/ValueInsightCard'
 import TrendInsightCard from '@/components/insights/TrendInsightCard'
 import SettingsTab from '@/components/settings/SettingsTab'
 import ErrorToast from '@/components/auth/ErrorToast'
+import ContinueConcernItem from '@/components/home/ContinueConcernItem'
+import ConcernItem from '@/components/home/ConcernItem'
+import ConcernRecordItem from '@/components/concern/ConcernRecordItem'
 
 const MOCK_CARD = {
   categoryKey: 'work' as const,
@@ -31,7 +34,7 @@ const VALUES = [
   { category: 'efficiency', label: '효율' },
   { category: 'meaning', label: '의미' },
   { category: 'responsibility', label: '책임' },
-]
+] as const
 
 function Test1() {
   const [activeFilter, setActiveFilter] = useState('최근 7일')
@@ -86,6 +89,62 @@ function Test1() {
               { key: 'stability', change: -5 },
               { key: 'connection', change: -5 },
             ]}
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">
+          ContinueConcernItem
+        </h2>
+        <div className="w-80">
+          <ContinueConcernItem
+            title="A사 vs B사"
+            topic="일"
+            lastRecordDate="2026-07-24"
+            recordCount={4}
+          />
+          <ContinueConcernItem
+            title="헬스 다시 시작할까"
+            topic="건강"
+            lastRecordDate="2026-07-18"
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">RecordItem</h2>
+        <div className="w-80">
+          <ConcernRecordItem
+            date="2026-07-20"
+            decision="A사가 조금 더 마음에 남"
+            valueKey="growth"
+          />
+          <ConcernRecordItem
+            date="2026-07-15"
+            decision="아직 잘 모르겠다"
+            valueKey="stability"
+          />
+          <ConcernRecordItem
+            date="2026-07-10"
+            decision="B사도 나쁘지 않은 것 같다"
+            valueKey="autonomy"
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">ConcernItem</h2>
+        <div className="w-80">
+          <ConcernItem
+            title="A사 vs B사"
+            topic="일"
+            lastRecordDate="2026-07-24"
+          />
+          <ConcernItem
+            title="헬스 다시 시작할까"
+            topic="건강"
+            lastRecordDate="2026-07-18"
           />
         </div>
       </section>
