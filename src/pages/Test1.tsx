@@ -5,6 +5,7 @@ import CategoryInsightCard from '@/components/insights/ValueInsightCard'
 import TrendInsightCard from '@/components/insights/TrendInsightCard'
 import SettingsTab from '@/components/settings/SettingsTab'
 import ErrorToast from '@/components/auth/ErrorToast'
+import ContinueConcernItem from '@/components/home/ContinueConcernItem'
 import ConcernItem from '@/components/home/ConcernItem'
 
 const MOCK_CARD = {
@@ -92,13 +93,31 @@ function Test1() {
       </section>
 
       <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-500">
+          ContinueConcernItem
+        </h2>
+        <div className="w-80">
+          <ContinueConcernItem
+            title="A사 vs B사"
+            topic="일"
+            lastRecordDate="2026-07-24"
+            recordCount={4}
+          />
+          <ContinueConcernItem
+            title="헬스 다시 시작할까"
+            topic="건강"
+            lastRecordDate="2026-07-18"
+          />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-gray-500">ConcernItem</h2>
         <div className="w-80">
           <ConcernItem
             title="A사 vs B사"
             topic="일"
             lastRecordDate="2026-07-24"
-            recordCount={4}
           />
           <ConcernItem
             title="헬스 다시 시작할까"
