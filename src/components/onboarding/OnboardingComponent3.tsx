@@ -30,6 +30,8 @@ type CategoryValue = (typeof CATEGORY_OPTIONS)[number]['value']
 export default function OnboardingComponent3() {
 
   const [topic, setTopic] = useState('');
+  const [decision, setDecision] = useState('');
+  const [reason, setReason] = useState('');
   const [selectedValue, setSelectedValue] = useState<ValueKey | null>(null)
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryValue | null>(null)
@@ -68,8 +70,8 @@ export default function OnboardingComponent3() {
         <TextArea
           label="오늘, 어떤 판단을 내렸나요?"
           placeholder="예: 아직 못 정함/ A로 마음이 기움"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
+          value={decision}
+          onChange={(e) => setDecision(e.target.value)}
           maxLength={50}
         />
       </section>
@@ -79,8 +81,8 @@ export default function OnboardingComponent3() {
         <TextArea
           label="그건 왜인가요?"
           placeholder="한 줄이면 충분해요"
-          value={topic}
-          onChange={(e) => setTopic(e.target.value)}
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
           maxLength={100}
           rows={3}
         />
