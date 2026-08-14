@@ -124,7 +124,7 @@ function InsightPage() {
               <h2 className="text-[15px] font-bold text-[#2A1F1C]">
                 주제별 가치 인사이트
               </h2>
-              <span className="text-sm text-gray-400">
+              <span className="text-xs text-gray-400">
                 전체 기록 {MOCK_TOTAL_RECORDS}건
               </span>
             </div>
