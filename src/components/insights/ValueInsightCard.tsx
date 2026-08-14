@@ -39,7 +39,7 @@ function ValueInsightCard({
         >
           <span className="text-lg leading-none">{emoji}</span>
         </div>
-        <span className="font-bold text-gray-800 text-[15px]">{title}</span>
+        <span className="font-bold text-gray-800 text-base">{title}</span>
       </div>
 
       <div className="mt-3">
@@ -53,7 +53,7 @@ function ValueInsightCard({
         </div>
       </div>
 
-      <div className="mt-1.5 leading-none">
+      <div className="mt-2 leading-none">
         <span
           className="text-[20px] font-bold leading-tight"
           style={{ color: colorVar }}
