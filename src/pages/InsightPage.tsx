@@ -4,6 +4,7 @@ import Button from '@/components/common/button/Button'
 import Divider from '@/components/common/Divider'
 import InsightFilterSheet from '@/components/insights/InsightFilterSheet'
 import ValueInsightCard from '@/components/insights/ValueInsightCard'
+import InsightCard from '@/components/insights/InsightCard'
 import ValueTrendSection from '@/components/insights/ValueTrendSection'
 import {
   DEFAULT_FILTERS,
@@ -213,6 +214,8 @@ function InsightPage() {
             maxIncrease={trendMaxIncrease}
             maxDecrease={trendMaxDecrease}
           />
+          <Divider className="my-5.5" />
+          <InsightCard topTopicLabel="일·진로" topValueKey="growth" />
         </div>
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 py-10">
