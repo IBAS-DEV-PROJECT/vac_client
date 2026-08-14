@@ -10,8 +10,7 @@ import ConcernItem from '@/components/home/ConcernItem'
 import ConcernRecordItem from '@/components/concern/ConcernRecordItem'
 
 const MOCK_CARD = {
-  categoryKey: 'work' as const,
-  title: '일·진로',
+  topicKey: '일' as const,
   values: [
     { key: 'growth' as const, percent: 62 },
     { key: 'stability' as const, percent: 20 },

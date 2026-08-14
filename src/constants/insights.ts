@@ -49,6 +49,15 @@ export const VALUE_LABELS: Record<ValueKey, string> = {
   responsibility: '책임',
 }
 
+export const TOPIC_ICONS: Record<TopicKey, string> = {
+  일: '💼',
+  관계: '❤️',
+  돈: '💰',
+  건강: '💪',
+  나: '🌱',
+  기타: '📌',
+}
+
 export type PeriodOption =
   '최근 1년' | '오늘' | '최근 7일' | '최근 30일' | '캘린더'
 export type TopicOption = '전체' | TopicKey
