@@ -91,7 +91,7 @@ function CalendarSheet({
       <div className="flex items-center justify-between px-5 pb-2 pt-7">
         <div>
           <h2 className="text-base font-extrabold text-[#2A1F1C]">기간 선택</h2>
-          <p className="mt-0.5 text-xs text-[#2A1F1C]/60">
+          <p className="mt-3 text-xs text-[#2A1F1C]/60">
             시작일과 종료일을 각각 눌러 연속된 기간을 선택하세요.
           </p>
         </div>
@@ -224,7 +224,7 @@ function CalendarSheet({
             <span className="text-sm font-medium text-[#2A1F1C]">
               {formatDate(startDate)} → {formatDate(endDate)}
             </span>
-            <span className="text-sm font-semibold text-[#2A1F1C]/50">
+            <span className="text-sm font-normal text-[#2A1F1C]/50">
               {diffDays}일간
             </span>
           </>
@@ -236,7 +236,7 @@ function CalendarSheet({
       </div>
 
       {/* 적용하기 */}
-      <div className="px-5 pb-6 pt-4">
+      <div className="mx-5 my-6">
         <Button
           onClick={() => {
             if (startDate && endDate) onApply(startDate, endDate)
