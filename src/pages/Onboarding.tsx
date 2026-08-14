@@ -17,7 +17,7 @@ export default function Onboarding () {
     <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px]">
       {/* onboarding header*/}
       <OnboardingHeader pageNumber={pageNumber} />
-      <div className="grow-1 flex flex-col justify-between px-[28px] py-[48px]">
+      <div className="grow flex flex-col justify-between px-[28px] py-[48px]">
         {/* onboarding contents, change by pageNumber*/}
         <OnboardingComponentChange pageNumber={pageNumber}/>
 

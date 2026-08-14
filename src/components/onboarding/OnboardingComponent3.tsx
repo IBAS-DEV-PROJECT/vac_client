@@ -77,7 +77,7 @@ export default function OnboardingComponent3() {
       
       <section className="flex w-[352px] flex-col gap-5 mb-[20px]">
         <TextArea
-          label="그건 왜인가요?"
+          label="그건 왜인가요? "
           placeholder="한 줄이면 충분해요"
           value={topic}
           onChange={(e) => setTopic(e.target.value)}
