@@ -46,7 +46,7 @@ function InsightPage() {
       </div>
 
       {/* 통합 필터 바 */}
-      <div className="px-5 pb-5">
+      <div className="px-5 pb-5.5">
         <button
           type="button"
           onClick={() => setIsFilterOpen(true)}
@@ -77,6 +77,7 @@ function InsightPage() {
           </span>
         </button>
       </div>
+      <div className="h-0.5 bg-gray-300" />
 
       {/* 본문 콘텐츠 */}
       <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 py-10">
