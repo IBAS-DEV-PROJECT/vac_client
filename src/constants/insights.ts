@@ -64,6 +64,7 @@ export type TopicOption = '전체' | TopicKey
 
 export interface InsightFilters {
   period: PeriodOption
+  dateRange?: { start: Date; end: Date }
   topics: TopicOption[]
   values: (ValueKey | 'all')[]
 }

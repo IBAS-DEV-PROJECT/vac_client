@@ -84,7 +84,13 @@ const MOCK_INSIGHT_CARDS = [
 ]
 
 function buildFilterSummary(filters: InsightFilters): string {
-  const parts: string[] = [filters.period]
+  const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`
+  const periodLabel =
+    filters.period === '캘린더' && filters.dateRange
+      ? `${fmt(filters.dateRange.start)}~${fmt(filters.dateRange.end)}`
+      : filters.period
+
+  const parts: string[] = [periodLabel]
 
   if (filters.topics.length > 0 && !filters.topics.includes('전체')) {
     parts.push(filters.topics.map((t) => TOPIC_LABELS[t as TopicKey]).join('·'))
