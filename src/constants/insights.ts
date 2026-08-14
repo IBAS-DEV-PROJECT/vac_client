@@ -85,6 +85,18 @@ export interface ChangeEntry {
   change: number
 }
 
+export const VALUE_KEY_MAP: Record<string, ValueKey> = {
+  성장: 'growth',
+  안정: 'stability',
+  자율: 'autonomy',
+  연결: 'connection',
+  인정: 'recognition',
+  재미: 'fun',
+  효율: 'efficiency',
+  의미: 'meaning',
+  책임: 'responsibility',
+}
+
 export const VALUE_COLORS: Record<ValueKey, string> = {
   growth: '#2bb673',
   stability: '#3ab0d9',

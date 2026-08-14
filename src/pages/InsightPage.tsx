@@ -10,78 +10,52 @@ import {
   DEFAULT_FILTERS,
   TOPIC_LABELS,
   VALUE_LABELS,
+  VALUE_KEY_MAP,
   type ChangeEntry,
   type InsightFilters,
   type TopicKey,
   type TrendDataPoint,
   type ValueKey,
 } from '@/constants/insights'
+import { MOCK_INSIGHT } from '@/mock/insight'
 
-const MOCK_TOTAL_RECORDS = 48
+function formatPeriodLabel(startDate: string, endDate: string): string {
+  const [, sm, sd] = startDate.split('-')
+  const [, em, ed] = endDate.split('-')
+  return `${Number(sm)}.${Number(sd)}~${Number(em)}.${Number(ed)}`
+}
 
-const DEFAULT_TREND_KEYS: ValueKey[] = [
-  'growth',
-  'stability',
-  'autonomy',
-  'connection',
-]
+const TREND_DATA: TrendDataPoint[] = MOCK_INSIGHT.trend.map((item) => {
+  const point: TrendDataPoint = {
+    period: formatPeriodLabel(item.startDate, item.endDate),
+  }
+  item.valueDistribution.forEach(({ value, percentage }) => {
+    const key = VALUE_KEY_MAP[value]
+    if (key) point[key] = percentage
+  })
+  return point
+})
 
-const MOCK_TREND_DATA: TrendDataPoint[] = [
-  { period: '6.30~7.6', growth: 45, stability: 20, autonomy: 5, connection: 8 },
-  {
-    period: '7.7~7.13',
-    growth: 80,
-    stability: 30,
-    autonomy: 12,
-    connection: 22,
-  },
-  {
-    period: '7.14~7.20',
-    growth: 74,
-    stability: 30,
-    autonomy: 8,
-    connection: 26,
-  },
-  {
-    period: '7.21~7.27',
-    growth: 90,
-    stability: 26,
-    autonomy: 10,
-    connection: 28,
-  },
-]
+const TREND_KEYS: ValueKey[] = Array.from(
+  new Set(
+    MOCK_INSIGHT.trend.flatMap((item) =>
+      item.valueDistribution
+        .map(({ value }) => VALUE_KEY_MAP[value])
+        .filter((k): k is ValueKey => !!k),
+    ),
+  ),
+)
 
-const MOCK_INSIGHT_CARDS = [
-  {
-    topicKey: '일' as TopicKey,
-    values: [
-      { key: 'growth' as ValueKey, percent: 62 },
-      { key: 'stability' as ValueKey, percent: 20 },
-      { key: 'autonomy' as ValueKey, percent: 12 },
-      { key: 'connection' as ValueKey, percent: 6 },
-    ],
-    recordCount: 12,
-  },
-  {
-    topicKey: '관계' as TopicKey,
-    values: [
-      { key: 'connection' as ValueKey, percent: 45 },
-      { key: 'stability' as ValueKey, percent: 30 },
-      { key: 'growth' as ValueKey, percent: 15 },
-      { key: 'autonomy' as ValueKey, percent: 10 },
-    ],
-    recordCount: 11,
-  },
-  {
-    topicKey: '건강' as TopicKey,
-    values: [
-      { key: 'stability' as ValueKey, percent: 50 },
-      { key: 'autonomy' as ValueKey, percent: 28 },
-      { key: 'growth' as ValueKey, percent: 22 },
-    ],
-    recordCount: 9,
-  },
-]
+const INSIGHT_CARDS = MOCK_INSIGHT.valueByTopic.map((item) => ({
+  topicKey: item.topic as TopicKey,
+  values: item.valueDistribution
+    .map(({ value, percentage }) => ({
+      key: VALUE_KEY_MAP[value] as ValueKey,
+      percent: percentage,
+    }))
+    .filter((v) => v.key),
+  recordCount: item.count,
+}))
 
 function buildFilterSummary(filters: InsightFilters): string {
   const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`
@@ -113,28 +87,29 @@ function InsightPage() {
 
   const hasRecords = true
 
-  const trendValueKeys: ValueKey[] = appliedFilters.values.includes('all')
-    ? DEFAULT_TREND_KEYS
+  const filteredTrendKeys = appliedFilters.values.includes('all')
+    ? TREND_KEYS
     : (appliedFilters.values as ValueKey[]).filter((v) =>
-        DEFAULT_TREND_KEYS.includes(v),
+        TREND_KEYS.includes(v),
       )
 
   const activeKeys =
-    trendValueKeys.length > 0 ? trendValueKeys : DEFAULT_TREND_KEYS
+    filteredTrendKeys.length > 0 ? filteredTrendKeys : TREND_KEYS
 
-  const trendChanges: ChangeEntry[] = activeKeys.map((key) => ({
-    key,
-    change:
-      ((MOCK_TREND_DATA[MOCK_TREND_DATA.length - 1]?.[key] as number) ?? 0) -
-      ((MOCK_TREND_DATA[MOCK_TREND_DATA.length - 2]?.[key] as number) ?? 0),
-  }))
+  const trendMaxIncrease: ChangeEntry = {
+    key: VALUE_KEY_MAP[MOCK_INSIGHT.largestIncrease[0].value] as ValueKey,
+    change: MOCK_INSIGHT.largestIncrease[0].increaseRate,
+  }
+  const trendMaxDecrease: ChangeEntry = {
+    key: VALUE_KEY_MAP[MOCK_INSIGHT.largestDecrease[0].value] as ValueKey,
+    change: MOCK_INSIGHT.largestDecrease[0].decreaseRate,
+  }
 
-  const trendMaxIncrease = trendChanges.reduce((a, b) =>
-    a.change >= b.change ? a : b,
-  )
-  const trendMaxDecrease = trendChanges.reduce((a, b) =>
-    a.change <= b.change ? a : b,
-  )
+  const topTopicLabel =
+    TOPIC_LABELS[MOCK_INSIGHT.insight.mostTopic[0] as TopicKey]
+  const topValueKey = VALUE_KEY_MAP[
+    MOCK_INSIGHT.insight.mostValue[0]
+  ] as ValueKey
 
   return (
     <div className="flex min-h-full flex-col bg-[#E1F5FE]">
@@ -190,12 +165,12 @@ function InsightPage() {
                 주제별 가치 인사이트
               </h2>
               <span className="text-xs text-gray-400">
-                전체 기록 {MOCK_TOTAL_RECORDS}건
+                전체 기록 {MOCK_INSIGHT.totalCount}건
               </span>
             </div>
             <div className="overflow-x-auto">
               <div className="flex gap-3 px-5 pb-1">
-                {MOCK_INSIGHT_CARDS.map((card) => (
+                {INSIGHT_CARDS.map((card) => (
                   <ValueInsightCard
                     key={card.topicKey}
                     {...card}
@@ -215,13 +190,16 @@ function InsightPage() {
             </p>
           </div>
           <ValueTrendSection
-            data={MOCK_TREND_DATA}
+            data={TREND_DATA}
             valueKeys={activeKeys}
             maxIncrease={trendMaxIncrease}
             maxDecrease={trendMaxDecrease}
           />
           <Divider className="my-5.5" />
-          <InsightCard topTopicLabel="일·진로" topValueKey="growth" />
+          <InsightCard
+            topTopicLabel={topTopicLabel}
+            topValueKey={topValueKey}
+          />
         </div>
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 py-10">
