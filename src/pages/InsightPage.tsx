@@ -4,16 +4,51 @@ import Button from '@/components/common/button/Button'
 import Divider from '@/components/common/Divider'
 import InsightFilterSheet from '@/components/insights/InsightFilterSheet'
 import ValueInsightCard from '@/components/insights/ValueInsightCard'
+import ValueTrendSection from '@/components/insights/ValueTrendSection'
 import {
   DEFAULT_FILTERS,
   TOPIC_LABELS,
   VALUE_LABELS,
+  type ChangeEntry,
   type InsightFilters,
   type TopicKey,
+  type TrendDataPoint,
   type ValueKey,
 } from '@/constants/insights'
 
 const MOCK_TOTAL_RECORDS = 48
+
+const DEFAULT_TREND_KEYS: ValueKey[] = [
+  'growth',
+  'stability',
+  'autonomy',
+  'connection',
+]
+
+const MOCK_TREND_DATA: TrendDataPoint[] = [
+  { period: '6.30~7.6', growth: 45, stability: 20, autonomy: 5, connection: 8 },
+  {
+    period: '7.7~7.13',
+    growth: 80,
+    stability: 30,
+    autonomy: 12,
+    connection: 22,
+  },
+  {
+    period: '7.14~7.20',
+    growth: 74,
+    stability: 30,
+    autonomy: 8,
+    connection: 26,
+  },
+  {
+    period: '7.21~7.27',
+    growth: 90,
+    stability: 26,
+    autonomy: 10,
+    connection: 28,
+  },
+]
 
 const MOCK_INSIGHT_CARDS = [
   {
@@ -71,6 +106,29 @@ function InsightPage() {
 
   const hasRecords = true
 
+  const trendValueKeys: ValueKey[] = appliedFilters.values.includes('all')
+    ? DEFAULT_TREND_KEYS
+    : (appliedFilters.values as ValueKey[]).filter((v) =>
+        DEFAULT_TREND_KEYS.includes(v),
+      )
+
+  const activeKeys =
+    trendValueKeys.length > 0 ? trendValueKeys : DEFAULT_TREND_KEYS
+
+  const trendChanges: ChangeEntry[] = activeKeys.map((key) => ({
+    key,
+    change:
+      ((MOCK_TREND_DATA[MOCK_TREND_DATA.length - 1]?.[key] as number) ?? 0) -
+      ((MOCK_TREND_DATA[MOCK_TREND_DATA.length - 2]?.[key] as number) ?? 0),
+  }))
+
+  const trendMaxIncrease = trendChanges.reduce((a, b) =>
+    a.change >= b.change ? a : b,
+  )
+  const trendMaxDecrease = trendChanges.reduce((a, b) =>
+    a.change <= b.change ? a : b,
+  )
+
   return (
     <div className="flex min-h-full flex-col bg-[#E1F5FE]">
       {/* 페이지 헤더 */}
@@ -121,7 +179,7 @@ function InsightPage() {
           {/* 주제별 가치 인사이트 */}
           <section>
             <div className="flex items-center justify-between px-5 mb-4">
-              <h2 className="text-[15px] font-bold text-[#2A1F1C]">
+              <h2 className="text-sm font-bold text-[#2A1F1C]">
                 주제별 가치 인사이트
               </h2>
               <span className="text-xs text-gray-400">
@@ -142,6 +200,19 @@ function InsightPage() {
               </div>
             </div>
           </section>
+          <Divider className="my-5.5" />
+          <div className="px-5 mb-4">
+            <h2 className="text-sm font-bold text-[#2A1F1C]">가치 변화 추이</h2>
+            <p className="mt-1 text-xs leading-snug text-gray-400">
+              선택한 기간 동안 각 가치의 선택 비율이 어떻게 변했는지 보여드려요.
+            </p>
+          </div>
+          <ValueTrendSection
+            data={MOCK_TREND_DATA}
+            valueKeys={activeKeys}
+            maxIncrease={trendMaxIncrease}
+            maxDecrease={trendMaxDecrease}
+          />
         </div>
       ) : (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 py-10">

@@ -2,7 +2,6 @@ import { useState } from 'react'
 import FilterButton from '@/components/insights/FilterButton'
 import ValueButton from '@/components/insights/ValueButton'
 import CategoryInsightCard from '@/components/insights/ValueInsightCard'
-import TrendInsightCard from '@/components/insights/TrendInsightCard'
 import SettingsTab from '@/components/settings/SettingsTab'
 import ErrorToast from '@/components/auth/ErrorToast'
 import ContinueConcernItem from '@/components/home/ContinueConcernItem'
@@ -60,36 +59,6 @@ function Test1() {
           ValueInsightCard
         </h2>
         <CategoryInsightCard {...MOCK_CARD} />
-      </section>
-
-      <section className="flex flex-col gap-3">
-        <h2 className="text-sm font-semibold text-gray-500">
-          TrendInsightCard
-        </h2>
-        <div className="flex gap-3 flex-wrap">
-          <TrendInsightCard
-            type="increase"
-            values={[{ key: 'growth', change: 16 }]}
-          />
-          <TrendInsightCard
-            type="decrease"
-            values={[{ key: 'stability', change: -8 }]}
-          />
-          <TrendInsightCard
-            type="increase"
-            values={[
-              { key: 'growth', change: 8 },
-              { key: 'fun', change: 8 },
-            ]}
-          />
-          <TrendInsightCard
-            type="decrease"
-            values={[
-              { key: 'stability', change: -5 },
-              { key: 'connection', change: -5 },
-            ]}
-          />
-        </div>
       </section>
 
       <section className="flex flex-col gap-3">

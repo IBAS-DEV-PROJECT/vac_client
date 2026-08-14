@@ -73,3 +73,25 @@ export const DEFAULT_FILTERS: InsightFilters = {
   topics: ['전체'],
   values: ['all'],
 }
+
+export interface TrendDataPoint {
+  period: string
+  [key: string]: number | string
+}
+
+export interface ChangeEntry {
+  key: ValueKey
+  change: number
+}
+
+export const VALUE_COLORS: Record<ValueKey, string> = {
+  growth: '#2bb673',
+  stability: '#3ab0d9',
+  autonomy: '#f5a623',
+  connection: '#ff6f91',
+  recognition: '#ffc845',
+  fun: '#ff8a3d',
+  efficiency: '#17a398',
+  meaning: '#8b5fbf',
+  responsibility: '#3e2723',
+}
