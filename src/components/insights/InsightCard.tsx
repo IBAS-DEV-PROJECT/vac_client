@@ -16,7 +16,7 @@ function InsightCard({ topTopicLabel, topValueKey }: InsightCardProps) {
   const topValueColor = VALUE_COLORS[topValueKey]
 
   return (
-    <div className="mx-5 rounded-2xl bg-white p-4 shadow-sm">
+    <div className="m-5 rounded-2xl bg-white p-4 shadow-sm">
       <h2 className="text-[15px] font-bold text-[#2A1F1C]">
         한눈에 보는 인사이트
       </h2>
