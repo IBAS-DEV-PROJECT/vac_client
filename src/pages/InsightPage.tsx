@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import insightPlus from '@/assets/insightPlus.svg'
+import insightEmpty from '@/assets/insightEmpty.png'
+import valueEmpty from '@/assets/valueEmpty.png'
+import pencil from '@/assets/pencil.png'
 import Button from '@/components/common/button/Button'
 import Divider from '@/components/common/Divider'
 import InsightFilterSheet from '@/components/insights/InsightFilterSheet'
+import InsightSectionEmpty from '@/components/insights/InsightSectionEmpty'
 import ValueInsightCard from '@/components/insights/ValueInsightCard'
 import InsightCard from '@/components/insights/InsightCard'
 import ValueTrendSection from '@/components/insights/ValueTrendSection'
@@ -77,6 +81,89 @@ function buildFilterSummary(filters: InsightFilters): string {
   return parts.join(' · ')
 }
 
+const topicEmptyIcon = (
+  <svg
+    width="26"
+    height="26"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <rect x="2" y="13" width="5" height="8" rx="1.2" fill="#818cf8" />
+    <rect x="9.5" y="7" width="5" height="14" rx="1.2" fill="#f472b6" />
+    <rect x="17" y="10" width="5" height="11" rx="1.2" fill="#60a5fa" />
+  </svg>
+)
+
+const trendEmptyIcon = (
+  <img
+    src={valueEmpty}
+    alt=""
+    aria-hidden="true"
+    className="w-6.5 h-6.5 object-contain"
+  />
+)
+
+const insightEmptyIcon = (
+  <img
+    src={insightEmpty}
+    alt=""
+    aria-hidden="true"
+    className="w-6.5 h-6.5 object-contain"
+  />
+)
+
+const lightbulbIcon = (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#2A1F1C"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.5 4.5-3 6H9c-1.5-1.5-3-3.5-3-6a6 6 0 0 1 6-6z" />
+  </svg>
+)
+
+const chartHintIcon = (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#2A1F1C"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <line x1="18" y1="20" x2="18" y2="10" />
+    <line x1="12" y1="20" x2="12" y2="4" />
+    <line x1="6" y1="20" x2="6" y2="14" />
+  </svg>
+)
+
+const pencilIcon = (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="#2A1F1C"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+  </svg>
+)
+
 function InsightPage() {
   const [appliedFilters, setAppliedFilters] = useState<InsightFilters>(() => ({
     ...DEFAULT_FILTERS,
@@ -84,8 +171,6 @@ function InsightPage() {
     values: [...DEFAULT_FILTERS.values],
   }))
   const [isFilterOpen, setIsFilterOpen] = useState(false)
-
-  const hasRecords = true
 
   const filteredTrendKeys = appliedFilters.values.includes('all')
     ? TREND_KEYS
@@ -110,6 +195,11 @@ function InsightPage() {
   const topValueKey = VALUE_KEY_MAP[
     MOCK_INSIGHT.insight.mostValue[0]
   ] as ValueKey
+
+  const hasTopicData = false
+  const hasTrendData = false
+  const hasInsightData = false
+  const hasAllEmpty = false // 섹션별 빈 상태 테스트용
 
   return (
     <div className="flex min-h-full flex-col bg-[#E1F5FE]">
@@ -156,60 +246,17 @@ function InsightPage() {
       <Divider className="my-5.5" />
 
       {/* 본문 콘텐츠 */}
-      {hasRecords ? (
-        <div className="flex flex-col">
-          {/* 주제별 가치 인사이트 */}
-          <section>
-            <div className="flex items-center justify-between px-5 mb-4">
-              <h2 className="text-sm font-bold text-[#2A1F1C]">
-                주제별 가치 인사이트
-              </h2>
-              <span className="text-xs text-gray-400">
-                전체 기록 {MOCK_INSIGHT.totalCount}건
-              </span>
-            </div>
-            <div className="overflow-x-auto">
-              <div className="flex gap-3 px-5 pb-1">
-                {INSIGHT_CARDS.map((card) => (
-                  <ValueInsightCard
-                    key={card.topicKey}
-                    {...card}
-                    onRecordClick={() =>
-                      console.log(`${card.topicKey} 기록 클릭`)
-                    }
-                  />
-                ))}
-              </div>
-            </div>
-          </section>
-          <Divider className="my-5.5" />
-          <div className="px-5 mb-4">
-            <h2 className="text-sm font-bold text-[#2A1F1C]">가치 변화 추이</h2>
-            <p className="mt-1 text-xs leading-snug text-gray-400">
-              선택한 기간 동안 각 가치의 선택 비율이 어떻게 변했는지 보여드려요.
-            </p>
-          </div>
-          <ValueTrendSection
-            data={TREND_DATA}
-            valueKeys={activeKeys}
-            maxIncrease={trendMaxIncrease}
-            maxDecrease={trendMaxDecrease}
-          />
-          <Divider className="my-5.5" />
-          <InsightCard
-            topTopicLabel={topTopicLabel}
-            topValueKey={topValueKey}
-          />
-        </div>
-      ) : (
+      {hasAllEmpty ? (
         <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 py-10">
           <div className="flex flex-col items-center gap-4 text-center">
-            <img
-              src={insightPlus}
-              alt=""
-              aria-hidden="true"
-              className="w-20 h-20"
-            />
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+              <img
+                src={insightPlus}
+                alt=""
+                aria-hidden="true"
+                className="w-10 h-10"
+              />
+            </div>
             <div>
               <p className="text-[15px] font-bold text-[#2A1F1C]">
                 선택한 조건에 맞는 기록이 아직 없어요
@@ -223,6 +270,121 @@ function InsightPage() {
                 지금 기록하기
               </Button>
             </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col pb-6">
+          {/* 주제별 가치 인사이트 */}
+          <section>
+            {hasTopicData ? (
+              <>
+                <div className="flex items-center justify-between px-5 mb-4">
+                  <h2 className="text-sm font-bold text-[#2A1F1C]">
+                    주제별 가치 인사이트
+                  </h2>
+                  <span className="text-xs text-gray-400">
+                    전체 기록 {MOCK_INSIGHT.totalCount}건
+                  </span>
+                </div>
+                <div className="overflow-x-auto">
+                  <div className="flex gap-3 px-5 pb-1">
+                    {INSIGHT_CARDS.map((card) => (
+                      <ValueInsightCard
+                        key={card.topicKey}
+                        {...card}
+                        onRecordClick={() =>
+                          console.log(`${card.topicKey} 기록 클릭`)
+                        }
+                      />
+                    ))}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <InsightSectionEmpty
+                sectionTitle="주제별 가치 인사이트"
+                icon={topicEmptyIcon}
+                title="아직 분석할 기록이 없어요."
+                description="기록이 쌓이면 어떤 가치가 가장 많이 등장했는지와 자주 고민하는 주제를 한눈에 보여드려요."
+                hintIcon={lightbulbIcon}
+                hintText="주요 가치의 순위와 변화, 나만의 고민 키워드를 확인할 수 있어요."
+              />
+            )}
+          </section>
+
+          <Divider className="my-5.5" />
+
+          {/* 가치 변화 추이 */}
+          <section>
+            {hasTrendData ? (
+              <>
+                <div className="px-5 mb-4">
+                  <h2 className="text-sm font-bold text-[#2A1F1C]">
+                    가치 변화 추이
+                  </h2>
+                  <p className="mt-1 text-xs leading-snug text-gray-400">
+                    선택한 기간 동안 각 가치의 선택 비율이 어떻게 변했는지
+                    보여드려요.
+                  </p>
+                </div>
+                <ValueTrendSection
+                  data={TREND_DATA}
+                  valueKeys={activeKeys}
+                  maxIncrease={trendMaxIncrease}
+                  maxDecrease={trendMaxDecrease}
+                />
+              </>
+            ) : (
+              <InsightSectionEmpty
+                sectionTitle="가치 변화 추이"
+                icon={trendEmptyIcon}
+                title="아직 변화가 없어요."
+                description="기록이 쌓이면 나의 가치가 어떻게 변해왔는지 그래프로 확인할 수 있어요."
+                hintIcon={chartHintIcon}
+                hintText="시간이 지날수록 나의 고민과 가치의 흐름을 한눈에 볼 수 있어요."
+              />
+            )}
+          </section>
+
+          <Divider className="my-5.5" />
+
+          {/* 한눈에 보는 인사이트 */}
+          <section>
+            {hasInsightData ? (
+              <InsightCard
+                topTopicLabel={topTopicLabel}
+                topValueKey={topValueKey}
+              />
+            ) : (
+              <InsightSectionEmpty
+                sectionTitle="한눈에 보는 인사이트"
+                icon={insightEmptyIcon}
+                title="아직 요약할 내용이 없어요."
+                description="기록이 쌓이면 AI가 나의 고민을 정리해 핵심 인사이트를 한눈에 보여드려요."
+                hintIcon={pencilIcon}
+                hintText="반복되는 고민, 숨겨진 패턴까지 쉽게 확인할 수 있어요."
+              />
+            )}
+          </section>
+
+          {/* 하단 CTA */}
+          <div className="mx-5 mt-6">
+            <button
+              type="button"
+              onClick={() => console.log('기록하기 클릭')}
+              className="flex w-full items-center justify-center gap-2 rounded-[9px] bg-[#3E2723] px-5 py-4 text-white"
+            >
+              <img
+                src={pencil}
+                alt=""
+                aria-hidden="true"
+                className="w-4 h-4 object-contain"
+              />
+              <span className="text-[16px] font-extrabold">
+                지금 기록해서 인사이트 만들기
+              </span>
+              <span className="text-base">›</span>
+            </button>
           </div>
         </div>
       )}
