@@ -23,7 +23,6 @@ import {
   type TrendDataPoint,
   type ValueKey,
 } from '@/constants/insights'
-import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
 import { MOCK_INSIGHT } from '@/mock/insight'
 
 function formatPeriodLabel(startDate: string, endDate: string): string {
@@ -131,56 +130,9 @@ const insightEmptyIcon = (
   />
 )
 
-const lightbulbIcon = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2A1F1C"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.5-1.5 4.5-3 6H9c-1.5-1.5-3-3.5-3-6a6 6 0 0 1 6-6z" />
-  </svg>
-)
-
-const chartHintIcon = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2A1F1C"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <line x1="18" y1="20" x2="18" y2="10" />
-    <line x1="12" y1="20" x2="12" y2="4" />
-    <line x1="6" y1="20" x2="6" y2="14" />
-  </svg>
-)
-
-const pencilIcon = (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="#2A1F1C"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-  </svg>
-)
+const lightbulbIcon = <span aria-hidden="true">💡</span>
+const chartHintIcon = <span aria-hidden="true">📊</span>
+const pencilIcon = <span aria-hidden="true">✏️</span>
 
 function InsightPage() {
   const navigate = useNavigate()
@@ -419,7 +371,6 @@ function InsightPage() {
               state: {
                 filters: f,
                 headerLabel: buildHeaderLabel(f),
-                count: MOCK_CONCERN_RECORDS.length,
               },
             })
           }}
