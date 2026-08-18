@@ -1,3 +1,7 @@
+import valueMoney from '@/assets/valueMoney.png'
+import valueMyself from '@/assets/valueMyself.png'
+import valueHealth from '@/assets/valueHealth.png'
+
 export type TopicKey = '일' | '관계' | '돈' | '건강' | '나' | '기타'
 
 export const TOPIC_LABELS: Record<TopicKey, string> = {
@@ -28,13 +32,6 @@ export type ValueKey =
   | 'meaning'
   | 'responsibility'
 
-export type CategoryKey = 'work'
-// 카테고리 추가 시 여기에 union 타입으로 추가
-
-export const CATEGORY_CONFIG: Record<CategoryKey, { emoji: string }> = {
-  work: { emoji: '💼' },
-}
-
 export const VALUE_LABELS: Record<ValueKey, string> = {
   growth: '성장',
   stability: '안정',
@@ -54,6 +51,12 @@ export const TOPIC_ICONS: Record<TopicKey, string> = {
   건강: '💪',
   나: '🌱',
   기타: '📌',
+}
+
+export const TOPIC_IMAGES: Partial<Record<TopicKey, string>> = {
+  돈: valueMoney,
+  건강: valueHealth,
+  나: valueMyself,
 }
 
 export const VALUE_KEY_MAP = Object.fromEntries(

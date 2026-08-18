@@ -1,19 +1,11 @@
-import valueMoney from '@/assets/valueMoney.png'
-import valueMyself from '@/assets/valueMyself.png'
-import valueFree from '@/assets/valueFree.png'
 import {
   TOPIC_ICONS,
+  TOPIC_IMAGES,
   TOPIC_LABELS,
   VALUE_LABELS,
   type TopicKey,
   type ValueKey,
 } from '@/constants/insights'
-
-const TOPIC_IMAGE: Partial<Record<TopicKey, string>> = {
-  돈: valueMoney,
-  건강: valueFree,
-  나: valueMyself,
-}
 
 interface ValueEntry {
   key: ValueKey
@@ -33,7 +25,7 @@ function ValueInsightCard({
   recordCount,
   onRecordClick,
 }: ValueInsightCardProps) {
-  const topicImage = TOPIC_IMAGE[topicKey]
+  const topicImage = TOPIC_IMAGES[topicKey]
   const emoji = TOPIC_ICONS[topicKey]
   const title = TOPIC_LABELS[topicKey]
   const topValue = values[0]
