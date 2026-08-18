@@ -35,7 +35,7 @@ function InsightSectionEmpty({
       </div>
       <div className="flex items-center gap-2 rounded-xl bg-[#f6fbfe] px-3 py-2.5">
         <span className="shrink-0">{hintIcon}</span>
-        <p className="text-[12px] leading-snug text-[#2A1F1C]/70">{hintText}</p>
+        <p className="text-[12px] leading-snug text-gray-600">{hintText}</p>
       </div>
     </div>
   )
