@@ -240,10 +240,12 @@ function CalendarSheet({
               {diffDays}일간
             </span>
           </>
-        ) : (
-          <span className="text-sm text-[#2A1F1C]/40">
-            시작일과 종료일을 선택해주세요
+        ) : startDate ? (
+          <span className="text-sm font-medium text-[#2A1F1C]">
+            {formatDate(startDate)}
           </span>
+        ) : (
+          <span className="text-sm text-[#2A1F1C]/40">날짜를 선택해주세요</span>
         )}
       </div>
 
@@ -251,9 +253,9 @@ function CalendarSheet({
       <div className="mx-5 my-6">
         <Button
           onClick={() => {
-            if (startDate && endDate) onApply(startDate, endDate)
+            if (startDate) onApply(startDate, endDate ?? startDate)
           }}
-          disabled={!startDate || !endDate}
+          disabled={!startDate}
         >
           적용하기
         </Button>
