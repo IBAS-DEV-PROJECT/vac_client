@@ -76,7 +76,7 @@ export const MOCK_INSIGHT: InsightData = {
     },
   ],
   largestIncrease: [{ value: '성장', increaseRate: 16 }],
-  largestDecrease: [{ value: '안정', decreaseRate: 4 }],
+  largestDecrease: [{ value: '안정', decreaseRate: -4 }],
   insight: {
     mostTopic: ['일'],
     mostValue: ['성장'],

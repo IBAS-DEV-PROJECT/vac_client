@@ -28,7 +28,10 @@ function ValueInsightCard({
   const topicImage = TOPIC_IMAGES[topicKey]
   const emoji = TOPIC_ICONS[topicKey]
   const title = TOPIC_LABELS[topicKey]
-  const topValue = values[0]
+  const topValue = values.reduce(
+    (max, v) => (v.percent > max.percent ? v : max),
+    values[0],
+  )
   const colorVar = `var(--color-${topValue?.key ?? 'growth'})`
   const colorBg = `color-mix(in srgb, ${colorVar} 14%, white)`
 

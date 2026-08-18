@@ -110,7 +110,7 @@ function ValueTrendSection({
                 {VALUE_LABELS[maxDecrease.key]}
               </span>
               <span className="text-[15px] font-bold text-red-500">
-                -{maxDecrease.change}%p
+                {maxDecrease.change}%p
               </span>
             </div>
           </div>
