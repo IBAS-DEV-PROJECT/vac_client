@@ -55,18 +55,21 @@ const TREND_KEYS: ValueKey[] = Array.from(
 )
 
 const INSIGHT_CARDS = MOCK_INSIGHT.valueByTopic.map((item) => ({
-  topicKey: item.topic as TopicKey,
+  topicKey: item.topic,
   values: item.valueDistribution
     .map(({ value, percentage }) => ({
-      key: VALUE_KEY_MAP[value] as ValueKey,
+      key: VALUE_KEY_MAP[value],
       percent: percentage,
     }))
     .filter((v) => v.key),
   recordCount: item.count,
 }))
 
+function fmt(d: Date): string {
+  return `${d.getMonth() + 1}/${d.getDate()}`
+}
+
 function buildHeaderLabel(filters: InsightFilters): string {
-  const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`
   const periodLabel =
     filters.period === '캘린더' && filters.dateRange
       ? `${fmt(filters.dateRange.start)}~${fmt(filters.dateRange.end)}`
@@ -86,7 +89,6 @@ function buildHeaderLabel(filters: InsightFilters): string {
 }
 
 function buildFilterSummary(filters: InsightFilters): string {
-  const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`
   const periodLabel =
     filters.period === '캘린더' && filters.dateRange
       ? `${fmt(filters.dateRange.start)}~${fmt(filters.dateRange.end)}`
@@ -155,19 +157,16 @@ function InsightPage() {
     filteredTrendKeys.length > 0 ? filteredTrendKeys : TREND_KEYS
 
   const trendMaxIncrease: ChangeEntry = {
-    key: VALUE_KEY_MAP[MOCK_INSIGHT.largestIncrease[0].value] as ValueKey,
+    key: VALUE_KEY_MAP[MOCK_INSIGHT.largestIncrease[0].value],
     change: MOCK_INSIGHT.largestIncrease[0].increaseRate,
   }
   const trendMaxDecrease: ChangeEntry = {
-    key: VALUE_KEY_MAP[MOCK_INSIGHT.largestDecrease[0].value] as ValueKey,
+    key: VALUE_KEY_MAP[MOCK_INSIGHT.largestDecrease[0].value],
     change: MOCK_INSIGHT.largestDecrease[0].decreaseRate,
   }
 
-  const topTopicLabel =
-    TOPIC_LABELS[MOCK_INSIGHT.insight.mostTopic[0] as TopicKey]
-  const topValueKey = VALUE_KEY_MAP[
-    MOCK_INSIGHT.insight.mostValue[0]
-  ] as ValueKey
+  const topTopicLabel = TOPIC_LABELS[MOCK_INSIGHT.insight.mostTopic[0]]
+  const topValueKey = VALUE_KEY_MAP[MOCK_INSIGHT.insight.mostValue[0]]
 
   const hasTopicData = INSIGHT_CARDS.length > 0
   const hasTrendData = TREND_DATA.length > 0
