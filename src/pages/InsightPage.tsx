@@ -156,7 +156,7 @@ function InsightPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   const hasTopicData = INSIGHT_CARDS.length > 0
-  const hasTrendData = TREND_DATA.length > 0
+  const hasTrendData = MOCK_INSIGHT.totalCount >= 2
   const hasInsightData = !!(topTopicLabel && topValueKey)
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
