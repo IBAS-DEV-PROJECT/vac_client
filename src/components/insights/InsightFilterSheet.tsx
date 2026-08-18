@@ -13,6 +13,7 @@ import {
   type TopicOption,
   type ValueKey,
 } from '@/constants/insights'
+import { formatDate } from '@/utils/date'
 
 const PERIOD_OPTIONS: PeriodOption[] = [
   '최근 1년',
@@ -40,10 +41,6 @@ function cloneFilters(f: InsightFilters): InsightFilters {
     values: [...f.values],
     dateRange: f.dateRange ? { ...f.dateRange } : undefined,
   }
-}
-
-function formatDate(d: Date) {
-  return `${d.getMonth() + 1}월 ${d.getDate()}일`
 }
 
 function InsightFilterSheet({
@@ -80,7 +77,7 @@ function InsightFilterSheet({
       const newTopics = filtered.includes(topic)
         ? filtered.filter((t) => t !== topic)
         : [...filtered, topic]
-      return { ...prev, topics: newTopics }
+      return { ...prev, topics: newTopics.length === 0 ? ['전체'] : newTopics }
     })
   }
 
@@ -94,7 +91,7 @@ function InsightFilterSheet({
       const newValues = filtered.includes(value)
         ? filtered.filter((v) => v !== value)
         : [...filtered, value]
-      return { ...prev, values: newValues }
+      return { ...prev, values: newValues.length === 0 ? ['all'] : newValues }
     })
   }
 
@@ -139,6 +136,7 @@ function InsightFilterSheet({
             <button
               type="button"
               onClick={onClose}
+              aria-label="닫기"
               className="cursor-pointer text-black"
             >
               <svg
@@ -149,7 +147,7 @@ function InsightFilterSheet({
                 stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
-                aria-label="닫기"
+                aria-hidden="true"
               >
                 <path d="M18 6L6 18M6 6l12 12" />
               </svg>
