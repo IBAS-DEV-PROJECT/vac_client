@@ -2,6 +2,7 @@ import { useState } from 'react'
 import insightPlus from '@/assets/insightPlus.svg'
 import insightEmpty from '@/assets/insightEmpty.png'
 import valueEmpty from '@/assets/valueEmpty.png'
+import topicEmpty from '@/assets/topicEmpty.svg'
 import pencil from '@/assets/pencil.png'
 import Button from '@/components/common/button/Button'
 import Divider from '@/components/common/Divider'
@@ -82,17 +83,12 @@ function buildFilterSummary(filters: InsightFilters): string {
 }
 
 const topicEmptyIcon = (
-  <svg
-    width="26"
-    height="26"
-    viewBox="0 0 24 24"
-    fill="none"
+  <img
+    src={topicEmpty}
+    alt=""
     aria-hidden="true"
-  >
-    <rect x="2" y="13" width="5" height="8" rx="1.2" fill="#818cf8" />
-    <rect x="9.5" y="7" width="5" height="14" rx="1.2" fill="#f472b6" />
-    <rect x="17" y="10" width="5" height="11" rx="1.2" fill="#60a5fa" />
-  </svg>
+    className="w-6.5 h-6.5 object-contain"
+  />
 )
 
 const trendEmptyIcon = (
