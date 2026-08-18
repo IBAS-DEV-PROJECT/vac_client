@@ -1,5 +1,6 @@
 import {
   TOPIC_ICONS,
+  TOPIC_IMAGE,
   TOPIC_LABELS,
   VALUE_LABELS,
   type TopicKey,
@@ -24,6 +25,7 @@ function ValueInsightCard({
   recordCount,
   onRecordClick,
 }: ValueInsightCardProps) {
+  const topicImage = TOPIC_IMAGE[topicKey]
   const emoji = TOPIC_ICONS[topicKey]
   const title = TOPIC_LABELS[topicKey]
   const topValue = values[0]
@@ -37,7 +39,11 @@ function ValueInsightCard({
           className="w-9 h-9 rounded-full flex items-center justify-center"
           style={{ backgroundColor: colorBg }}
         >
-          <span className="text-lg leading-none">{emoji}</span>
+          {topicImage ? (
+            <img src={topicImage} alt="" className="w-5 h-5 object-contain" />
+          ) : (
+            <span className="text-lg leading-none">{emoji}</span>
+          )}
         </div>
         <span className="font-bold text-gray-800 text-base">{title}</span>
       </div>

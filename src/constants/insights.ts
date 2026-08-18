@@ -1,3 +1,7 @@
+import valueMoney from '@/assets/valueMoney.png'
+import valueMyself from '@/assets/valueMyself.png'
+import valueFree from '@/assets/valueFree.png'
+
 export type TopicKey = '일' | '관계' | '돈' | '건강' | '나' | '기타'
 
 export const TOPIC_LABELS: Record<TopicKey, string> = {
@@ -56,6 +60,12 @@ export const TOPIC_ICONS: Record<TopicKey, string> = {
   건강: '💪',
   나: '🌱',
   기타: '📌',
+}
+
+export const TOPIC_IMAGE: Partial<Record<TopicKey, string>> = {
+  돈: valueMoney,
+  건강: valueFree,
+  나: valueMyself,
 }
 
 export type PeriodOption =
