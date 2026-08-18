@@ -54,7 +54,7 @@ function ConcernTimelinePage() {
       <div className="h-px bg-[#3E2723]/15" />
 
       {/* 타임라인 */}
-      <div className="px-5 pt-2">
+      <div className="pl-6 pt-5">
         {records.map((record) => (
           <RecordTimelineItem
             key={record.id}
