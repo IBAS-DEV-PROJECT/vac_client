@@ -178,7 +178,7 @@ function CalendarSheet({
       </div>
 
       {/* 날짜 그리드 */}
-      <div className="grid grid-cols-7 gap-y-2 px-3">
+      <div className="grid grid-cols-7 gap-y-[2px] px-3">
         {cells.map((date, i) => {
           if (!date) return <div key={`e-${i}`} className="h-[50px]" />
 
