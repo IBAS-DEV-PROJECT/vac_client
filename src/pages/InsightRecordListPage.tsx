@@ -1,11 +1,67 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
-import { type InsightFilters } from '@/constants/insights'
+import {
+  type InsightFilters,
+  type TopicKey,
+  type ValueKey,
+} from '@/constants/insights'
 import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr)
   return `${date.getMonth() + 1}월 ${date.getDate()}일`
+}
+
+function getDateRange(filters: InsightFilters): { start: Date; end: Date } {
+  const end = new Date()
+  end.setHours(23, 59, 59, 999)
+
+  if (filters.period === '캘린더' && filters.dateRange) {
+    return { start: filters.dateRange.start, end: filters.dateRange.end }
+  }
+
+  const start = new Date()
+  start.setHours(0, 0, 0, 0)
+
+  if (filters.period === '오늘') return { start, end }
+  if (filters.period === '최근 7일') {
+    start.setDate(start.getDate() - 6)
+    return { start, end }
+  }
+  if (filters.period === '최근 30일') {
+    start.setDate(start.getDate() - 29)
+    return { start, end }
+  }
+  if (filters.period === '최근 1년') {
+    start.setFullYear(start.getFullYear() - 1)
+    return { start, end }
+  }
+
+  return { start, end }
+}
+
+function filterRecords(filters: InsightFilters) {
+  const { start, end } = getDateRange(filters)
+
+  return MOCK_CONCERN_RECORDS.filter((record) => {
+    const date = new Date(record.date)
+
+    if (date < start || date > end) return false
+
+    if (
+      !filters.topics.includes('전체') &&
+      !filters.topics.includes(record.topic as TopicKey)
+    )
+      return false
+
+    if (
+      !filters.values.includes('all') &&
+      !filters.values.includes(record.valueKey as ValueKey)
+    )
+      return false
+
+    return true
+  })
 }
 
 function InsightRecordListPage() {
@@ -14,10 +70,11 @@ function InsightRecordListPage() {
   const state = location.state as {
     filters: InsightFilters
     headerLabel: string
-    count: number
   } | null
 
-  const records = MOCK_CONCERN_RECORDS
+  const records = state?.filters
+    ? filterRecords(state.filters)
+    : MOCK_CONCERN_RECORDS
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -44,7 +101,7 @@ function InsightRecordListPage() {
           </svg>
         </button>
         <h1 className="text-[15px] font-bold text-[#2A1F1C]">
-          {state?.headerLabel ?? '기록 목록'} {state?.count ?? records.length}건
+          {state?.headerLabel ?? '기록 목록'} {records.length}건
         </h1>
       </div>
 
