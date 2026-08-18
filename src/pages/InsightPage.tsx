@@ -169,10 +169,10 @@ function InsightPage() {
     MOCK_INSIGHT.insight.mostValue[0]
   ] as ValueKey
 
-  const hasTopicData = false
-  const hasTrendData = false
-  const hasInsightData = false
-  const hasAllEmpty = false // 섹션별 빈 상태 테스트용
+  const hasTopicData = INSIGHT_CARDS.length > 0
+  const hasTrendData = TREND_DATA.length > 0
+  const hasInsightData = !!(topTopicLabel && topValueKey)
+  const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
   return (
     <div className="flex min-h-full flex-col">
