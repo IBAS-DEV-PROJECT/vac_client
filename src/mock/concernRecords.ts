@@ -1,13 +1,6 @@
-import type { TopicKey, ValueKey } from '@/constants/insights'
+import type { ConcernRecord } from '@/types/api'
 
-export interface ConcernRecord {
-  id: string
-  decision: string
-  concern: string
-  topic: TopicKey
-  valueKey: ValueKey
-  date: string
-}
+export type { ConcernRecord }
 
 export const MOCK_CONCERN_RECORDS: ConcernRecord[] = [
   {

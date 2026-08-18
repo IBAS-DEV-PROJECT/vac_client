@@ -1,4 +1,4 @@
-import type { TopicKey } from '@/constants/insights'
+import type { TopicKey, ValueKey } from '@/constants/insights'
 
 export interface ApiResponse<T> {
   success: true
@@ -80,4 +80,15 @@ export interface ConcernTimelineData {
   topic: TopicKey
   records: TimelineRecordItem[]
   recordCount: number
+}
+
+// ─── Concern Record (클라이언트 모델) ──────────────────────
+
+export interface ConcernRecord {
+  id: string
+  decision: string
+  concern: string
+  topic: TopicKey
+  valueKey: ValueKey
+  date: string
 }

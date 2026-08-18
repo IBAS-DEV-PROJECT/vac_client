@@ -1,11 +1,19 @@
+import valueMoney from '@/assets/valueMoney.png'
+import valueMyself from '@/assets/valueMyself.png'
+import valueFree from '@/assets/valueFree.png'
 import {
   TOPIC_ICONS,
-  TOPIC_IMAGE,
   TOPIC_LABELS,
   VALUE_LABELS,
   type TopicKey,
   type ValueKey,
 } from '@/constants/insights'
+
+const TOPIC_IMAGE: Partial<Record<TopicKey, string>> = {
+  돈: valueMoney,
+  건강: valueFree,
+  나: valueMyself,
+}
 
 interface ValueEntry {
   key: ValueKey

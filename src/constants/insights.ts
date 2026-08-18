@@ -1,7 +1,3 @@
-import valueMoney from '@/assets/valueMoney.png'
-import valueMyself from '@/assets/valueMyself.png'
-import valueFree from '@/assets/valueFree.png'
-
 export type TopicKey = '일' | '관계' | '돈' | '건강' | '나' | '기타'
 
 export const TOPIC_LABELS: Record<TopicKey, string> = {
@@ -15,12 +11,10 @@ export const TOPIC_LABELS: Record<TopicKey, string> = {
 
 export const TOPIC_OPTIONS: { key: TopicKey | '전체'; label: string }[] = [
   { key: '전체', label: '전체' },
-  { key: '일', label: '일·진로' },
-  { key: '관계', label: '관계' },
-  { key: '돈', label: '돈' },
-  { key: '건강', label: '건강·몸' },
-  { key: '나', label: '나 자신' },
-  { key: '기타', label: '기타' },
+  ...(Object.keys(TOPIC_LABELS) as TopicKey[]).map((key) => ({
+    key,
+    label: TOPIC_LABELS[key],
+  })),
 ]
 
 export type ValueKey =
@@ -62,12 +56,6 @@ export const TOPIC_ICONS: Record<TopicKey, string> = {
   기타: '📌',
 }
 
-export const TOPIC_IMAGE: Partial<Record<TopicKey, string>> = {
-  돈: valueMoney,
-  건강: valueFree,
-  나: valueMyself,
-}
-
 export type PeriodOption =
   '최근 1년' | '오늘' | '최근 7일' | '최근 30일' | '캘린더'
 export type TopicOption = '전체' | TopicKey
@@ -95,17 +83,12 @@ export interface ChangeEntry {
   change: number
 }
 
-export const VALUE_KEY_MAP: Record<string, ValueKey> = {
-  성장: 'growth',
-  안정: 'stability',
-  자율: 'autonomy',
-  연결: 'connection',
-  인정: 'recognition',
-  재미: 'fun',
-  효율: 'efficiency',
-  의미: 'meaning',
-  책임: 'responsibility',
-}
+export const VALUE_KEY_MAP = Object.fromEntries(
+  (Object.entries(VALUE_LABELS) as [ValueKey, string][]).map(([k, v]) => [
+    v,
+    k,
+  ]),
+) as Record<string, ValueKey>
 
 export const VALUE_COLORS: Record<ValueKey, string> = {
   growth: '#2bb673',
