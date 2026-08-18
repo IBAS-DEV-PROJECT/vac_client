@@ -1,5 +1,6 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
+import { TOPIC_LABELS } from '@/constants/insights'
 import { type InsightFilters } from '@/types/insight'
 import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
 import { formatDate } from '@/utils/date'
@@ -13,20 +14,38 @@ function InsightRecordListPage() {
     headerLabel: string
   } | null
 
-  const records = state?.filters
+  const filteredRecords = state?.filters
     ? filterRecords(state.filters)
     : MOCK_CONCERN_RECORDS
 
-  const handleRecordClick = (record: (typeof records)[number]) => {
-    const concernRecords = MOCK_CONCERN_RECORDS.filter(
-      (r) => r.concern === record.concern,
+  // 고민 단위로 중복 제거
+  const seen = new Set<string>()
+  const concernCards = filteredRecords
+    .filter((r) => {
+      if (seen.has(r.concern)) return false
+      seen.add(r.concern)
+      return true
+    })
+    .map((r) => {
+      // 해당 고민의 첫 기록일 (전체 mock 기준)
+      const firstDate = MOCK_CONCERN_RECORDS.filter(
+        (cr) => cr.concern === r.concern,
+      ).sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+      )[0].date
+      return { ...r, firstDate }
+    })
+
+  const handleConcernClick = (concern: (typeof concernCards)[number]) => {
+    const records = MOCK_CONCERN_RECORDS.filter(
+      (r) => r.concern === concern.concern,
     ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
 
     navigate('/insight/timeline', {
       state: {
-        concern: record.concern,
-        topic: record.topic,
-        records: concernRecords,
+        concern: concern.concern,
+        topic: concern.topic,
+        records,
       },
     })
   }
@@ -56,20 +75,20 @@ function InsightRecordListPage() {
           </svg>
         </button>
         <h1 className="text-[15px] font-extrabold text-[#2A1F1C]">
-          {state?.headerLabel ?? '기록 목록'} {records.length}건
+          {state?.headerLabel ?? '기록 목록'} {concernCards.length}건
         </h1>
       </div>
 
-      {/* 기록 목록 */}
+      {/* 고민 목록 */}
       <div className="mt-2 flex flex-col px-5">
-        {records.map((record) => (
+        {concernCards.map((concern) => (
           <RecordItem
-            key={record.id}
-            valueKey={record.valueKey}
-            title={record.decision}
-            topic={record.concern}
-            date={formatDate(record.date)}
-            onClick={() => handleRecordClick(record)}
+            key={concern.concern}
+            valueKey={concern.valueKey}
+            title={concern.concern}
+            topic={TOPIC_LABELS[concern.topic]}
+            date={formatDate(concern.firstDate)}
+            onClick={() => handleConcernClick(concern)}
             className="cursor-pointer"
           />
         ))}
