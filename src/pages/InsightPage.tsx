@@ -61,7 +61,8 @@ const INSIGHT_CARDS = MOCK_INSIGHT.valueByTopic.map((item) => ({
       key: VALUE_KEY_MAP[value],
       percent: percentage,
     }))
-    .filter((v) => v.key),
+    .filter((v) => v.key)
+    .slice(0, 4),
   recordCount: item.count,
 }))
 
