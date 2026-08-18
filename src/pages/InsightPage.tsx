@@ -154,15 +154,6 @@ function InsightPage() {
   }))
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
-  const filteredTrendKeys = appliedFilters.values.includes('all')
-    ? TREND_KEYS
-    : (appliedFilters.values as ValueKey[]).filter((v) =>
-        TREND_KEYS.includes(v),
-      )
-
-  const activeKeys =
-    filteredTrendKeys.length > 0 ? filteredTrendKeys : TREND_KEYS
-
   const hasTopicData = INSIGHT_CARDS.length > 0
   const hasTrendData = TREND_DATA.length > 0
   const hasInsightData = !!(topTopicLabel && topValueKey)
@@ -303,7 +294,7 @@ function InsightPage() {
                 </div>
                 <ValueTrendSection
                   data={TREND_DATA}
-                  valueKeys={activeKeys}
+                  valueKeys={TREND_KEYS}
                   maxIncrease={trendMaxIncrease}
                   maxDecrease={trendMaxDecrease}
                 />
