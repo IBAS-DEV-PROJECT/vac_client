@@ -76,6 +76,20 @@ function InsightRecordListPage() {
     ? filterRecords(state.filters)
     : MOCK_CONCERN_RECORDS
 
+  const handleRecordClick = (record: (typeof records)[number]) => {
+    const concernRecords = MOCK_CONCERN_RECORDS.filter(
+      (r) => r.concern === record.concern,
+    ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    navigate('/insight/timeline', {
+      state: {
+        concern: record.concern,
+        topic: record.topic,
+        records: concernRecords,
+      },
+    })
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* 헤더 */}
@@ -100,7 +114,7 @@ function InsightRecordListPage() {
             <path d="M19 12H5M12 5l-7 7 7 7" />
           </svg>
         </button>
-        <h1 className="text-[15px] font-bold text-[#2A1F1C]">
+        <h1 className="text-[15px] font-extrabold text-[#2A1F1C]">
           {state?.headerLabel ?? '기록 목록'} {records.length}건
         </h1>
       </div>
@@ -114,6 +128,8 @@ function InsightRecordListPage() {
             title={record.decision}
             topic={record.concern}
             date={formatDate(record.date)}
+            onClick={() => handleRecordClick(record)}
+            className="cursor-pointer"
           />
         ))}
       </div>
