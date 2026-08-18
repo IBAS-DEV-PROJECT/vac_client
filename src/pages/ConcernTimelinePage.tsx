@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordTimelineItem from '@/components/common/record/RecordTimelineItem'
 import { TOPIC_LABELS, type TopicKey } from '@/constants/insights'
-import type { ConcernRecord } from '@/mock/concernRecords'
+import type { ConcernRecord } from '@/types/api'
 import { formatDate } from '@/utils/date'
 
 function ConcernTimelinePage() {
@@ -18,7 +18,7 @@ function ConcernTimelinePage() {
   const records = state?.records ?? []
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#E1F5FE]">
+    <div className="flex min-h-screen flex-col">
       {/* 헤더 */}
       <div className="flex h-15 items-center gap-3 px-4">
         <button
