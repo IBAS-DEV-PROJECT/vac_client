@@ -1,3 +1,5 @@
+import type { TopicKey } from '@/constants/insights'
+
 export interface ApiResponse<T> {
   success: true
   data: T
@@ -11,15 +13,20 @@ export interface ApiErrorResponse {
   }
 }
 
+export type ApiResult<T> = ApiResponse<T> | ApiErrorResponse
+
 // ─── Insight ───────────────────────────────────────────────
 
+export type ValueLabel =
+  '성장' | '안정' | '자율' | '연결' | '인정' | '재미' | '효율' | '의미' | '책임'
+
 export interface ValueDistributionItem {
-  value: string
+  value: ValueLabel
   percentage: number
 }
 
 export interface ValueByTopicItem {
-  topic: string
+  topic: TopicKey
   valueDistribution: ValueDistributionItem[]
   count: number
 }
@@ -33,11 +40,11 @@ export interface TrendItem {
 export interface InsightData {
   valueByTopic: ValueByTopicItem[]
   trend: TrendItem[]
-  largestIncrease: { value: string; increaseRate: number }[]
-  largestDecrease: { value: string; decreaseRate: number }[]
+  largestIncrease: { value: ValueLabel; increaseRate: number }[]
+  largestDecrease: { value: ValueLabel; decreaseRate: number }[]
   insight: {
-    mostTopic: string[]
-    mostValue: string[]
+    mostTopic: TopicKey[]
+    mostValue: ValueLabel[]
   }
   totalCount: number
 }
@@ -47,14 +54,14 @@ export interface InsightData {
 export interface TopicRecordItem {
   recordId: string
   decision: string
-  value: string
+  value: ValueLabel
   concernId: string
   concern: string
   recordDate: string
 }
 
 export interface TopicRecordsData {
-  topic: string
+  topic: TopicKey
   records: TopicRecordItem[]
   recordCount: number
 }
@@ -64,13 +71,13 @@ export interface TopicRecordsData {
 export interface TimelineRecordItem {
   recordId: string
   decision: string
-  value: string
+  value: ValueLabel
   createdAt: string
 }
 
 export interface ConcernTimelineData {
   concern: string
-  topic: string
+  topic: TopicKey
   records: TimelineRecordItem[]
   recordCount: number
 }
