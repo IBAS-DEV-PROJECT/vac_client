@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import BottomSheet from '@/components/common/BottomSheet'
 import Button from '@/components/common/button/Button'
+import { formatDate } from '@/utils/date'
 
 interface CalendarSheetProps {
   initialStart?: Date
@@ -79,7 +80,6 @@ function CalendarSheet({
   const checkInRange = (d: Date) =>
     !!startDate && !!endDate && d > startDate && d < endDate
 
-  const formatDate = (d: Date) => `${d.getMonth() + 1}월 ${d.getDate()}일`
   const diffDays =
     startDate && endDate
       ? Math.round((endDate.getTime() - startDate.getTime()) / 86400000) + 1

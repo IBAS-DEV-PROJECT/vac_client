@@ -2,11 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import RecordTimelineItem from '@/components/common/record/RecordTimelineItem'
 import { TOPIC_LABELS, type TopicKey } from '@/constants/insights'
 import type { ConcernRecord } from '@/mock/concernRecords'
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  return `${date.getMonth() + 1}월 ${date.getDate()}일`
-}
+import { formatDate } from '@/utils/date'
 
 function ConcernTimelinePage() {
   const navigate = useNavigate()

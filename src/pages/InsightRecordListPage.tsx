@@ -6,11 +6,7 @@ import {
   type ValueKey,
 } from '@/constants/insights'
 import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
-
-function formatDate(dateStr: string): string {
-  const date = new Date(dateStr)
-  return `${date.getMonth() + 1}월 ${date.getDate()}일`
-}
+import { formatDate } from '@/utils/date'
 
 function getDateRange(filters: InsightFilters): { start: Date; end: Date } {
   const end = new Date()
