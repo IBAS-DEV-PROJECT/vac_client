@@ -32,7 +32,7 @@ export interface onboardingComponentProps {
   selectedValue : string | null,
   setSelectedValue : React.Dispatch<React.SetStateAction<ValueKey | null>>,
   selectedCategory : string | null,
-  setSelectedCategory : React.Dispatch<React.SetStateAction<ValueKey | null>>,
+  setSelectedCategory : Dispatch<SetStateAction<"etc" | "health" | "money" | "relationship" | "self" | "work" | null>>,
 }
 
 export default function Onboarding () {

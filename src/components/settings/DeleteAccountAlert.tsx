@@ -1,4 +1,10 @@
-export default function DeleteAccountAlert(props: {isVisible : boolean}){
+import { Dispatch, SetStateAction } from 'react';
+
+export default function DeleteAccountAlert(props: {
+  isVisible : boolean,
+  deleteAccountAlertShow : boolean,
+  setDeleteAccountAlertShow : Dispatch<SetStateAction<boolean>>,
+  }){
   if(props.isVisible){
     return (
       <div className="fixed top-0 z-10 block w-[100%] h-[100%] bg-[#140B0A73]">

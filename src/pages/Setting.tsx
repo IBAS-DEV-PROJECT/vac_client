@@ -11,7 +11,29 @@ import Arrow from '@/assets/Arrow.png'
 
 export default function Setting () {
 
-  const [activeNav, setActiveNav] = useState<NavValue>('setting')
+  const [activeNav, setActiveNav] = useState<NavValue>('setting');
+  const [deleteAccountShow, setDeleteAccountShow] = useState(false);
+  const [deleteAccountAlertShow, setDeleteAccountAlertShow] = useState(false);
+
+  const DeleteAccountShow = () =>{
+    if(deleteAccountShow == false){
+      setDeleteAccountShow(true);
+    }
+    else{
+      setDeleteAccountShow(false);
+    }
+  }
+
+  const DeleteAccountAlertShow = () =>{
+    if(deleteAccountAlertShow == false){
+      setDeleteAccountShow(false);
+      setDeleteAccountAlertShow(true);
+    }
+    else{
+      setDeleteAccountShow(true);
+      setDeleteAccountAlertShow(false);
+    }
+  }
 
   return (
     <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px]">
@@ -32,7 +54,7 @@ export default function Setting () {
           </div>
           <div className="w-[100%] h-[2px] bg-[#3E272338] my-[20px]"/>
           <button className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#201E1D] border-b-[1px] border-[#3E272338]">로그아웃</button>
-          <button className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#2A1F1C99] border-b-[1px] border-[#3E272338]">회원탈퇴</button>
+          <button onClick={DeleteAccountShow} className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#2A1F1C99] border-b-[1px] border-[#3E272338]">회원탈퇴</button>
         </div>
         
         <center><p className="text-[12px] font-[400] text-[#2A1F1C8C] mb-[48px]">Layer v1.0.0</p></center>
@@ -41,9 +63,15 @@ export default function Setting () {
         <BottomNav value={activeNav} onChange={setActiveNav} />
       </footer>
       {/* Account Delete tab */}
-      <DeleteAccount isVisible={false} />
-      {/* Account Delete tab */}
-      <DeleteAccountAlert isVisible={false} />
+      <DeleteAccount 
+        isVisible={deleteAccountShow} 
+        deleteAccountShow={deleteAccountShow} 
+        setDeleteAccountShow={setDeleteAccountShow} 
+        deleteAccountAlertShow={deleteAccountAlertShow} 
+        setDeleteAccountAlertShow={setDeleteAccountAlertShow}
+      />
+      {/* Account Delete Alert tab */}
+      <DeleteAccountAlert isVisible={deleteAccountAlertShow}/>
     </div>
   );
 }
