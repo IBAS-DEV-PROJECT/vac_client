@@ -157,7 +157,7 @@ function InsightPage() {
 
   const hasTopicData = INSIGHT_CARDS.length > 0
   const hasTrendData = MOCK_INSIGHT.totalCount >= 2
-  const hasInsightData = !!(topTopicLabel && topValueKey)
+  const hasInsightData = MOCK_INSIGHT.totalCount >= 1
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
   return (
