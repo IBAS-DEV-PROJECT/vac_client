@@ -98,7 +98,7 @@ function ValueInsightCard({
           style={{ backgroundColor: colorBg }}
         >
           <span className="text-[11px] font-medium" style={{ color: colorVar }}>
-            기록{recordCount}건 ›
+            기록 {recordCount}건 ›
           </span>
         </button>
       </div>
