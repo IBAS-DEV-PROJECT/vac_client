@@ -19,7 +19,7 @@ function RecordItem({
   return (
     <div
       {...props}
-      className="flex w-full items-center justify-between gap-3 border-b border-[#3E2723]/22 py-3"
+      className="flex w-full items-center justify-between gap-3 border-b border-[#3E2723]/22 py-4"
     >
       <div className="flex min-w-0 items-center gap-3">
         <span

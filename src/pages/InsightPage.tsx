@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import insightPlus from '@/assets/insightPlus.svg'
 import insightEmpty from '@/assets/insightEmpty.png'
 import valueEmpty from '@/assets/valueEmpty.png'
@@ -22,6 +23,7 @@ import {
   type TrendDataPoint,
   type ValueKey,
 } from '@/constants/insights'
+import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
 import { MOCK_INSIGHT } from '@/mock/insight'
 
 function formatPeriodLabel(startDate: string, endDate: string): string {
@@ -61,6 +63,26 @@ const INSIGHT_CARDS = MOCK_INSIGHT.valueByTopic.map((item) => ({
     .filter((v) => v.key),
   recordCount: item.count,
 }))
+
+function buildHeaderLabel(filters: InsightFilters): string {
+  const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`
+  const periodLabel =
+    filters.period === '캘린더' && filters.dateRange
+      ? `${fmt(filters.dateRange.start)}~${fmt(filters.dateRange.end)}`
+      : filters.period
+
+  const parts: string[] = [periodLabel]
+
+  if (filters.topics.length > 0 && !filters.topics.includes('전체')) {
+    filters.topics.forEach((t) => parts.push(TOPIC_LABELS[t as TopicKey]))
+  }
+
+  if (filters.values.length > 0 && !filters.values.includes('all')) {
+    filters.values.forEach((v) => parts.push(VALUE_LABELS[v as ValueKey]))
+  }
+
+  return parts.join('·') + ' 기록'
+}
 
 function buildFilterSummary(filters: InsightFilters): string {
   const fmt = (d: Date) => `${d.getMonth() + 1}/${d.getDate()}`
@@ -161,6 +183,7 @@ const pencilIcon = (
 )
 
 function InsightPage() {
+  const navigate = useNavigate()
   const [appliedFilters, setAppliedFilters] = useState<InsightFilters>(() => ({
     ...DEFAULT_FILTERS,
     topics: [...DEFAULT_FILTERS.topics],
@@ -198,7 +221,7 @@ function InsightPage() {
   const hasAllEmpty = false // 섹션별 빈 상태 테스트용
 
   return (
-    <div className="flex min-h-full flex-col bg-[#E1F5FE]">
+    <div className="flex min-h-full flex-col">
       {/* 페이지 헤더 */}
       <div className="px-5 pb-5 pt-8">
         <h1 className="text-2xl font-bold text-[#2A1F1C]">인사이트</h1>
@@ -392,6 +415,13 @@ function InsightPage() {
           onApply={(f) => {
             setAppliedFilters(f)
             setIsFilterOpen(false)
+            navigate('/insight/records', {
+              state: {
+                filters: f,
+                headerLabel: buildHeaderLabel(f),
+                count: MOCK_CONCERN_RECORDS.length,
+              },
+            })
           }}
           onClose={() => setIsFilterOpen(false)}
         />
