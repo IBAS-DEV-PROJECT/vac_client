@@ -238,9 +238,7 @@ function InsightPage() {
               </p>
             </div>
             <div className="mt-1 w-48">
-              <Button onClick={() => console.log('지금 기록하기 클릭')}>
-                지금 기록하기
-              </Button>
+              <Button onClick={() => {}}>지금 기록하기</Button>
             </div>
           </div>
         </div>
@@ -264,9 +262,18 @@ function InsightPage() {
                       <ValueInsightCard
                         key={card.topicKey}
                         {...card}
-                        onRecordClick={() =>
-                          console.log(`${card.topicKey} 기록 클릭`)
-                        }
+                        onRecordClick={() => {
+                          const f = {
+                            ...DEFAULT_FILTERS,
+                            topics: [card.topicKey],
+                          }
+                          navigate('/insight/records', {
+                            state: {
+                              filters: f,
+                              headerLabel: buildHeaderLabel(f),
+                            },
+                          })
+                        }}
                       />
                     ))}
                   </div>
@@ -343,7 +350,7 @@ function InsightPage() {
           <div className="mx-5 mt-6">
             <button
               type="button"
-              onClick={() => console.log('기록하기 클릭')}
+              onClick={() => {}}
               className="flex w-full items-center justify-center gap-2 rounded-[9px] bg-[#3E2723] px-5 py-4 text-white"
             >
               <img
