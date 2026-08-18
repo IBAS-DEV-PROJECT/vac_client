@@ -10,7 +10,14 @@ interface BottomSheetProps {
 function BottomSheet({ onClose, children, className = '' }: BottomSheetProps) {
   return createPortal(
     <div className="fixed inset-0 z-50 flex flex-col justify-end">
-      <div className="absolute inset-0 bg-black/40" onClick={onClose} />
+      <div
+        className="absolute inset-0 bg-black/40"
+        role="button"
+        aria-label="닫기"
+        tabIndex={0}
+        onClick={onClose}
+        onKeyDown={(e) => e.key === 'Enter' && onClose()}
+      />
       <div
         className={`relative flex max-h-[80vh] flex-col rounded-t-3xl bg-[#E1F5FE] ${className}`}
       >
