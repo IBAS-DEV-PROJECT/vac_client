@@ -1,7 +1,7 @@
 import type { InsightData } from '@/types/api'
 
 export const MOCK_INSIGHT: InsightData = {
-  totalCount: 48,
+  totalCount: 32,
   valueByTopic: [
     {
       topic: '일',
