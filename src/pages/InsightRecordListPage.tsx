@@ -1,10 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
-import {
-  type InsightFilters,
-  type TopicKey,
-  type ValueKey,
-} from '@/constants/insights'
+import { type TopicKey, type ValueKey } from '@/constants/insights'
+import { type InsightFilters } from '@/types/insight'
 import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
 import { formatDate } from '@/utils/date'
 

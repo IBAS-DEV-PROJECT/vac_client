@@ -13,16 +13,18 @@ import ValueInsightCard from '@/components/insights/ValueInsightCard'
 import InsightCard from '@/components/insights/InsightCard'
 import ValueTrendSection from '@/components/insights/ValueTrendSection'
 import {
-  DEFAULT_FILTERS,
   TOPIC_LABELS,
   VALUE_LABELS,
   VALUE_KEY_MAP,
-  type ChangeEntry,
-  type InsightFilters,
   type TopicKey,
-  type TrendDataPoint,
   type ValueKey,
 } from '@/constants/insights'
+import {
+  DEFAULT_FILTERS,
+  type ChangeEntry,
+  type InsightFilters,
+  type TrendDataPoint,
+} from '@/types/insight'
 import { MOCK_INSIGHT } from '@/mock/insight'
 
 function formatPeriodLabel(startDate: string, endDate: string): string {

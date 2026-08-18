@@ -5,14 +5,16 @@ import CalendarSheet from './CalendarSheet'
 import BottomSheet from '@/components/common/BottomSheet'
 import Button from '@/components/common/button/Button'
 import {
-  DEFAULT_FILTERS,
   TOPIC_OPTIONS,
   VALUE_LABELS,
+  type ValueKey,
+} from '@/constants/insights'
+import {
+  DEFAULT_FILTERS,
   type InsightFilters,
   type PeriodOption,
   type TopicOption,
-  type ValueKey,
-} from '@/constants/insights'
+} from '@/types/insight'
 import { formatDate } from '@/utils/date'
 
 const PERIOD_OPTIONS: PeriodOption[] = [

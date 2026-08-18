@@ -6,13 +6,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import {
-  VALUE_COLORS,
-  VALUE_LABELS,
-  type ChangeEntry,
-  type TrendDataPoint,
-  type ValueKey,
-} from '@/constants/insights'
+import { VALUE_COLORS, VALUE_LABELS, type ValueKey } from '@/constants/insights'
+import { type ChangeEntry, type TrendDataPoint } from '@/types/insight'
 import { eul } from '@/utils/korean'
 
 interface ValueTrendSectionProps {
