@@ -180,7 +180,7 @@ function CalendarSheet({
       {/* 날짜 그리드 */}
       <div className="grid grid-cols-7 px-3">
         {cells.map((date, i) => {
-          if (!date) return <div key={`e-${i}`} className="h-13" />
+          if (!date) return <div key={`e-${i}`} className="h-[50px]" />
 
           const isSelected = checkStart(date) || checkEnd(date)
           const isRangeStart = checkStart(date)
@@ -190,25 +190,37 @@ function CalendarSheet({
           return (
             <div
               key={date.toISOString()}
-              className="relative flex h-13 items-center justify-center"
+              className="relative flex h-[50px] items-center justify-center"
             >
               {isMiddle && (
-                <div className="absolute inset-y-1 left-0 right-0 bg-[#3ab0d9]/20" />
+                <div
+                  className="absolute inset-y-0 left-0 right-0"
+                  style={{ backgroundColor: 'var(--color-calendar-range)' }}
+                />
               )}
               {isRangeStart && hasRange && (
-                <div className="absolute inset-y-1 left-1/2 right-0 bg-[#3ab0d9]/20" />
+                <div
+                  className="absolute inset-y-0 left-1/2 right-0"
+                  style={{ backgroundColor: 'var(--color-calendar-range)' }}
+                />
               )}
               {isRangeEnd && hasRange && (
-                <div className="absolute inset-y-1 left-0 right-1/2 bg-[#3ab0d9]/20" />
+                <div
+                  className="absolute inset-y-0 left-0 right-1/2"
+                  style={{ backgroundColor: 'var(--color-calendar-range)' }}
+                />
               )}
               <button
                 type="button"
                 onClick={() => handleDayClick(date)}
-                className={`relative z-10 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-sm font-medium transition-colors ${
-                  isSelected
-                    ? 'bg-[#3ab0d9] font-bold text-white'
-                    : 'text-[#2A1F1C] hover:bg-[#3ab0d9]/10'
+                className={`relative z-10 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-full text-sm font-medium transition-colors ${
+                  isSelected ? 'font-bold text-white' : 'text-[#2A1F1C]'
                 }`}
+                style={
+                  isSelected
+                    ? { backgroundColor: 'var(--color-stability)' }
+                    : undefined
+                }
               >
                 {date.getDate()}
               </button>
