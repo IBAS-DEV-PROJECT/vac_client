@@ -66,16 +66,28 @@ const INSIGHT_CARDS = MOCK_INSIGHT.valueByTopic.map((item) => ({
   recordCount: item.count,
 }))
 
-const trendMaxIncrease: ChangeEntry = {
-  key: VALUE_KEY_MAP[MOCK_INSIGHT.largestIncrease[0].value],
-  change: MOCK_INSIGHT.largestIncrease[0].increaseRate,
-}
-const trendMaxDecrease: ChangeEntry = {
-  key: VALUE_KEY_MAP[MOCK_INSIGHT.largestDecrease[0].value],
-  change: MOCK_INSIGHT.largestDecrease[0].decreaseRate,
-}
-const topTopicLabel = TOPIC_LABELS[MOCK_INSIGHT.insight.mostTopic[0]]
-const topValueKey = VALUE_KEY_MAP[MOCK_INSIGHT.insight.mostValue[0]]
+const trendMaxIncrease: ChangeEntry | null =
+  MOCK_INSIGHT.largestIncrease.length > 0
+    ? {
+        key: VALUE_KEY_MAP[MOCK_INSIGHT.largestIncrease[0].value],
+        change: MOCK_INSIGHT.largestIncrease[0].increaseRate,
+      }
+    : null
+
+const trendMaxDecrease: ChangeEntry | null =
+  MOCK_INSIGHT.largestDecrease.length > 0
+    ? {
+        key: VALUE_KEY_MAP[MOCK_INSIGHT.largestDecrease[0].value],
+        change: MOCK_INSIGHT.largestDecrease[0].decreaseRate,
+      }
+    : null
+
+const topTopicLabel = MOCK_INSIGHT.insight.mostTopic[0]
+  ? TOPIC_LABELS[MOCK_INSIGHT.insight.mostTopic[0]]
+  : null
+const topValueKey = MOCK_INSIGHT.insight.mostValue[0]
+  ? VALUE_KEY_MAP[MOCK_INSIGHT.insight.mostValue[0]]
+  : null
 
 function fmt(d: Date): string {
   return `${d.getMonth() + 1}/${d.getDate()}`
@@ -156,8 +168,9 @@ function InsightPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
 
   const hasTopicData = INSIGHT_CARDS.length > 0
-  const hasTrendData = MOCK_INSIGHT.totalCount >= 2
-  const hasInsightData = MOCK_INSIGHT.totalCount >= 1
+  const hasTrendData =
+    TREND_DATA.length > 0 && !!trendMaxIncrease && !!trendMaxDecrease
+  const hasInsightData = !!topTopicLabel && !!topValueKey
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
   return (
@@ -296,8 +309,8 @@ function InsightPage() {
                 <ValueTrendSection
                   data={TREND_DATA}
                   valueKeys={TREND_KEYS}
-                  maxIncrease={trendMaxIncrease}
-                  maxDecrease={trendMaxDecrease}
+                  maxIncrease={trendMaxIncrease!}
+                  maxDecrease={trendMaxDecrease!}
                 />
               </>
             ) : (
@@ -318,8 +331,8 @@ function InsightPage() {
           <section>
             {hasInsightData ? (
               <InsightCard
-                topTopicLabel={topTopicLabel}
-                topValueKey={topValueKey}
+                topTopicLabel={topTopicLabel!}
+                topValueKey={topValueKey!}
               />
             ) : (
               <InsightSectionEmpty
