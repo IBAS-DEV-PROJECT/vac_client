@@ -3,6 +3,7 @@ import { useState, type ChangeEvent } from 'react'
 import LayerLogo from '@/assets/LayerLogo.png'
 import Exclamation from '@/assets/Exclamation.png'
 import Input from '@/components/common/input/Input'
+import Button from '@/components/common/button/Button'
 
 import {
   validateNickname,
@@ -40,7 +41,7 @@ export default function Login () {
               {...validatePassword(password)}
             />
           </section>
-          <button className="w-[100%] h-[46px] rounded-[9px] text-[14px] font-[800] text-[#E1F5FE] bg-[#3E2723]">로그인</button>
+          <Button>로그인</Button>
         </div>
         <center><button className="w-[159px] h-[18px] rounded-[9px] text-[13px] font-[800] text-[#3E2723]">계정이 없으신가요? 회원가입</button></center>
       </div>
