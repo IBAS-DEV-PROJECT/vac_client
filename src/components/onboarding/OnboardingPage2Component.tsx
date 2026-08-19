@@ -1,4 +1,4 @@
-export default function OnboardingComponent2() {
+export default function OnboardingPage2Component() {
   return (
     <div>
       <h1 className="text-[32px] font-[800] text-[#201E1D] mb-[38px] ">고르고, 이유를 남기면</h1>

@@ -27,7 +27,7 @@ const CATEGORY_OPTIONS = [
 
 type CategoryValue = (typeof CATEGORY_OPTIONS)[number]['value']
 
-export default function OnboardingComponent3({pageNumber, topic, setTopic, decision, setDecision, reason, setReason, selectedValue, setSelectedValue, selectedCategory, setSelectedCategory} : onboardingComponentProps) {
+export default function OnboardingPage3Component({pageNumber, topic, setTopic, decision, setDecision, reason, setReason, selectedValue, setSelectedValue, selectedCategory, setSelectedCategory} : onboardingComponentProps) {
 
     
   return (

@@ -2,8 +2,6 @@ import { Dispatch, SetStateAction } from 'react';
 
 export default function DeleteAccountAlert(props: {
   isVisible : boolean,
-  deleteAccountAlertShow : boolean,
-  setDeleteAccountAlertShow : Dispatch<SetStateAction<boolean>>,
   }){
   if(props.isVisible){
     return (

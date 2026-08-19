@@ -7,7 +7,7 @@ import Setting from '@/pages/Setting'
 import RecordGuide from '@/pages/RecordGuide'
 
 function App() {
-  return <Setting />
+  return <Onboarding />
 }
 
 export default App

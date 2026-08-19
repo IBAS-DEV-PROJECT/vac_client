@@ -1,4 +1,4 @@
-export default function OnboardingComponent1() {
+export default function OnboardingPage1Component() {
     
   return (
     <div>
