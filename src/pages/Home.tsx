@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import HomeHeader from '@/components/home/HomeHeader'
 import ConcernCard from '@/components/home/ConcernCard'
 import ConcernItem from '@/components/home/ConcernItem'
@@ -6,9 +5,6 @@ import MonthlyValueSection from '@/components/home/MonthlyValueSection'
 import EmptyState from '@/components/home/EmptyState'
 import Button from '@/components/common/button/Button'
 import RecordItem from '@/components/common/record/RecordItem'
-import BottomNav, {
-  type NavValue,
-} from '@/components/common/navigation/BottomNav'
 import PencilIcon from '@/assets/pencil.svg'
 import ClockIcon from '@/assets/clock.svg'
 import { type TopicKey } from '@/constants/insights'
@@ -69,8 +65,6 @@ const MOCK_HOME = {
 }
 
 function Home() {
-  const [activeNav, setActiveNav] = useState<NavValue>('home')
-
   const data = MOCK_HOME
   const {
     ongoingConcerns,
@@ -81,15 +75,14 @@ function Home() {
 
   const hasConcern = ongoingConcerns.length > 0
 
-  // TODO: 라우터 도입 후 고민 기록 페이지(새 고민 탭)로 이동
+  // TODO: 고민 기록 페이지로 이동
   const handleGoToRecord = () => console.log('새 고민 탭으로 이동')
   const handleContinue = (concernId: string) =>
     console.log('이어쓰기', concernId)
 
   return (
-    // TODO: 라우터 도입 시 바깥 래퍼 + BottomNav를 MainLayout으로 이동
-    <div className="min-h-screen w-full bg-[#E1F5FE]">
-      <div className="mx-auto w-full max-w-[400px] pb-32">
+    <div className="min-h-full w-full bg-[#E1F5FE]">
+      <div className="mx-auto w-full max-w-[400px]">
         <HomeHeader />
 
         <div className="flex flex-col gap-6 px-6 py-6">
@@ -173,11 +166,6 @@ function Home() {
               </div>
             )}
           </section>
-        </div>
-
-        {/* 하단 네비바 */}
-        <div className="fixed bottom-5 left-1/2 z-20 w-full max-w-[400px] -translate-x-1/2 px-6">
-          <BottomNav value={activeNav} onChange={setActiveNav} />
         </div>
       </div>
     </div>

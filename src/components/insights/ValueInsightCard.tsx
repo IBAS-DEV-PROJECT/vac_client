@@ -1,7 +1,9 @@
 import {
-  CATEGORY_CONFIG,
+  TOPIC_ICONS,
+  TOPIC_IMAGES,
+  TOPIC_LABELS,
   VALUE_LABELS,
-  type CategoryKey,
+  type TopicKey,
   type ValueKey,
 } from '@/constants/insights'
 
@@ -11,47 +13,59 @@ interface ValueEntry {
 }
 
 interface ValueInsightCardProps {
-  categoryKey: CategoryKey
-  title: string
+  topicKey: TopicKey
   values: ValueEntry[]
   recordCount: number
   onRecordClick?: () => void
 }
 
 function ValueInsightCard({
-  categoryKey,
-  title,
+  topicKey,
   values,
   recordCount,
   onRecordClick,
 }: ValueInsightCardProps) {
-  const emoji = CATEGORY_CONFIG[categoryKey]?.emoji ?? '📋'
-  const topValue = values[0]
+  const topicImage = TOPIC_IMAGES[topicKey]
+  const emoji = TOPIC_ICONS[topicKey]
+  const title = TOPIC_LABELS[topicKey]
+  const topValue = values.reduce(
+    (max, v) => (v.percent > max.percent ? v : max),
+    values[0],
+  )
+  const colorVar = `var(--color-${topValue?.key ?? 'growth'})`
+  const colorBg = `color-mix(in srgb, ${colorVar} 14%, white)`
 
   return (
-    <div className="w-52.5 rounded-[14px] bg-white border border-gray-100 shadow-sm flex flex-col px-4 pt-4 pb-4">
+    <div className="w-52.5 shrink-0 rounded-[14px] border border-gray-100 bg-white shadow-sm flex flex-col px-4 pt-4 pb-4">
       <div className="flex items-center gap-2">
-        <div className="w-9 h-9 rounded-full bg-[color-mix(in_srgb,var(--color-growth)_12%,white)] flex items-center justify-center">
-          <span className="text-lg leading-none">{emoji}</span>
+        <div
+          className="w-9 h-9 rounded-full flex items-center justify-center"
+          style={{ backgroundColor: colorBg }}
+        >
+          {topicImage ? (
+            <img src={topicImage} alt="" className="w-5 h-5 object-contain" />
+          ) : (
+            <span className="text-lg leading-none">{emoji}</span>
+          )}
         </div>
-        <span className="font-bold text-gray-800 text-[15px]">{title}</span>
+        <span className="font-bold text-gray-800 text-base">{title}</span>
       </div>
 
       <div className="mt-3">
-        <div className="w-28.25 h-5.5 rounded-[7px] bg-[color-mix(in_srgb,var(--color-growth)_15%,white)] flex items-center justify-center">
-          <span
-            className="text-[11px] font-medium"
-            style={{ color: 'var(--color-growth)' }}
-          >
+        <div
+          className="w-fit px-2.5 h-5.5 rounded-[7px] flex items-center justify-center"
+          style={{ backgroundColor: colorBg }}
+        >
+          <span className="text-[11px] font-medium" style={{ color: colorVar }}>
             가장 많이 선택한 가치
           </span>
         </div>
       </div>
 
-      <div className="mt-1.5 leading-none">
+      <div className="mt-2 leading-none">
         <span
           className="text-[20px] font-bold leading-tight"
-          style={{ color: `var(--color-${topValue?.key ?? 'growth'})` }}
+          style={{ color: colorVar }}
         >
           {topValue ? VALUE_LABELS[topValue.key] : ''}
         </span>
@@ -66,7 +80,7 @@ function ValueInsightCard({
               </span>
               <span className="text-[12px] text-gray-400">{v.percent}%</span>
             </div>
-            <div className="h-1.25 bg-blue-100 rounded-full overflow-hidden">
+            <div className="h-1.25 bg-gray-100 rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full"
                 style={{
@@ -83,13 +97,11 @@ function ValueInsightCard({
         <button
           type="button"
           onClick={onRecordClick}
-          className="w-17.5 h-5.5 rounded-[7px] bg-[color-mix(in_srgb,var(--color-growth)_15%,white)] flex items-center justify-center cursor-pointer"
+          className="h-5.5 px-2.5 rounded-[7px] flex items-center justify-center cursor-pointer"
+          style={{ backgroundColor: colorBg }}
         >
-          <span
-            className="text-[11px] font-medium"
-            style={{ color: 'var(--color-growth)' }}
-          >
-            기록{recordCount}건 ›
+          <span className="text-[11px] font-medium" style={{ color: colorVar }}>
+            기록 {recordCount}건 ›
           </span>
         </button>
       </div>

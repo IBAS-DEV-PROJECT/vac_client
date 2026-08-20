@@ -6,14 +6,12 @@ interface RecordTimelineItemProps extends HTMLAttributes<HTMLDivElement> {
   valueKey: ValueKey
   title: string
   date: string
-  isLast?: boolean
 }
 
 function RecordTimelineItem({
   valueKey,
   title,
   date,
-  isLast = false,
   ...props
 }: RecordTimelineItemProps) {
   return (
@@ -25,12 +23,7 @@ function RecordTimelineItem({
           style={{ backgroundColor: `var(--color-${valueKey})` }}
           aria-hidden="true"
         />
-        {!isLast && (
-          <span
-            className="mt-1 w-px flex-1 bg-[#3E2723]/22"
-            aria-hidden="true"
-          />
-        )}
+        <span className="mt-1 w-px flex-1 bg-[#3E2723]/22" aria-hidden="true" />
       </div>
 
       {/* 날짜 + 제목 + 뱃지 */}

@@ -1,4 +1,5 @@
-export function formatDate(dateStr: string): string {
-  const [, month, day] = dateStr.split('-')
-  return `${Number(month)}월 ${Number(day)}일`
+export function formatDate(date: Date | string): string {
+  const d = typeof date === 'string' ? new Date(date) : date
+  if (isNaN(d.getTime())) return ''
+  return `${d.getMonth() + 1}월 ${d.getDate()}일`
 }
