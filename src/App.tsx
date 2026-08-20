@@ -26,7 +26,6 @@ function App() {
         />
         <Route path="/insight/records" element={<InsightRecordListPage />} />
         <Route path="/insight/timeline" element={<ConcernTimelinePage />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/test1" element={<Test1 />} />
         <Route path="/test2" element={<Test2 />} />
       </Routes>
