@@ -1,4 +1,4 @@
-import { type ValueKey } from '@/constants/insights'
+import { VALUE_LABELS, type ValueKey } from '@/constants/insights'
 
 export const VALUE_DESCRIPTIONS: Record<ValueKey, string> = {
   growth: '배우고 나아지는 쪽',
@@ -11,3 +11,7 @@ export const VALUE_DESCRIPTIONS: Record<ValueKey, string> = {
   meaning: '옳다고 믿는 것에 맞는 쪽',
   responsibility: '해야 할 일이라서 고른 쪽',
 }
+
+export const VALUE_KEY_BY_LABEL = Object.fromEntries(
+  Object.entries(VALUE_LABELS).map(([key, label]) => [label, key]),
+) as Record<string, ValueKey>
