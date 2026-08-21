@@ -6,6 +6,7 @@ import ConcernTimelinePage from '@/pages/ConcernTimelinePage'
 import Test1 from '@/pages/Test1'
 import Test2 from '@/pages/Test2'
 import Home from '@/pages/Home'
+import RecordPage from '@/pages/RecordPage'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         />
         <Route path="/insight/records" element={<InsightRecordListPage />} />
         <Route path="/insight/timeline" element={<ConcernTimelinePage />} />
+        <Route path="/record" element={<RecordPage />} />
         <Route path="/test1" element={<Test1 />} />
         <Route path="/test2" element={<Test2 />} />
       </Routes>

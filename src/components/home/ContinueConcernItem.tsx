@@ -24,12 +24,12 @@ function ContinueConcernItem({
     <button
       type="button"
       onClick={onClick}
-      className="w-full h-21 flex items-center justify-between px-0 py-4 border-b border-gray-200 cursor-pointer text-left"
+      className="w-full h-21 flex items-center justify-between px-0 py-4 border-b border-[#3E272338] cursor-pointer text-left"
     >
       <div className="flex flex-col gap-1.5">
         <span className="text-[15px] font-semibold text-gray-900">{title}</span>
         <div className="flex items-start gap-2">
-          <span className="text-[12px] text-gray-500 bg-gray-100 rounded px-1.5 py-0.5">
+          <span className="text-[12px] text-gray-500 bg-[#F6FBFE] rounded-[7px] px-1.5 py-0.5">
             {TOPIC_LABELS[topic]}
           </span>
           <span className="text-[12px] text-gray-400">
@@ -38,7 +38,7 @@ function ContinueConcernItem({
           </span>
         </div>
       </div>
-      <span className="text-gray-800 text-base">›</span>
+      <span className="text-[24px] text-[#201E1D] text-base">›</span>
     </button>
   )
 }
