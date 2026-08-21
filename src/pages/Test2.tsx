@@ -151,7 +151,7 @@ function Test2() {
   }
 
   return (
-    <div className="min-h-screen bg-[#E1F5FE]">
+    <div className="min-h-screen">
       <div className="flex justify-center gap-16">
         <div className="w-[400px] shrink-0">
           <Header
