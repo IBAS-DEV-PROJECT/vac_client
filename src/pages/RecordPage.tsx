@@ -13,7 +13,7 @@ import ContinueListStep from '@/components/record/ContinueListStep'
 import ContinueJudgmentStep from '@/components/record/ContinueJudgmentStep'
 import {
   MOCK_PENDING_CONCERNS,
-  getRecordsByConcern,
+  getRecordsByConcernId,
 } from '@/mock/pendingConcerns'
 import { type PendingConcern, type RecordForm } from '@/types/record'
 
@@ -80,7 +80,10 @@ function RecordPage() {
 
   // TODO: POST /concerns, POST /concerns/pending/{concernId} 연동
   const onSubmit = (data: RecordForm) => {
-    console.log('기록 남기기', { isContinue, ...data })
+    console.log('기록 남기기', {
+      concernId: selectedConcern?.concernId ?? null,
+      ...data,
+    })
     navigate('/')
   }
 
@@ -123,7 +126,7 @@ function RecordPage() {
                   {step === 1 && (
                     <ContinueJudgmentStep
                       concern={selectedConcern.concern}
-                      records={getRecordsByConcern(selectedConcern.concern)}
+                      records={getRecordsByConcernId(selectedConcern.concernId)}
                       onNext={() => setStep(2)}
                     />
                   )}

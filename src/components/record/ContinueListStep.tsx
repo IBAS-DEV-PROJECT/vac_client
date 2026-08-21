@@ -28,7 +28,7 @@ function ContinueListStep({
     <div className="flex flex-col px-6 py-6">
       {concerns.map((item) => (
         <ContinueConcernItem
-          key={item.concern}
+          key={item.concernId}
           title={item.concern}
           topic={item.topic}
           lastRecordDate={item.lastRecordDate}

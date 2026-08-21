@@ -14,6 +14,7 @@ export interface RecordForm {
 
 /** 이어쓸 고민 목록 항목 */
 export interface PendingConcern {
+  concernId: string
   concern: string
   topic: TopicKey
   lastRecordDate: string
