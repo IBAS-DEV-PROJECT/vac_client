@@ -135,7 +135,7 @@ const pencilIcon = <span aria-hidden="true">✏️</span>
 
 function InsightPage() {
   const navigate = useNavigate()
-  const [appliedFilters] = useState<InsightFilters>(() => ({
+  const [appliedFilters, setAppliedFilters] = useState<InsightFilters>(() => ({
     ...DEFAULT_FILTERS,
     topics: [...DEFAULT_FILTERS.topics],
     values: [...DEFAULT_FILTERS.values],
@@ -429,6 +429,11 @@ function InsightPage() {
         <InsightFilterSheet
           filters={appliedFilters}
           onApply={(f) => {
+            setAppliedFilters({
+              ...f,
+              topics: [...f.topics],
+              values: [...f.values],
+            })
             setIsFilterOpen(false)
             navigate('/insight/records', {
               state: { filters: f, headerLabel: buildHeaderLabel(f) },
