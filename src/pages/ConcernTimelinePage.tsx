@@ -33,11 +33,8 @@ function ConcernTimelinePage() {
   }, [state?.concernId])
 
   const concern = timelineData?.concern ?? state?.concern ?? ''
-  const topicLabel = timelineData?.topic
-    ? TOPIC_LABELS[timelineData.topic]
-    : state?.topic
-      ? TOPIC_LABELS[state.topic]
-      : ''
+  const topic = timelineData?.topic ?? state?.topic
+  const topicLabel = topic ? TOPIC_LABELS[topic] : ''
   const records = timelineData?.records ?? []
 
   return (

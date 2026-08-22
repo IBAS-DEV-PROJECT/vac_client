@@ -135,7 +135,7 @@ const pencilIcon = <span aria-hidden="true">✏️</span>
 
 function InsightPage() {
   const navigate = useNavigate()
-  const [appliedFilters, setAppliedFilters] = useState<InsightFilters>(() => ({
+  const [appliedFilters] = useState<InsightFilters>(() => ({
     ...DEFAULT_FILTERS,
     topics: [...DEFAULT_FILTERS.topics],
     values: [...DEFAULT_FILTERS.values],
@@ -151,41 +151,40 @@ function InsightPage() {
       .finally(() => setIsLoading(false))
   }, [appliedFilters])
 
-  const insightCards = useMemo(
-    () => (insightData ? deriveInsightCards(insightData) : []),
-    [insightData],
-  )
-  const trendData = useMemo(
-    () => (insightData ? deriveTrendData(insightData) : []),
-    [insightData],
-  )
-  const trendKeys = useMemo(
-    () => (insightData ? deriveTrendKeys(insightData) : []),
-    [insightData],
-  )
-
-  const trendMaxIncrease: ChangeEntry | null = useMemo(() => {
-    if (!insightData || insightData.largestIncrease.length === 0) return null
+  const derived = useMemo(() => {
+    if (!insightData) return null
     return {
-      key: VALUE_KEY_MAP[insightData.largestIncrease[0].value],
-      change: insightData.largestIncrease[0].increaseRate,
+      insightCards: deriveInsightCards(insightData),
+      trendData: deriveTrendData(insightData),
+      trendKeys: deriveTrendKeys(insightData),
+      trendMaxIncrease: insightData.largestIncrease[0]
+        ? {
+            key: VALUE_KEY_MAP[insightData.largestIncrease[0].value],
+            change: insightData.largestIncrease[0].increaseRate,
+          }
+        : (null as ChangeEntry | null),
+      trendMaxDecrease: insightData.largestDecrease[0]
+        ? {
+            key: VALUE_KEY_MAP[insightData.largestDecrease[0].value],
+            change: insightData.largestDecrease[0].decreaseRate,
+          }
+        : (null as ChangeEntry | null),
+      topTopicLabel: insightData.insight.mostTopic[0]
+        ? TOPIC_LABELS[insightData.insight.mostTopic[0]]
+        : null,
+      topValueKey: insightData.insight.mostValue[0]
+        ? VALUE_KEY_MAP[insightData.insight.mostValue[0]]
+        : null,
     }
   }, [insightData])
 
-  const trendMaxDecrease: ChangeEntry | null = useMemo(() => {
-    if (!insightData || insightData.largestDecrease.length === 0) return null
-    return {
-      key: VALUE_KEY_MAP[insightData.largestDecrease[0].value],
-      change: insightData.largestDecrease[0].decreaseRate,
-    }
-  }, [insightData])
-
-  const topTopicLabel = insightData?.insight.mostTopic[0]
-    ? TOPIC_LABELS[insightData.insight.mostTopic[0]]
-    : null
-  const topValueKey = insightData?.insight.mostValue[0]
-    ? VALUE_KEY_MAP[insightData.insight.mostValue[0]]
-    : null
+  const insightCards = derived?.insightCards ?? []
+  const trendData = derived?.trendData ?? []
+  const trendKeys = derived?.trendKeys ?? []
+  const trendMaxIncrease = derived?.trendMaxIncrease ?? null
+  const trendMaxDecrease = derived?.trendMaxDecrease ?? null
+  const topTopicLabel = derived?.topTopicLabel ?? null
+  const topValueKey = derived?.topValueKey ?? null
 
   const filteredTrendKeys = appliedFilters.values.includes('all')
     ? trendKeys
@@ -407,7 +406,6 @@ function InsightPage() {
         <InsightFilterSheet
           filters={appliedFilters}
           onApply={(f) => {
-            setAppliedFilters(f)
             setIsFilterOpen(false)
             navigate('/insight/records', {
               state: { filters: f, headerLabel: buildHeaderLabel(f) },
