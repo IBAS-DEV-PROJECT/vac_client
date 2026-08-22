@@ -1,21 +1,44 @@
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordTimelineItem from '@/components/common/record/RecordTimelineItem'
-import { TOPIC_LABELS, type TopicKey } from '@/constants/insights'
-import type { ConcernRecord } from '@/types/api'
+import {
+  TOPIC_LABELS,
+  VALUE_KEY_MAP,
+  type TopicKey,
+} from '@/constants/insights'
+import type { ConcernTimelineData } from '@/types/api'
 import { formatDate } from '@/utils/date'
+import { fetchConcernTimeline } from '@/services/insight'
 
 function ConcernTimelinePage() {
   const navigate = useNavigate()
   const location = useLocation()
   const state = location.state as {
+    concernId: string
     concern: string
     topic: TopicKey
-    records: ConcernRecord[]
   } | null
 
-  const concern = state?.concern ?? ''
-  const topicLabel = state?.topic ? TOPIC_LABELS[state.topic] : ''
-  const records = state?.records ?? []
+  const [timelineData, setTimelineData] = useState<ConcernTimelineData | null>(
+    null,
+  )
+  const [isLoading, setIsLoading] = useState(!!state?.concernId)
+
+  useEffect(() => {
+    if (!state?.concernId) return
+    fetchConcernTimeline(state.concernId)
+      .then(setTimelineData)
+      .catch(() => setTimelineData(null))
+      .finally(() => setIsLoading(false))
+  }, [state?.concernId])
+
+  const concern = timelineData?.concern ?? state?.concern ?? ''
+  const topicLabel = timelineData?.topic
+    ? TOPIC_LABELS[timelineData.topic]
+    : state?.topic
+      ? TOPIC_LABELS[state.topic]
+      : ''
+  const records = timelineData?.records ?? []
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -46,7 +69,7 @@ function ConcernTimelinePage() {
             {concern}
           </h1>
           <p className="text-[12px] text-[#2A1F1C]/60">
-            {topicLabel} · 기록 {records.length}건
+            {topicLabel} · 기록 {timelineData?.recordCount ?? 0}건
           </p>
         </div>
       </div>
@@ -54,16 +77,22 @@ function ConcernTimelinePage() {
       <div className="h-px bg-[#3E2723]/15" />
 
       {/* 타임라인 */}
-      <div className="pl-6 pt-5">
-        {records.map((record) => (
-          <RecordTimelineItem
-            key={record.id}
-            valueKey={record.valueKey}
-            title={record.decision}
-            date={formatDate(record.date)}
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
+        </div>
+      ) : (
+        <div className="pl-6 pt-5">
+          {records.map((record) => (
+            <RecordTimelineItem
+              key={record.recordId}
+              valueKey={VALUE_KEY_MAP[record.value]}
+              title={record.decision}
+              date={formatDate(record.createdAt)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

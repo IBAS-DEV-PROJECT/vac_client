@@ -51,7 +51,7 @@ api.interceptors.response.use(
 
       if (!tokenStore.getRefreshToken()) {
         tokenStore.clear()
-        window.location.href = '/login'
+        window.location.href = '/'
         return Promise.reject(error)
       }
 
@@ -61,7 +61,7 @@ api.interceptors.response.use(
         return api(original)
       } catch {
         tokenStore.clear()
-        window.location.href = '/login'
+        window.location.href = '/'
         return Promise.reject(error)
       }
     }
