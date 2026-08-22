@@ -33,7 +33,7 @@ function TextArea({
       />
 
       <span className="self-end text-[11px] text-[#2A1F1C]/55">
-        {value?.length} / {maxLength}
+        {value.length} / {maxLength}
       </span>
     </div>
   )
