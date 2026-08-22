@@ -23,14 +23,22 @@ function ConcernTimelinePage() {
     null,
   )
   const [isLoading, setIsLoading] = useState(!!state?.concernId)
+  const [isError, setIsError] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     if (!state?.concernId) return
     fetchConcernTimeline(state.concernId)
       .then(setTimelineData)
-      .catch(() => setTimelineData(null))
+      .catch(() => setIsError(true))
       .finally(() => setIsLoading(false))
-  }, [state?.concernId])
+  }, [state?.concernId, retryCount])
+
+  const handleRetry = () => {
+    setIsLoading(true)
+    setIsError(false)
+    setRetryCount((c) => c + 1)
+  }
 
   const concern = timelineData?.concern ?? state?.concern ?? ''
   const topic = timelineData?.topic ?? state?.topic
@@ -77,6 +85,19 @@ function ConcernTimelinePage() {
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
+        </div>
+      ) : isError ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-2">
+          <p className="text-sm text-[#2A1F1C]/60">
+            데이터를 불러오지 못했어요.
+          </p>
+          <button
+            type="button"
+            onClick={handleRetry}
+            className="text-sm font-medium text-[#3E2723] underline"
+          >
+            다시 시도
+          </button>
         </div>
       ) : (
         <div className="pl-6 pt-5">

@@ -143,13 +143,21 @@ function InsightPage() {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [insightData, setInsightData] = useState<InsightData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
 
   useEffect(() => {
     fetchInsight(appliedFilters)
       .then(setInsightData)
-      .catch(() => setInsightData(null))
+      .catch(() => setIsError(true))
       .finally(() => setIsLoading(false))
-  }, [appliedFilters])
+  }, [appliedFilters, retryCount])
+
+  const handleRetry = () => {
+    setIsLoading(true)
+    setIsError(false)
+    setRetryCount((c) => c + 1)
+  }
 
   const derived = useMemo(() => {
     if (!insightData) return null
@@ -202,6 +210,21 @@ function InsightPage() {
     return (
       <div className="flex min-h-full items-center justify-center">
         <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-full flex-col items-center justify-center gap-2">
+        <p className="text-sm text-[#2A1F1C]/60">데이터를 불러오지 못했어요.</p>
+        <button
+          type="button"
+          onClick={handleRetry}
+          className="text-sm font-medium text-[#3E2723] underline"
+        >
+          다시 시도
+        </button>
       </div>
     )
   }
