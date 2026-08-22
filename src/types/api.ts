@@ -92,3 +92,40 @@ export interface ConcernRecord {
   valueKey: ValueKey
   date: string
 }
+
+// ─── Concern Record (클라이언트 모델) ──────────────────────
+export interface ConcernRecord {
+  id: string
+  decision: string
+  concern: string
+  topic: TopicKey
+  valueKey: ValueKey
+  date: string
+}
+
+// ─── Home ──────────────────────────────────────────────────
+export interface HomeOngoingConcern {
+  concernId: string
+  concern: string
+  topic: TopicKey
+  topicOther: string | null
+  lastRecordDate: string
+}
+
+export interface HomeRecentRecord {
+  recordId: string
+  decision: string
+  date: string
+  value: ValueLabel
+}
+
+export interface HomeData {
+  nickname: string
+  ongoingConcernCount: number
+  ongoingConcerns: HomeOngoingConcern[]
+  monthlyValueHighlight: {
+    topValue: ValueLabel
+    changeRateVsLastMonth: number
+  } | null
+  recentRecords: HomeRecentRecord[]
+}
