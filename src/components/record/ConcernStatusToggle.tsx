@@ -6,14 +6,14 @@ const OPTIONS: { value: ConcernStatus; label: string }[] = [
 ]
 
 interface ConcernStatusToggleProps {
-  value: ConcernStatus
+  value: ConcernStatus | null
   onChange: (value: ConcernStatus) => void
 }
 
 function ConcernStatusToggle({ value, onChange }: ConcernStatusToggleProps) {
   return (
     <div className="flex h-[38px] w-full overflow-hidden rounded-[9px] border border-[#3E2723]/22">
-      {OPTIONS.map((option) => {
+      {OPTIONS.map((option, index) => {
         const isActive = option.value === value
 
         return (
@@ -23,10 +23,8 @@ function ConcernStatusToggle({ value, onChange }: ConcernStatusToggleProps) {
             aria-pressed={isActive}
             onClick={() => onChange(option.value)}
             className={`flex-1 text-[13px] font-normal ${
-              isActive
-                ? 'bg-[#3E2723] text-[#E1F5FE]'
-                : 'bg-[#E1F5FE] text-[#201E1D]'
-            }`}
+              index > 0 ? 'border-l border-[#3E2723]/22' : ''
+            } ${isActive ? 'bg-[#3E2723] text-[#E1F5FE]' : 'bg-[#E1F5FE] text-[#201E1D]'}`}
           >
             {option.label}
           </button>

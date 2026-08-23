@@ -8,9 +8,14 @@ import { type RecordForm } from '@/types/record'
 
 const VALUE_KEYS = Object.keys(VALUE_LABELS) as ValueKey[]
 
-function ValueStep() {
+interface ValueStepProps {
+  isSubmitting: boolean
+}
+
+function ValueStep({ isSubmitting }: ValueStepProps) {
   const { control } = useFormContext<RecordForm>()
   const value = useWatch({ control, name: 'value' })
+  const concernStatus = useWatch({ control, name: 'concernStatus' })
 
   return (
     <div className="flex flex-col gap-6 px-6 py-6">
@@ -55,8 +60,11 @@ function ValueStep() {
         />
       </div>
 
-      <Button type="submit" disabled={value === null}>
-        기록 남기기
+      <Button
+        type="submit"
+        disabled={value === null || concernStatus === null || isSubmitting}
+      >
+        {isSubmitting ? '저장 중...' : '기록 남기기'}
       </Button>
     </div>
   )

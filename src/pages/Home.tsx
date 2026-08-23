@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import HomeHeader from '@/components/home/HomeHeader'
 import ConcernCard from '@/components/home/ConcernCard'
 import ConcernItem from '@/components/home/ConcernItem'
@@ -14,6 +15,7 @@ const SECTION_TITLE =
   'text-[13px] font-extrabold uppercase leading-[14.56px] tracking-[1.04px] text-[#201E1D]'
 
 function Home() {
+  const navigate = useNavigate()
   const { data, isLoading, error } = useHome()
 
   if (isLoading) {
@@ -42,10 +44,9 @@ function Home() {
   } = data
   const hasConcern = ongoingConcerns.length > 0
 
-  // TODO: 고민 기록 페이지로 이동
-  const handleGoToRecord = () => console.log('새 고민 탭으로 이동')
+  const handleGoToRecord = () => navigate('/record')
   const handleContinue = (concernId: string) =>
-    console.log('이어쓰기', concernId)
+    navigate(`/record?tab=continue&concernId=${concernId}`)
 
   return (
     <div className="min-h-full w-full bg-[#E1F5FE]">

@@ -15,6 +15,9 @@ const TOPIC_OPTIONS: { value: TopicKey; title: string; description: string }[] =
     { value: '기타', title: '기타', description: '위 어디에도 해당 없음' },
   ]
 
+const CONCERN_MAX = 50
+const TOPIC_OTHER_MAX = 5
+
 interface ConcernStepProps {
   onNext: () => void
 }
@@ -23,8 +26,16 @@ function ConcernStep({ onNext }: ConcernStepProps) {
   const { control, register } = useFormContext<RecordForm>()
   const concern = useWatch({ control, name: 'concern' })
   const topic = useWatch({ control, name: 'topic' })
+  const topicOther = useWatch({ control, name: 'topicOther' })
 
-  const canProceed = concern.trim().length > 0 && topic !== null
+  const isConcernOver = concern.length > CONCERN_MAX
+  const isTopicOtherOver = topicOther.length > TOPIC_OTHER_MAX
+
+  const canProceed =
+    concern.trim().length > 0 &&
+    !isConcernOver &&
+    topic !== null &&
+    !isTopicOtherOver
 
   return (
     <div className="flex flex-col gap-6 px-6 py-6">
@@ -35,7 +46,7 @@ function ConcernStep({ onNext }: ConcernStepProps) {
           <TextArea
             {...field}
             label="무슨 고민인가요?"
-            maxLength={50}
+            maxLength={CONCERN_MAX}
             placeholder="예: A사 vs B사"
           />
         )}
@@ -62,10 +73,14 @@ function ConcernStep({ onNext }: ConcernStepProps) {
                     option.value === '기타' && field.value === '기타' ? (
                       <input
                         type="text"
-                        maxLength={5}
                         placeholder="직접 입력 (5자 이내)"
-                        {...register('topicEtc')}
-                        className="min-h-9 w-full rounded-[9px] border border-[#3E2723]/22 bg-white px-2.5 py-2.5 text-[13px] text-[#201E1D] outline-none placeholder:text-[#757575]"
+                        {...register('topicOther')}
+                        aria-invalid={isTopicOtherOver}
+                        className={`min-h-9 w-full rounded-[9px] border bg-white px-2.5 py-2.5 text-[13px] text-[#201E1D] outline-none placeholder:text-[#757575] ${
+                          isTopicOtherOver
+                            ? 'border-[#F97316]'
+                            : 'border-[#3E2723]/22'
+                        }`}
                       />
                     ) : undefined
                   }
@@ -74,6 +89,10 @@ function ConcernStep({ onNext }: ConcernStepProps) {
             </>
           )}
         />
+
+        {isTopicOtherOver && (
+          <p className="text-[11px] text-[#F97316]">5자 이내로 작성해주세요</p>
+        )}
       </div>
 
       <Button onClick={onNext} disabled={!canProceed}>
