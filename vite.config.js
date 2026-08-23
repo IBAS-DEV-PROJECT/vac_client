@@ -11,4 +11,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://peezmc7oz0.execute-api.ap-northeast-2.amazonaws.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/vac/api/v1'),
+      },
+    },
+  },
 })
