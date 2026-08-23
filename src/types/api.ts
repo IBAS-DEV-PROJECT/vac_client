@@ -83,17 +83,6 @@ export interface ConcernTimelineData {
 }
 
 // ─── Concern Record (클라이언트 모델) ──────────────────────
-
-export interface ConcernRecord {
-  id: string
-  decision: string
-  concern: string
-  topic: TopicKey
-  valueKey: ValueKey
-  date: string
-}
-
-// ─── Concern Record (클라이언트 모델) ──────────────────────
 export interface ConcernRecord {
   id: string
   decision: string
