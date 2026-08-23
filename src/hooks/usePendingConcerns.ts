@@ -28,5 +28,9 @@ export function usePendingConcerns(enabled: boolean) {
     }
   }, [enabled])
 
+  if (!enabled) {
+    return { concerns: [], isLoading: false, error: null }
+  }
+
   return { concerns, isLoading, error }
 }
