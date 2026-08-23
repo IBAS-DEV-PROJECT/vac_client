@@ -5,6 +5,7 @@ import { type PendingConcernItem } from '@/types/api'
 interface ContinueListStepProps {
   concerns: PendingConcernItem[]
   isLoading: boolean
+  error: Error | null
   onSelect: (concern: PendingConcernItem) => void
   onGoToNew: () => void
 }
@@ -12,6 +13,7 @@ interface ContinueListStepProps {
 function ContinueListStep({
   concerns,
   isLoading,
+  error,
   onSelect,
   onGoToNew,
 }: ContinueListStepProps) {
@@ -19,6 +21,18 @@ function ContinueListStep({
     return (
       <div className="flex flex-1 items-center justify-center px-6 py-6">
         <p className="text-sm text-[#2A1F1C]/55">불러오는 중...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-1 items-center justify-center px-6 py-6">
+        <p className="text-center text-sm text-[#2A1F1C]/55">
+          목록을 불러오지 못했어요.
+          <br />
+          잠시 후 다시 시도해주세요.
+        </p>
       </div>
     )
   }

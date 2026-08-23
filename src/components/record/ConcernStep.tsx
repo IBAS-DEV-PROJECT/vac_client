@@ -29,7 +29,8 @@ function ConcernStep({ onNext }: ConcernStepProps) {
   const topicOther = useWatch({ control, name: 'topicOther' })
 
   const isConcernOver = concern.length > CONCERN_MAX
-  const isTopicOtherOver = topicOther.length > TOPIC_OTHER_MAX
+  const isTopicOtherOver =
+    topic === '기타' && topicOther.length > TOPIC_OTHER_MAX
 
   const canProceed =
     concern.trim().length > 0 &&

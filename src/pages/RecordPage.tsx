@@ -12,7 +12,6 @@ import ValueStep from '@/components/record/ValueStep'
 import ContinueListStep from '@/components/record/ContinueListStep'
 import ContinueJudgmentStep from '@/components/record/ContinueJudgmentStep'
 import { usePendingConcerns } from '@/hooks/usePendingConcerns'
-import { useConcernDetail } from '@/hooks/useConcernDetail'
 import { createConcern, createPendingRecord } from '@/services/concerns'
 import { VALUE_LABELS } from '@/constants/insights'
 import { type PendingConcernItem, type ValueLabel } from '@/types/api'
@@ -60,8 +59,11 @@ function RecordPage() {
 
   const isContinue = tab === 'continue'
 
-  const { concerns, isLoading: isConcernsLoading } =
-    usePendingConcerns(isContinue)
+  const {
+    concerns,
+    isLoading: isConcernsLoading,
+    error: concernsError,
+  } = usePendingConcerns(isContinue)
 
   // 홈에서 특정 고민의 이어쓰기로 진입한 경우 목록에서 찾아 표시
   const autoSelected =
@@ -70,10 +72,6 @@ function RecordPage() {
       : null
 
   const activeConcern = selectedConcern ?? autoSelected
-
-  const { records, isLoading: isRecordsLoading } = useConcernDetail(
-    activeConcern?.concernId ?? null,
-  )
 
   const isList = isContinue && activeConcern === null
   const totalSteps = isContinue ? 2 : 3
@@ -181,6 +179,7 @@ function RecordPage() {
                 <ContinueListStep
                   concerns={concerns}
                   isLoading={isConcernsLoading}
+                  error={concernsError}
                   onSelect={handleSelectConcern}
                   onGoToNew={() => handleTabChange('new')}
                 />
@@ -188,9 +187,9 @@ function RecordPage() {
                 <>
                   {step === 1 && (
                     <ContinueJudgmentStep
+                      key={activeConcern.concernId}
+                      concernId={activeConcern.concernId}
                       concern={activeConcern.concern}
-                      records={records}
-                      isLoading={isRecordsLoading}
                       onNext={() => setStep(2)}
                     />
                   )}

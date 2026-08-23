@@ -2,14 +2,12 @@ import { useEffect, useState } from 'react'
 import { getPendingConcernDetail } from '@/services/concerns'
 import { type PendingRecordItem } from '@/types/api'
 
-export function useConcernDetail(concernId: string | null) {
+export function useConcernDetail(concernId: string) {
   const [records, setRecords] = useState<PendingRecordItem[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    if (!concernId) return
-
     let ignore = false
 
     getPendingConcernDetail(concernId)
