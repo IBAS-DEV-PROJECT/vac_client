@@ -118,3 +118,46 @@ export interface HomeData {
   } | null
   recentRecords: HomeRecentRecord[]
 }
+
+// ─── Concerns (기록 작성) ──────────────────────────────────
+export interface PendingConcernItem {
+  concernId: string
+  concern: string
+  topic: TopicKey
+  topicOther: string | null
+  lastRecordDate: string
+  recordCount: number
+}
+
+export interface PendingConcernsData {
+  ongoingConcerns: PendingConcernItem[]
+}
+
+export interface PendingRecordItem {
+  recordId: string
+  decision: string
+  value: ValueLabel
+  createdAt: string
+}
+
+export interface PendingConcernDetailData {
+  concern: string
+  records: PendingRecordItem[]
+}
+
+export interface CreateConcernRequest {
+  concern: string
+  topic: TopicKey
+  topicOther: string | null
+  decision: string
+  reason: string
+  value: ValueLabel
+  concernStatus: 'PENDING' | 'RESOLVED'
+}
+
+export interface CreateRecordRequest {
+  decision: string
+  reason: string
+  value: ValueLabel
+  concernStatus: 'PENDING' | 'RESOLVED'
+}

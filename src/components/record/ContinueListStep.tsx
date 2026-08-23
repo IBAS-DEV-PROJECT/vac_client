@@ -1,18 +1,42 @@
 import Button from '@/components/common/button/Button'
 import ContinueConcernItem from '@/components/home/ContinueConcernItem'
-import { type PendingConcern } from '@/types/record'
+import { type PendingConcernItem } from '@/types/api'
 
 interface ContinueListStepProps {
-  concerns: PendingConcern[]
-  onSelect: (concern: PendingConcern) => void
+  concerns: PendingConcernItem[]
+  isLoading: boolean
+  error: Error | null
+  onSelect: (concern: PendingConcernItem) => void
   onGoToNew: () => void
 }
 
 function ContinueListStep({
   concerns,
+  isLoading,
+  error,
   onSelect,
   onGoToNew,
 }: ContinueListStepProps) {
+  if (isLoading) {
+    return (
+      <div className="flex flex-1 items-center justify-center px-6 py-6">
+        <p className="text-sm text-[#2A1F1C]/55">불러오는 중...</p>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-1 items-center justify-center px-6 py-6">
+        <p className="text-center text-sm text-[#2A1F1C]/55">
+          목록을 불러오지 못했어요.
+          <br />
+          잠시 후 다시 시도해주세요.
+        </p>
+      </div>
+    )
+  }
+
   if (concerns.length === 0) {
     return (
       <div className="flex flex-1 flex-col gap-6 px-6 py-6">
