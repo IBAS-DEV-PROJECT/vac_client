@@ -3,8 +3,7 @@
 // → 로그인 구현 완료 후 HttpOnly Cookie 방식으로 교체 예정
 
 import type { AuthUser } from '@/types/auth'
-
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string
+import { BASE_URL } from '@/utils/env'
 
 let accessToken: string | null = null
 

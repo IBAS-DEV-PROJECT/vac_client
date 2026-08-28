@@ -38,8 +38,11 @@ export default function Setting () {
   }
 
   const handleLogout = async () => {
-    await logout()
-    navigate('/login', { replace: true })
+    try {
+      await logout()
+    } finally {
+      navigate('/login', { replace: true })
+    }
   }
 
   return (

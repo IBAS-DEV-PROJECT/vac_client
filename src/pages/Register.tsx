@@ -21,6 +21,7 @@ export default function Register() {
 
   const [userId, setUserId] = useState('')
   const [checkResult, setCheckResult] = useState<DuplicateCheckResult>(null)
+  const [checkedId, setCheckedId] = useState<string | null>(null)
   const [isChecking, setIsChecking] = useState(false)
 
   const [nickname, setNickname] = useState('')
@@ -35,21 +36,27 @@ export default function Register() {
     setCheckResult(null) // 입력이 바뀌면 이전 확인 결과 무효화
   }
 
+  // checkedId와 userId가 다르면(입력이 바뀐 뒤 이전 요청이 늦게 도착한 경우 등)
+  // 화면에 남아있는 checkResult를 신뢰하지 않는다.
+  const currentCheckResult = checkedId === userId ? checkResult : null
+
   const idFormat = validateUserId(userId)
-  const idStatus = checkResult ?? idFormat.status
+  const idStatus = currentCheckResult ?? idFormat.status
   const idMessage =
-    checkResult === 'available'
+    currentCheckResult === 'available'
       ? '사용 가능한 아이디예요.'
-      : checkResult === 'unavailable'
+      : currentCheckResult === 'unavailable'
         ? '이미 사용 중인 아이디예요. 다시 입력해주세요.'
         : idFormat.message
 
   const handleCheckDuplicate = async () => {
     if (isChecking) return
+    const idToCheck = userId
     setApiError('')
     setIsChecking(true)
     try {
-      const available = await checkId(userId)
+      const available = await checkId(idToCheck)
+      setCheckedId(idToCheck)
       setCheckResult(available ? 'available' : 'unavailable')
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
@@ -63,7 +70,8 @@ export default function Register() {
   const passwordConfirmResult = validatePasswordConfirm(password, passwordConfirm)
 
   const canSubmit =
-    checkResult === 'available' &&
+    idFormat.status === 'ready' &&
+    currentCheckResult === 'available' &&
     nicknameResult.status === 'success' &&
     passwordResult.status === 'success' &&
     passwordConfirmResult.status === 'success'
