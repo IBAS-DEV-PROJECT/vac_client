@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import HomeHeader from '@/components/home/HomeHeader'
 import ConcernCard from '@/components/home/ConcernCard'
 import ConcernItem from '@/components/home/ConcernItem'
@@ -7,65 +8,34 @@ import Button from '@/components/common/button/Button'
 import RecordItem from '@/components/common/record/RecordItem'
 import PencilIcon from '@/assets/pencil.svg'
 import ClockIcon from '@/assets/clock.svg'
-import { type TopicKey } from '@/constants/insights'
 import { VALUE_KEY_BY_LABEL } from '@/constants/values'
+import { useHome } from '@/hooks/useHome'
 
 const SECTION_TITLE =
   'text-[13px] font-extrabold uppercase leading-[14.56px] tracking-[1.04px] text-[#201E1D]'
 
-// TODO: GET /home 연결 전 임시 데이터
-// 빈 상태 확인용 → ongoingConcerns: [], recentRecords: [], topValue: null 로 바꿔서 확인
-const MOCK_HOME = {
-  nickname: '닉네임',
-  ongoingConcernCount: 3,
-  ongoingConcerns: [
-    {
-      concernId: '1',
-      concern: '헬스 다시 시작할까',
-      topic: '건강' as TopicKey,
-      lastRecordDate: '2026-07-18',
-    },
-    {
-      concernId: '2',
-      concern: '자취방 계약할까',
-      topic: '돈' as TopicKey,
-      lastRecordDate: '2026-07-20',
-    },
-    {
-      concernId: '3',
-      concern: 'A사 vs B사',
-      topic: '일' as TopicKey,
-      lastRecordDate: '2026-07-24',
-    },
-  ],
-  monthlyValueHighlight: {
-    topValue: '성장' as string | null,
-    changeRateVsLastMonth: 12,
-  },
-  recentRecords: [
-    {
-      recordId: '1',
-      decision: 'A로 마음이 기움',
-      date: '2026-07-27',
-      value: '성장',
-    },
-    {
-      recordId: '2',
-      decision: '오늘은 그냥 쉬기로',
-      date: '2026-07-26',
-      value: '안정',
-    },
-    {
-      recordId: '3',
-      decision: '연락 먼저 하기로',
-      date: '2026-07-24',
-      value: '연결',
-    },
-  ],
-}
-
 function Home() {
-  const data = MOCK_HOME
+  const navigate = useNavigate()
+  const { data, isLoading, error } = useHome()
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full w-full items-center justify-center bg-[#E1F5FE]">
+        <p className="text-sm text-[#2A1F1C]/55">불러오는 중...</p>
+      </div>
+    )
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex min-h-full w-full items-center justify-center bg-[#E1F5FE]">
+        <p className="text-sm text-[#2A1F1C]/55">
+          정보를 불러오지 못했어요. 잠시 후 다시 시도해주세요.
+        </p>
+      </div>
+    )
+  }
+
   const {
     ongoingConcerns,
     ongoingConcernCount,
@@ -73,12 +43,9 @@ function Home() {
     recentRecords,
   } = data
 
-  const hasConcern = ongoingConcerns.length > 0
-
-  // TODO: 고민 기록 페이지로 이동
-  const handleGoToRecord = () => console.log('새 고민 탭으로 이동')
+  const handleGoToRecord = () => navigate('/record')
   const handleContinue = (concernId: string) =>
-    console.log('이어쓰기', concernId)
+    navigate(`/record?tab=continue&concernId=${concernId}`)
 
   return (
     <div className="min-h-full w-full bg-[#E1F5FE]">
@@ -128,9 +95,7 @@ function Home() {
           </section>
 
           {/* 기록 버튼 */}
-          <Button onClick={handleGoToRecord}>
-            {hasConcern ? '오늘 기록하기' : '새 고민 작성하기'}
-          </Button>
+          <Button onClick={handleGoToRecord}>오늘 기록하기</Button>
 
           {/* 이번 달 가치 분포 */}
           <section className="flex flex-col gap-2">

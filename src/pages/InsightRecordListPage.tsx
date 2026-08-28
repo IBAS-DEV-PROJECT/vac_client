@@ -1,9 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
-import { TOPIC_LABELS } from '@/constants/insights'
 import { type InsightFilters } from '@/types/insight'
 import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
-import { formatDate } from '@/utils/date'
 import { filterRecords } from '@/utils/insightFilter'
 
 function InsightRecordListPage() {
@@ -85,9 +83,10 @@ function InsightRecordListPage() {
           <RecordItem
             key={concern.concern}
             valueKey={concern.valueKey}
-            title={concern.concern}
-            topic={TOPIC_LABELS[concern.topic]}
-            date={formatDate(concern.firstDate)}
+            title={concern.decision}
+            topic={concern.concern}
+            date={concern.firstDate}
+            variant="insight"
             onClick={() => handleConcernClick(concern)}
             className="cursor-pointer"
           />

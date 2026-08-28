@@ -83,7 +83,6 @@ export interface ConcernTimelineData {
 }
 
 // ─── Concern Record (클라이언트 모델) ──────────────────────
-
 export interface ConcernRecord {
   id: string
   decision: string
@@ -91,4 +90,74 @@ export interface ConcernRecord {
   topic: TopicKey
   valueKey: ValueKey
   date: string
+}
+
+// ─── Home ──────────────────────────────────────────────────
+export interface HomeOngoingConcern {
+  concernId: string
+  concern: string
+  topic: TopicKey
+  topicOther: string | null
+  lastRecordDate: string
+}
+
+export interface HomeRecentRecord {
+  recordId: string
+  decision: string
+  date: string
+  value: ValueLabel
+}
+
+export interface HomeData {
+  nickname: string
+  ongoingConcernCount: number
+  ongoingConcerns: HomeOngoingConcern[]
+  monthlyValueHighlight: {
+    topValue: ValueLabel
+    changeRateVsLastMonth: number
+  } | null
+  recentRecords: HomeRecentRecord[]
+}
+
+// ─── Concerns (기록 작성) ──────────────────────────────────
+export interface PendingConcernItem {
+  concernId: string
+  concern: string
+  topic: TopicKey
+  topicOther: string | null
+  lastRecordDate: string
+  recordCount: number
+}
+
+export interface PendingConcernsData {
+  ongoingConcerns: PendingConcernItem[]
+}
+
+export interface PendingRecordItem {
+  recordId: string
+  decision: string
+  value: ValueLabel
+  createdAt: string
+}
+
+export interface PendingConcernDetailData {
+  concern: string
+  records: PendingRecordItem[]
+}
+
+export interface CreateConcernRequest {
+  concern: string
+  topic: TopicKey
+  topicOther: string | null
+  decision: string
+  reason: string
+  value: ValueLabel
+  concernStatus: 'PENDING' | 'RESOLVED'
+}
+
+export interface CreateRecordRequest {
+  decision: string
+  reason: string
+  value: ValueLabel
+  concernStatus: 'PENDING' | 'RESOLVED'
 }

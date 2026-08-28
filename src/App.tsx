@@ -9,6 +9,7 @@ import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Setting from '@/pages/Setting'
+import RecordPage from '@/pages/RecordPage'
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/insight/records" element={<InsightRecordListPage />} />
         <Route path="/insight/timeline" element={<ConcernTimelinePage />} />
+        <Route path="/record" element={<RecordPage />} />
         <Route path="/test1" element={<Test1 />} />
         <Route path="/test2" element={<Test2 />} />
       </Routes>
