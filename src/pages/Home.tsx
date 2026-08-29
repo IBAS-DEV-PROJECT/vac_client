@@ -42,7 +42,6 @@ function Home() {
     monthlyValueHighlight,
     recentRecords,
   } = data
-  const hasConcern = ongoingConcerns.length > 0
 
   const handleGoToRecord = () => navigate('/record')
   const handleContinue = (concernId: string) =>
@@ -96,9 +95,7 @@ function Home() {
           </section>
 
           {/* 기록 버튼 */}
-          <Button onClick={handleGoToRecord}>
-            {hasConcern ? '오늘 기록하기' : '새 고민 작성하기'}
-          </Button>
+          <Button onClick={handleGoToRecord}>오늘 기록하기</Button>
 
           {/* 이번 달 가치 분포 */}
           <section className="flex flex-col gap-2">

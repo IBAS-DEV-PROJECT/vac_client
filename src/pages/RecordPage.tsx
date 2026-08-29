@@ -3,9 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { FormProvider, useForm } from 'react-hook-form'
 import Header from '@/components/common/header/Header'
 import Tab from '@/components/common/tab/Tab'
-import BottomNav, {
-  type NavValue,
-} from '@/components/common/navigation/BottomNav'
 import ConcernStep from '@/components/record/ConcernStep'
 import JudgmentStep from '@/components/record/JudgmentStep'
 import ValueStep from '@/components/record/ValueStep'
@@ -147,11 +144,6 @@ function RecordPage() {
     }
   }
 
-  const handleNavChange = (value: NavValue) => {
-    // TODO: 레이아웃 라우팅 개선 후 정리
-    if (value === 'home') navigate('/')
-  }
-
   return (
     <div className="flex h-dvh flex-col bg-[#E1F5FE]">
       <Header
@@ -205,10 +197,6 @@ function RecordPage() {
             </form>
           </FormProvider>
         </div>
-      </div>
-
-      <div className="bg-[#E1F5FE] px-4 pb-4 pt-2">
-        <BottomNav value="home" onChange={handleNavChange} />
       </div>
     </div>
   )
