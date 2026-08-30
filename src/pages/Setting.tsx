@@ -1,37 +1,47 @@
-import { useState, type ChangeEvent } from 'react'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Header from '@/components/common/header/Header'
-import BottomNav, {
-  type NavValue,
-} from '@/components/common/navigation/BottomNav'
 import DeleteAccount from '@/components/settings/DeleteAccount'
 import DeleteAccountAlert from '@/components/settings/DeleteAccountAlert'
+import ErrorToast from '@/components/auth/ErrorToast'
 
 import Archive from '@/assets/Archive.png'
 import Arrow from '@/assets/Arrow.png'
 
-export default function Setting () {
+import { logout, deleteAccount, getAuthErrorMessage } from '@/services/auth'
 
-  const [activeNav, setActiveNav] = useState<NavValue>('setting');
+export default function Setting () {
+  const navigate = useNavigate()
+
   const [deleteAccountShow, setDeleteAccountShow] = useState(false);
   const [deleteAccountAlertShow, setDeleteAccountAlertShow] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const DeleteAccountShow = () =>{
-    if(deleteAccountShow == false){
-      setDeleteAccountShow(true);
-    }
-    else{
-      setDeleteAccountShow(false);
+    setDeleteAccountShow(!deleteAccountShow);
+  }
+
+  const handleDeleteAccountConfirm = async () => {
+    setApiError('')
+    try {
+      await deleteAccount()
+      setDeleteAccountShow(false)
+      setDeleteAccountAlertShow(true)
+    } catch (err) {
+      setApiError(getAuthErrorMessage(err))
     }
   }
 
-  const DeleteAccountAlertShow = () =>{
-    if(deleteAccountAlertShow == false){
-      setDeleteAccountShow(false);
-      setDeleteAccountAlertShow(true);
-    }
-    else{
-      setDeleteAccountShow(true);
-      setDeleteAccountAlertShow(false);
+  const handleDeleteAccountAlertConfirm = () => {
+    setDeleteAccountAlertShow(false)
+    navigate('/login', { replace: true })
+  }
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } finally {
+      navigate('/login', { replace: true })
     }
   }
 
@@ -53,25 +63,26 @@ export default function Setting () {
             <button className="w-[16px] h-[16px]"><img src={Arrow} alt=""  className="w-[6px] h-[8px]"/></button>
           </div>
           <div className="w-[100%] h-[2px] bg-[#3E272338] my-[20px]"/>
-          <button className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#201E1D] border-b-[1px] border-[#3E272338]">로그아웃</button>
+          {apiError && (
+            <div className="mb-[16px]">
+              <ErrorToast message={apiError} />
+            </div>
+          )}
+          <button onClick={handleLogout} className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#201E1D] border-b-[1px] border-[#3E272338]">로그아웃</button>
           <button onClick={DeleteAccountShow} className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#2A1F1C99] border-b-[1px] border-[#3E272338]">회원탈퇴</button>
         </div>
-        
+
         <center><p className="text-[12px] font-[400] text-[#2A1F1C8C] mb-[48px]">Layer v1.0.0</p></center>
       </div>
-      <footer className="flex w-[360px] flex-col gap-3 mx-[20px] mb-[20px]">
-        <BottomNav value={activeNav} onChange={setActiveNav} />
-      </footer>
       {/* Account Delete tab */}
-      <DeleteAccount 
-        isVisible={deleteAccountShow} 
-        deleteAccountShow={deleteAccountShow} 
-        setDeleteAccountShow={setDeleteAccountShow} 
-        deleteAccountAlertShow={deleteAccountAlertShow} 
-        setDeleteAccountAlertShow={setDeleteAccountAlertShow}
+      <DeleteAccount
+        isVisible={deleteAccountShow}
+        deleteAccountShow={deleteAccountShow}
+        setDeleteAccountShow={setDeleteAccountShow}
+        onConfirmDelete={handleDeleteAccountConfirm}
       />
       {/* Account Delete Alert tab */}
-      <DeleteAccountAlert isVisible={deleteAccountAlertShow}/>
+      <DeleteAccountAlert isVisible={deleteAccountAlertShow} onConfirm={handleDeleteAccountAlertConfirm} />
     </div>
   );
 }

@@ -1,33 +1,16 @@
 import { Dispatch, SetStateAction } from 'react';
 
 export default function DeleteAccount(props: {
-  isVisible : boolean; 
+  isVisible : boolean;
   deleteAccountShow: boolean,
   setDeleteAccountShow:Dispatch<SetStateAction<boolean>>,
-  deleteAccountAlertShow : boolean,
-  setDeleteAccountAlertShow : Dispatch<SetStateAction<boolean>>,
+  onConfirmDelete: () => void,
   }){
-  
+
   const DeleteAccountShow = () =>{
-    if(props.deleteAccountShow == false){
-      props.setDeleteAccountShow(true);
-    }
-    else{
-      props.setDeleteAccountShow(false);
-    }
+    props.setDeleteAccountShow(!props.deleteAccountShow)
   }
 
-  const DeleteAccountAlertShow = () =>{
-    if(props.deleteAccountAlertShow == false){
-      props.setDeleteAccountShow(false);
-      props.setDeleteAccountAlertShow(true);
-    }
-    else{
-      props.setDeleteAccountShow(true);
-      props.setDeleteAccountAlertShow(false);
-    }
-  }
-  
   if(props.isVisible){
     return (
       <div className="fixed top-0 z-10 block w-[100%] h-[100%] bg-[#140B0A73]">
@@ -40,7 +23,7 @@ export default function DeleteAccount(props: {
               <p className="text-left text-[13px] text-[#2A1F1C99] font-[400] mb-[14px]">삭제된 데이터는 복구할 수 없습니다.</p>
               <div>
                 <button onClick={DeleteAccountShow} className="border-[1px] border-[#201E1D66] font-[14px] text-[#2A1F1C] font-[800] w-[112px] h-[39px] rounded-[9px] bg-[#FFF] mr-[8px]">취소</button>
-                <button onClick={DeleteAccountAlertShow} className="font-[14px] text-[#FFF] font-[800] w-[112px] h-[39px] rounded-[9px] bg-[#E5342A]">탈퇴하기</button>
+                <button onClick={props.onConfirmDelete} className="font-[14px] text-[#FFF] font-[800] w-[112px] h-[39px] rounded-[9px] bg-[#E5342A]">탈퇴하기</button>
               </div>
             </div>
           </center>
