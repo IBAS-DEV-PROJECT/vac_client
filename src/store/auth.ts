@@ -2,7 +2,8 @@
 // Refresh token은 로그인 완성 전 개발용으로 localStorage 사용
 // → 로그인 구현 완료 후 HttpOnly Cookie 방식으로 교체 예정
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL as string
+import type { AuthUser } from '@/types/auth'
+import { BASE_URL } from '@/utils/env'
 
 let accessToken: string | null = null
 
@@ -22,6 +23,15 @@ export const tokenStore = {
   },
 }
 
+let currentUser: AuthUser | null = null
+
+export const userStore = {
+  get: () => currentUser,
+  set: (user: AuthUser | null) => {
+    currentUser = user
+  },
+}
+
 export async function initAuth(): Promise<void> {
   const refreshToken = tokenStore.getRefreshToken()
   if (!refreshToken) return
@@ -38,5 +48,6 @@ export async function initAuth(): Promise<void> {
     tokenStore.setRefreshToken(data.refreshToken)
   } catch {
     tokenStore.clear()
+    userStore.set(null)
   }
 }
