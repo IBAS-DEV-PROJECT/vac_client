@@ -144,8 +144,11 @@ function InsightPage() {
   const [insightData, setInsightData] = useState<InsightData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
+  const [summaryData, setSummaryData] = useState<InsightData | null>(null)
+  const [isSummaryLoading, setIsSummaryLoading] = useState(true)
   const [retryCount, setRetryCount] = useState(0)
 
+  // 주제별 가치 인사이트 + 가치변화추이: 전체 필터 적용
   useEffect(() => {
     fetchInsight(appliedFilters)
       .then(setInsightData)
@@ -153,10 +156,34 @@ function InsightPage() {
       .finally(() => setIsLoading(false))
   }, [appliedFilters, retryCount])
 
+  // 한눈에 보는 인사이트: 기간 필터만 적용
+  const periodOnlyFilters = useMemo<InsightFilters>(
+    () => ({
+      period: appliedFilters.period,
+      dateRange: appliedFilters.dateRange,
+      topics: ['전체'],
+      values: ['all'],
+    }),
+    [appliedFilters.period, appliedFilters.dateRange],
+  )
+
+  useEffect(() => {
+    fetchInsight(periodOnlyFilters)
+      .then(setSummaryData)
+      .finally(() => setIsSummaryLoading(false))
+  }, [periodOnlyFilters])
+
   const handleRetry = () => {
     setIsLoading(true)
     setIsError(false)
     setRetryCount((c) => c + 1)
+  }
+
+  const handleApplyFilters = (f: InsightFilters) => {
+    setIsLoading(true)
+    setIsError(false)
+    setAppliedFilters({ ...f, topics: [...f.topics], values: [...f.values] })
+    setIsFilterOpen(false)
   }
 
   const derived = useMemo(() => {
@@ -177,12 +204,6 @@ function InsightPage() {
             change: insightData.largestDecrease[0].decreaseRate,
           }
         : (null as ChangeEntry | null),
-      topTopicLabel: insightData.insight.mostTopic[0]
-        ? TOPIC_LABELS[insightData.insight.mostTopic[0]]
-        : null,
-      topValueKey: insightData.insight.mostValue[0]
-        ? VALUE_KEY_MAP[insightData.insight.mostValue[0]]
-        : null,
     }
   }, [insightData])
 
@@ -191,8 +212,14 @@ function InsightPage() {
   const trendKeys = derived?.trendKeys ?? []
   const trendMaxIncrease = derived?.trendMaxIncrease ?? null
   const trendMaxDecrease = derived?.trendMaxDecrease ?? null
-  const topTopicLabel = derived?.topTopicLabel ?? null
-  const topValueKey = derived?.topValueKey ?? null
+
+  // 한눈에 보는 인사이트는 기간 필터만 적용된 summaryData 사용
+  const topTopicLabel = summaryData?.insight.mostTopic[0]
+    ? TOPIC_LABELS[summaryData.insight.mostTopic[0]]
+    : null
+  const topValueKey = summaryData?.insight.mostValue[0]
+    ? VALUE_KEY_MAP[summaryData.insight.mostValue[0]]
+    : null
 
   const filteredTrendKeys = appliedFilters.values.includes('all')
     ? trendKeys
@@ -206,7 +233,7 @@ function InsightPage() {
   const hasInsightData = !!topTopicLabel && !!topValueKey
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
-  if (isLoading) {
+  if (isLoading || isSummaryLoading) {
     return (
       <div className="flex min-h-full items-center justify-center">
         <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
@@ -428,17 +455,7 @@ function InsightPage() {
       {isFilterOpen && (
         <InsightFilterSheet
           filters={appliedFilters}
-          onApply={(f) => {
-            setAppliedFilters({
-              ...f,
-              topics: [...f.topics],
-              values: [...f.values],
-            })
-            setIsFilterOpen(false)
-            navigate('/insight/records', {
-              state: { filters: f, headerLabel: buildHeaderLabel(f) },
-            })
-          }}
+          onApply={handleApplyFilters}
           onClose={() => setIsFilterOpen(false)}
         />
       )}
