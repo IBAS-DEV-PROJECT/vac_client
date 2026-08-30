@@ -30,6 +30,7 @@ function ContinueJudgmentStep({
   const canProceed =
     decision.trim().length > 0 &&
     decision.length <= DECISION_MAX &&
+    reason.trim().length > 0 &&
     reason.length <= REASON_MAX
 
   return (
