@@ -84,7 +84,10 @@ function InsightFilterSheet({
 
   const handleValueToggle = (value: ValueKey | 'all') => {
     if (value === 'all') {
-      setPending((prev) => ({ ...prev, values: ['all'] }))
+      setPending((prev) => ({
+        ...prev,
+        values: prev.values.includes('all') ? [] : ['all'],
+      }))
       return
     }
     setPending((prev) => {
@@ -92,7 +95,7 @@ function InsightFilterSheet({
       const newValues = filtered.includes(value)
         ? filtered.filter((v) => v !== value)
         : [...filtered, value]
-      return { ...prev, values: newValues.length === 0 ? ['all'] : newValues }
+      return { ...prev, values: newValues }
     })
   }
 
