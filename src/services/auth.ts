@@ -11,7 +11,7 @@ import type {
 } from '@/types/auth'
 
 export async function checkId(id: string): Promise<boolean> {
-  const { data } = await api.get<ApiResponse<CheckIdData>>('/auth/check-id', {
+  const { data } = await api.get<ApiResponse<CheckIdData>>('/auth/id/check', {
     params: { id },
   })
   return data.data.available
