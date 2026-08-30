@@ -1,8 +1,52 @@
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
+import {
+  TOPIC_LABELS,
+  VALUE_KEY_MAP,
+  type TopicKey,
+  type ValueKey,
+} from '@/constants/insights'
 import { type InsightFilters } from '@/types/insight'
-import { MOCK_CONCERN_RECORDS } from '@/mock/concernRecords'
-import { filterRecords } from '@/utils/insightFilter'
+import type { TopicRecordItem } from '@/types/api'
+import { formatDate } from '@/utils/date'
+import { getDateRange } from '@/utils/insightFilter'
+import {
+  fetchInsightRecords,
+  toDateParam,
+  ALL_TOPIC_KEYS,
+} from '@/services/insight'
+
+interface ConcernCard {
+  concernId: string
+  concern: string
+  topic: TopicKey
+  valueKey: ValueKey
+  firstDate: string
+}
+
+function buildConcernCards(
+  results: { topic: TopicKey; records: TopicRecordItem[] }[],
+): ConcernCard[] {
+  const seen = new Map<string, ConcernCard>()
+
+  results.forEach(({ topic, records }) => {
+    records.forEach((record) => {
+      const existing = seen.get(record.concernId)
+      if (!existing || record.recordDate < existing.firstDate) {
+        seen.set(record.concernId, {
+          concernId: record.concernId,
+          concern: record.concern,
+          topic,
+          valueKey: VALUE_KEY_MAP[record.value],
+          firstDate: record.recordDate,
+        })
+      }
+    })
+  })
+
+  return Array.from(seen.values())
+}
 
 function InsightRecordListPage() {
   const navigate = useNavigate()
@@ -12,38 +56,48 @@ function InsightRecordListPage() {
     headerLabel: string
   } | null
 
-  const filteredRecords = state?.filters
-    ? filterRecords(state.filters)
-    : MOCK_CONCERN_RECORDS
+  const [concernCards, setConcernCards] = useState<ConcernCard[]>([])
+  const [isLoading, setIsLoading] = useState(!!state?.filters)
+  const [isError, setIsError] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
 
-  // 고민 단위로 중복 제거
-  const seen = new Set<string>()
-  const concernCards = filteredRecords
-    .filter((r) => {
-      if (seen.has(r.concern)) return false
-      seen.add(r.concern)
-      return true
-    })
-    .map((r) => {
-      // 해당 고민의 첫 기록일 (전체 mock 기준)
-      const firstDate = MOCK_CONCERN_RECORDS.filter(
-        (cr) => cr.concern === r.concern,
-      ).sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      )[0].date
-      return { ...r, firstDate }
-    })
+  useEffect(() => {
+    const filters = state?.filters
+    if (!filters) return
 
-  const handleConcernClick = (concern: (typeof concernCards)[number]) => {
-    const records = MOCK_CONCERN_RECORDS.filter(
-      (r) => r.concern === concern.concern,
-    ).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    const { start, end } = getDateRange(filters)
+    const startDate = toDateParam(start)
+    const endDate = toDateParam(end)
 
+    const topics: TopicKey[] = filters.topics.includes('전체')
+      ? ALL_TOPIC_KEYS
+      : (filters.topics as TopicKey[])
+
+    Promise.all(
+      topics.map((topic) => fetchInsightRecords(topic, startDate, endDate)),
+    )
+      .then((results) => {
+        const cards = buildConcernCards(
+          results.map((r) => ({ topic: r.topic, records: r.records })),
+        )
+        setConcernCards(cards)
+      })
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false))
+  }, [state?.filters, retryCount])
+
+  const handleRetry = () => {
+    setIsLoading(true)
+    setIsError(false)
+    setRetryCount((c) => c + 1)
+  }
+
+  const handleConcernClick = (card: ConcernCard) => {
     navigate('/insight/timeline', {
       state: {
-        concern: concern.concern,
-        topic: concern.topic,
-        records,
+        concernId: card.concernId,
+        concern: card.concern,
+        topic: card.topic,
       },
     })
   }
@@ -73,25 +127,44 @@ function InsightRecordListPage() {
           </svg>
         </button>
         <h1 className="text-[15px] font-extrabold text-[#2A1F1C]">
-          {state?.headerLabel ?? '기록 목록'} {concernCards.length}건
+          {state?.headerLabel ?? '기록 목록'}{' '}
+          {!isLoading && `${concernCards.length}건`}
         </h1>
       </div>
 
       {/* 고민 목록 */}
-      <div className="mt-2 flex flex-col px-5">
-        {concernCards.map((concern) => (
-          <RecordItem
-            key={concern.concern}
-            valueKey={concern.valueKey}
-            title={concern.decision}
-            topic={concern.concern}
-            date={concern.firstDate}
-            variant="insight"
-            onClick={() => handleConcernClick(concern)}
-            className="cursor-pointer"
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex flex-1 items-center justify-center">
+          <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
+        </div>
+      ) : isError ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-2">
+          <p className="text-sm text-[#2A1F1C]/60">
+            데이터를 불러오지 못했어요.
+          </p>
+          <button
+            type="button"
+            onClick={handleRetry}
+            className="text-sm font-medium text-[#3E2723] underline"
+          >
+            다시 시도
+          </button>
+        </div>
+      ) : (
+        <div className="mt-2 flex flex-col px-5">
+          {concernCards.map((card) => (
+            <RecordItem
+              key={card.concernId}
+              valueKey={card.valueKey}
+              title={card.concern}
+              topic={TOPIC_LABELS[card.topic]}
+              date={formatDate(card.firstDate)}
+              onClick={() => handleConcernClick(card)}
+              className="cursor-pointer"
+            />
+          ))}
+        </div>
+      )}
     </div>
   )
 }

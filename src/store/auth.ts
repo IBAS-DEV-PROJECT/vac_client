@@ -32,22 +32,54 @@ export const userStore = {
   },
 }
 
-export async function initAuth(): Promise<void> {
-  const refreshToken = tokenStore.getRefreshToken()
-  if (!refreshToken) return
+async function devAutoLogin(): Promise<void> {
+  const id = import.meta.env.VITE_DEV_LOGIN_ID
+  const password = import.meta.env.VITE_DEV_LOGIN_PASSWORD
+  if (!id || !password) return
 
   try {
-    const res = await fetch(`${BASE_URL}/auth/refresh`, {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ id, password }),
     })
-    if (!res.ok) throw new Error()
+    if (!res.ok) return
     const { data } = await res.json()
-    tokenStore.setAccessToken(data.accessToken)
+    if (
+      typeof data?.accessToken !== 'string' ||
+      typeof data?.refreshToken !== 'string'
+    )
+      return
     tokenStore.setRefreshToken(data.refreshToken)
+    tokenStore.setAccessToken(data.accessToken)
   } catch {
     tokenStore.clear()
-    userStore.set(null)
+    // 개발 자동 로그인 실패는 무시 — 앱 렌더링에 영향 없음
+  }
+}
+
+export async function initAuth(): Promise<void> {
+  const refreshToken = tokenStore.getRefreshToken()
+
+  if (refreshToken) {
+    try {
+      const res = await fetch(`${BASE_URL}/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken }),
+      })
+      if (!res.ok) throw new Error()
+      const { data } = await res.json()
+      tokenStore.setAccessToken(data.accessToken)
+      tokenStore.setRefreshToken(data.refreshToken)
+      return
+    } catch {
+      tokenStore.clear()
+      userStore.set(null)
+    }
+  }
+
+  if (import.meta.env.DEV) {
+    await devAutoLogin()
   }
 }

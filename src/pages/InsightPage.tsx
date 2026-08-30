@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import insightPlus from '@/assets/insightPlus.svg'
 import insightEmpty from '@/assets/insightEmpty.png'
@@ -25,69 +25,14 @@ import {
   type InsightFilters,
   type TrendDataPoint,
 } from '@/types/insight'
-import { MOCK_INSIGHT } from '@/mock/insight'
+import type { InsightData } from '@/types/api'
+import { fetchInsight } from '@/services/insight'
 
 function formatPeriodLabel(startDate: string, endDate: string): string {
   const [, sm, sd] = startDate.split('-')
   const [, em, ed] = endDate.split('-')
   return `${Number(sm)}.${Number(sd)}~${Number(em)}.${Number(ed)}`
 }
-
-const TREND_DATA: TrendDataPoint[] = MOCK_INSIGHT.trend.map((item) => {
-  const point: TrendDataPoint = {
-    period: formatPeriodLabel(item.startDate, item.endDate),
-  }
-  item.valueDistribution.forEach(({ value, percentage }) => {
-    const key = VALUE_KEY_MAP[value]
-    if (key) point[key] = percentage
-  })
-  return point
-})
-
-const TREND_KEYS: ValueKey[] = Array.from(
-  new Set(
-    MOCK_INSIGHT.trend.flatMap((item) =>
-      item.valueDistribution
-        .map(({ value }) => VALUE_KEY_MAP[value])
-        .filter((k): k is ValueKey => !!k),
-    ),
-  ),
-)
-
-const INSIGHT_CARDS = MOCK_INSIGHT.valueByTopic.map((item) => ({
-  topicKey: item.topic,
-  values: item.valueDistribution
-    .map(({ value, percentage }) => ({
-      key: VALUE_KEY_MAP[value],
-      percent: percentage,
-    }))
-    .filter((v) => v.key)
-    .slice(0, 4),
-  recordCount: item.count,
-}))
-
-const trendMaxIncrease: ChangeEntry | null =
-  MOCK_INSIGHT.largestIncrease.length > 0
-    ? {
-        key: VALUE_KEY_MAP[MOCK_INSIGHT.largestIncrease[0].value],
-        change: MOCK_INSIGHT.largestIncrease[0].increaseRate,
-      }
-    : null
-
-const trendMaxDecrease: ChangeEntry | null =
-  MOCK_INSIGHT.largestDecrease.length > 0
-    ? {
-        key: VALUE_KEY_MAP[MOCK_INSIGHT.largestDecrease[0].value],
-        change: MOCK_INSIGHT.largestDecrease[0].decreaseRate,
-      }
-    : null
-
-const topTopicLabel = MOCK_INSIGHT.insight.mostTopic[0]
-  ? TOPIC_LABELS[MOCK_INSIGHT.insight.mostTopic[0]]
-  : null
-const topValueKey = MOCK_INSIGHT.insight.mostValue[0]
-  ? VALUE_KEY_MAP[MOCK_INSIGHT.insight.mostValue[0]]
-  : null
 
 function fmt(d: Date): string {
   return `${d.getMonth() + 1}/${d.getDate()}`
@@ -101,30 +46,63 @@ function getPeriodLabel(filters: InsightFilters): string {
 
 function buildHeaderLabel(filters: InsightFilters): string {
   const parts: string[] = [getPeriodLabel(filters)]
-
   if (filters.topics.length > 0 && !filters.topics.includes('전체')) {
     filters.topics.forEach((t) => parts.push(TOPIC_LABELS[t as TopicKey]))
   }
-
   if (filters.values.length > 0 && !filters.values.includes('all')) {
     filters.values.forEach((v) => parts.push(VALUE_LABELS[v as ValueKey]))
   }
-
   return parts.join('·') + ' 기록'
 }
 
 function buildFilterSummary(filters: InsightFilters): string {
   const parts: string[] = [getPeriodLabel(filters)]
-
   if (filters.topics.length > 0 && !filters.topics.includes('전체')) {
     parts.push(filters.topics.map((t) => TOPIC_LABELS[t as TopicKey]).join('·'))
   }
-
   if (filters.values.length > 0 && !filters.values.includes('all')) {
     parts.push(filters.values.map((v) => VALUE_LABELS[v as ValueKey]).join('·'))
   }
-
   return parts.join(' · ')
+}
+
+function deriveInsightCards(data: InsightData) {
+  return data.valueByTopic.map((item) => ({
+    topicKey: item.topic,
+    values: item.valueDistribution
+      .map(({ value, percentage }) => ({
+        key: VALUE_KEY_MAP[value],
+        percent: percentage,
+      }))
+      .filter((v) => v.key)
+      .slice(0, 4),
+    recordCount: item.count,
+  }))
+}
+
+function deriveTrendData(data: InsightData): TrendDataPoint[] {
+  return data.trend.map((item) => {
+    const point: TrendDataPoint = {
+      period: formatPeriodLabel(item.startDate, item.endDate),
+    }
+    item.valueDistribution.forEach(({ value, percentage }) => {
+      const key = VALUE_KEY_MAP[value]
+      if (key) point[key] = percentage
+    })
+    return point
+  })
+}
+
+function deriveTrendKeys(data: InsightData): ValueKey[] {
+  return Array.from(
+    new Set(
+      data.trend.flatMap((item) =>
+        item.valueDistribution
+          .map(({ value }) => VALUE_KEY_MAP[value])
+          .filter((k): k is ValueKey => !!k),
+      ),
+    ),
+  )
 }
 
 const topicEmptyIcon = (
@@ -135,7 +113,6 @@ const topicEmptyIcon = (
     className="w-6.5 h-6.5 object-contain"
   />
 )
-
 const trendEmptyIcon = (
   <img
     src={valueEmpty}
@@ -144,7 +121,6 @@ const trendEmptyIcon = (
     className="w-6.5 h-6.5 object-contain"
   />
 )
-
 const insightEmptyIcon = (
   <img
     src={insightEmpty}
@@ -153,7 +129,6 @@ const insightEmptyIcon = (
     className="w-6.5 h-6.5 object-contain"
   />
 )
-
 const lightbulbIcon = <span aria-hidden="true">💡</span>
 const chartHintIcon = <span aria-hidden="true">📊</span>
 const pencilIcon = <span aria-hidden="true">✏️</span>
@@ -166,12 +141,93 @@ function InsightPage() {
     values: [...DEFAULT_FILTERS.values],
   }))
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [insightData, setInsightData] = useState<InsightData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isError, setIsError] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
 
-  const hasTopicData = INSIGHT_CARDS.length > 0
+  useEffect(() => {
+    fetchInsight(appliedFilters)
+      .then(setInsightData)
+      .catch(() => setIsError(true))
+      .finally(() => setIsLoading(false))
+  }, [appliedFilters, retryCount])
+
+  const handleRetry = () => {
+    setIsLoading(true)
+    setIsError(false)
+    setRetryCount((c) => c + 1)
+  }
+
+  const derived = useMemo(() => {
+    if (!insightData) return null
+    return {
+      insightCards: deriveInsightCards(insightData),
+      trendData: deriveTrendData(insightData),
+      trendKeys: deriveTrendKeys(insightData),
+      trendMaxIncrease: insightData.largestIncrease[0]
+        ? {
+            key: VALUE_KEY_MAP[insightData.largestIncrease[0].value],
+            change: insightData.largestIncrease[0].increaseRate,
+          }
+        : (null as ChangeEntry | null),
+      trendMaxDecrease: insightData.largestDecrease[0]
+        ? {
+            key: VALUE_KEY_MAP[insightData.largestDecrease[0].value],
+            change: insightData.largestDecrease[0].decreaseRate,
+          }
+        : (null as ChangeEntry | null),
+      topTopicLabel: insightData.insight.mostTopic[0]
+        ? TOPIC_LABELS[insightData.insight.mostTopic[0]]
+        : null,
+      topValueKey: insightData.insight.mostValue[0]
+        ? VALUE_KEY_MAP[insightData.insight.mostValue[0]]
+        : null,
+    }
+  }, [insightData])
+
+  const insightCards = derived?.insightCards ?? []
+  const trendData = derived?.trendData ?? []
+  const trendKeys = derived?.trendKeys ?? []
+  const trendMaxIncrease = derived?.trendMaxIncrease ?? null
+  const trendMaxDecrease = derived?.trendMaxDecrease ?? null
+  const topTopicLabel = derived?.topTopicLabel ?? null
+  const topValueKey = derived?.topValueKey ?? null
+
+  const filteredTrendKeys = appliedFilters.values.includes('all')
+    ? trendKeys
+    : (appliedFilters.values as ValueKey[]).filter((v) => trendKeys.includes(v))
+  const activeKeys =
+    filteredTrendKeys.length > 0 ? filteredTrendKeys : trendKeys
+
+  const hasTopicData = insightCards.length > 0
   const hasTrendData =
-    TREND_DATA.length > 0 && !!trendMaxIncrease && !!trendMaxDecrease
+    trendData.length > 0 && !!trendMaxIncrease && !!trendMaxDecrease
   const hasInsightData = !!topTopicLabel && !!topValueKey
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-full items-center justify-center">
+        <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="flex min-h-full flex-col items-center justify-center gap-2">
+        <p className="text-sm text-[#2A1F1C]/60">데이터를 불러오지 못했어요.</p>
+        <button
+          type="button"
+          onClick={handleRetry}
+          className="text-sm font-medium text-[#3E2723] underline"
+        >
+          다시 시도
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="flex min-h-full flex-col">
@@ -238,7 +294,7 @@ function InsightPage() {
               </p>
             </div>
             <div className="mt-1 w-48">
-              <Button onClick={() => {}}>지금 기록하기</Button>
+              <Button onClick={() => navigate('/record')}>지금 기록하기</Button>
             </div>
           </div>
         </div>
@@ -253,12 +309,12 @@ function InsightPage() {
                     주제별 가치 인사이트
                   </h2>
                   <span className="text-xs text-gray-400">
-                    전체 기록 {MOCK_INSIGHT.totalCount}건
+                    전체 기록 {insightData?.totalCount}건
                   </span>
                 </div>
                 <div className="overflow-x-auto">
                   <div className="flex gap-3 px-5 pb-1">
-                    {INSIGHT_CARDS.map((card) => (
+                    {insightCards.map((card) => (
                       <ValueInsightCard
                         key={card.topicKey}
                         {...card}
@@ -307,8 +363,8 @@ function InsightPage() {
                   </p>
                 </div>
                 <ValueTrendSection
-                  data={TREND_DATA}
-                  valueKeys={TREND_KEYS}
+                  data={trendData}
+                  valueKeys={activeKeys}
                   maxIncrease={trendMaxIncrease!}
                   maxDecrease={trendMaxDecrease!}
                 />
@@ -350,7 +406,7 @@ function InsightPage() {
           <div className="mx-5 mt-6">
             <button
               type="button"
-              onClick={() => {}}
+              onClick={() => navigate('/record')}
               className="flex w-full items-center justify-center gap-2 rounded-[9px] bg-[#3E2723] px-5 py-4 text-white"
             >
               <img
@@ -373,13 +429,14 @@ function InsightPage() {
         <InsightFilterSheet
           filters={appliedFilters}
           onApply={(f) => {
-            setAppliedFilters(f)
+            setAppliedFilters({
+              ...f,
+              topics: [...f.topics],
+              values: [...f.values],
+            })
             setIsFilterOpen(false)
             navigate('/insight/records', {
-              state: {
-                filters: f,
-                headerLabel: buildHeaderLabel(f),
-              },
+              state: { filters: f, headerLabel: buildHeaderLabel(f) },
             })
           }}
           onClose={() => setIsFilterOpen(false)}
