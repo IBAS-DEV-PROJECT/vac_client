@@ -5,6 +5,7 @@ import Input from '@/components/common/input/Input'
 import IdInput from '@/components/auth/IdInput'
 import Header from '@/components/common/header/Header'
 import ErrorToast from '@/components/auth/ErrorToast'
+import InputAlert from '@/components/auth/InputAlert'
 
 import {
   validateNickname,
@@ -30,6 +31,12 @@ export default function Register() {
 
   const [apiError, setApiError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const [showToast, setShowToast] = useState(false)
+
+  const handleInputAlertConfirm = () => {
+    setShowToast(!showToast)
+  }
 
   const handleUserIdChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUserId(e.target.value)
@@ -67,7 +74,10 @@ export default function Register() {
 
   const nicknameResult = validateNickname(nickname)
   const passwordResult = validatePassword(password)
-  const passwordConfirmResult = validatePasswordConfirm(password, passwordConfirm)
+  const passwordConfirmResult = validatePasswordConfirm(
+    password,
+    passwordConfirm,
+  )
 
   const canSubmit =
     idFormat.status === 'ready' &&
@@ -78,13 +88,16 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!canSubmit || isSubmitting) return
+    if (!canSubmit || isSubmitting) {
+      handleInputAlertConfirm()
+      return
+    }
 
     setApiError('')
     setIsSubmitting(true)
     try {
       await signup({ id: userId, nickname, password, passwordConfirm })
-      navigate('/login', { replace: true })
+      navigate('/onBoarding', { replace: true })
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
     } finally {
@@ -139,7 +152,9 @@ export default function Register() {
                 {...passwordConfirmResult}
               />
 
-              <p className="text-[12px] font-[400] text-[#2A1F1C8C]">비밀번호를 잊으면 계정을 되찾을 수 없어요. 이메일은 받지 않아요.</p>
+              <p className="text-[12px] font-[400] text-[#2A1F1C8C]">
+                비밀번호를 잊으면 계정을 되찾을 수 없어요. 이메일은 받지 않아요.
+              </p>
             </section>
 
             {apiError && (
@@ -150,7 +165,6 @@ export default function Register() {
 
             <button
               type="submit"
-              disabled={!canSubmit || isSubmitting}
               className="w-[100%] h-[46px] rounded-[9px] text-[14px] font-[800] text-[#E1F5FE] bg-[#3E2723] disabled:opacity-50"
             >
               {isSubmitting ? '가입 중...' : '회원가입'}
@@ -167,6 +181,7 @@ export default function Register() {
           </center>
         </div>
       </form>
+      <InputAlert isVisible={showToast} onConfirm={handleInputAlertConfirm} />
     </div>
   )
 }

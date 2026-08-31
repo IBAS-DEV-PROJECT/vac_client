@@ -21,7 +21,7 @@ function App() {
           path="/"
           element={
             <BottomNavLayout
-              defaultTab="insight"
+              defaultTab="home"
               pages={{
                 home: <Home />,
                 insight: <InsightPage />,
