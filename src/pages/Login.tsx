@@ -5,7 +5,6 @@ import LayerLogo from '@/assets/LayerLogo.png'
 import Exclamation from '@/assets/Exclamation.png'
 import Input from '@/components/common/input/Input'
 import Button from '@/components/common/button/Button'
-import ErrorToast from '@/components/auth/ErrorToast'
 
 import { login, getAuthErrorMessage } from '@/services/auth'
 
@@ -14,26 +13,24 @@ export default function Login() {
 
   const [id, setId] = useState('')
   const [password, setPassword] = useState('')
-  const [showEmptyAlert, setShowEmptyAlert] = useState(false)
-  const [apiError, setApiError] = useState('')
+  const [alertMessage, setAlertMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    setApiError('')
+    setAlertMessage('')
 
     if (!id || !password) {
-      setShowEmptyAlert(true)
+      setAlertMessage('모든 항목을 입력해주세요.')
       return
     }
-    setShowEmptyAlert(false)
 
     setIsSubmitting(true)
     try {
       const { activateOnboarding } = await login({ id, password })
       navigate(activateOnboarding ? '/onboarding' : '/', { replace: true })
     } catch (err) {
-      setApiError(getAuthErrorMessage(err))
+      setAlertMessage(getAuthErrorMessage(err))
     } finally {
       setIsSubmitting(false)
     }
@@ -71,12 +68,6 @@ export default function Login() {
             />
           </section>
 
-          {apiError && (
-            <div className="mb-[16px]">
-              <ErrorToast message={apiError} />
-            </div>
-          )}
-
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? '로그인 중...' : '로그인'}
           </Button>
@@ -93,7 +84,7 @@ export default function Login() {
       </div>
       {/* alert tab */}
       <div
-        className={`${showEmptyAlert ? '' : 'invisible'} fixed left-[0] bottom-[28px] w-[calc(100%-48px)] h-[48px] px-[16px] py-[14px] mx-[24px] rounded-[9px]  bg-[#3E2723]`}
+        className={`${alertMessage ? '' : 'invisible'} fixed left-[0] bottom-[28px] w-[calc(100%-48px)] h-[48px] px-[16px] py-[14px] mx-[24px] rounded-[9px]  bg-[#3E2723]`}
       >
         <img
           className="inline-block align-baseline w-[16px] h-[16px]"
@@ -101,7 +92,7 @@ export default function Login() {
           alt=""
         />
         <p className="inline-block align-top text-[13px] font-[400] text-[#FFFFFF] ml-[10px]">
-          모든 항목을 입력해주세요.
+          {alertMessage}
         </p>
       </div>
     </form>
