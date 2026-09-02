@@ -97,7 +97,7 @@ export default function Register() {
     setIsSubmitting(true)
     try {
       await signup({ id: userId, nickname, password, passwordConfirm })
-      navigate('/onBoarding', { replace: true })
+      navigate('/login', { replace: true })
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
     } finally {

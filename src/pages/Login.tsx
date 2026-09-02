@@ -30,8 +30,8 @@ export default function Login() {
 
     setIsSubmitting(true)
     try {
-      await login({ id, password })
-      navigate('/', { replace: true })
+      const { activateOnboarding } = await login({ id, password })
+      navigate(activateOnboarding ? '/onboarding' : '/', { replace: true })
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
     } finally {
