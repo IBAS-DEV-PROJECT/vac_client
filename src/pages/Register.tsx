@@ -88,7 +88,8 @@ export default function Register() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!canSubmit || isSubmitting) {
+    if (isSubmitting) return
+    if (!canSubmit) {
       handleInputAlertConfirm()
       return
     }
