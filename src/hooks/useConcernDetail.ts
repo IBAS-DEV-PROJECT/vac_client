@@ -12,7 +12,14 @@ export function useConcernDetail(concernId: string) {
 
     getPendingConcernDetail(concernId)
       .then((result) => {
-        if (!ignore) setRecords(result.records)
+        if (!ignore)
+          setRecords(
+            [...result.records].sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+            ),
+          )
       })
       .catch((err: Error) => {
         if (!ignore) setError(err)
