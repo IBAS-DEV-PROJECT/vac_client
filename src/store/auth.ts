@@ -76,6 +76,7 @@ export async function initAuth(): Promise<void> {
     } catch {
       tokenStore.clear()
       userStore.set(null)
+      return
     }
   }
 
