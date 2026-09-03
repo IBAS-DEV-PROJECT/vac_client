@@ -17,6 +17,7 @@ export default defineConfig({
         target: 'https://peezmc7oz0.execute-api.ap-northeast-2.amazonaws.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '/vac/api/v1'),
+        timeout: 10000,
       },
     },
   },

@@ -4,6 +4,7 @@ import { BASE_URL } from '@/utils/env'
 
 export const api = axios.create({
   baseURL: BASE_URL,
+  timeout: 10000,
 })
 
 // 요청마다 access token 주입
