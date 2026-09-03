@@ -1,7 +1,14 @@
 import { useRef, useState, type ReactNode } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import BottomNav, {
   type NavValue,
 } from '@/components/common/navigation/BottomNav'
+
+const NAV_VALUES: NavValue[] = ['home', 'insight', 'setting']
+
+function isNavValue(v: string | null): v is NavValue {
+  return NAV_VALUES.includes(v as NavValue)
+}
 
 interface BottomNavLayoutProps {
   pages: Record<NavValue, ReactNode>
@@ -9,7 +16,11 @@ interface BottomNavLayoutProps {
 }
 
 function BottomNavLayout({ pages, defaultTab = 'home' }: BottomNavLayoutProps) {
-  const [activeTab, setActiveTab] = useState<NavValue>(defaultTab)
+  const [searchParams] = useSearchParams()
+  const tabParam = searchParams.get('tab')
+  const initialTab = isNavValue(tabParam) ? tabParam : defaultTab
+
+  const [activeTab, setActiveTab] = useState<NavValue>(initialTab)
   const mainRef = useRef<HTMLElement>(null)
 
   const handleTabChange = (tab: NavValue) => {

@@ -132,7 +132,7 @@ function RecordPage() {
         })
       }
 
-      navigate('/')
+      navigate('/?tab=insight')
     } catch (err) {
       setSubmitError(
         err instanceof Error
