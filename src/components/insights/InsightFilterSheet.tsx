@@ -15,7 +15,6 @@ import {
   type PeriodOption,
   type TopicOption,
 } from '@/types/insight'
-import { formatDate } from '@/utils/date'
 
 const PERIOD_OPTIONS: PeriodOption[] = [
   '최근 1년',
@@ -85,7 +84,10 @@ function InsightFilterSheet({
 
   const handleValueToggle = (value: ValueKey | 'all') => {
     if (value === 'all') {
-      setPending((prev) => ({ ...prev, values: ['all'] }))
+      setPending((prev) => ({
+        ...prev,
+        values: prev.values.includes('all') ? [] : ['all'],
+      }))
       return
     }
     setPending((prev) => {
@@ -93,7 +95,7 @@ function InsightFilterSheet({
       const newValues = filtered.includes(value)
         ? filtered.filter((v) => v !== value)
         : [...filtered, value]
-      return { ...prev, values: newValues.length === 0 ? ['all'] : newValues }
+      return { ...prev, values: newValues }
     })
   }
 
@@ -201,29 +203,6 @@ function InsightFilterSheet({
                 ),
               )}
             </div>
-            {/* 선택된 날짜 범위 표시 */}
-            {pending.period === '캘린더' && pending.dateRange && (
-              <button
-                type="button"
-                onClick={() => setIsCalendarOpen(true)}
-                className="flex items-center gap-1.5 self-start rounded-lg bg-white px-3 py-1.5 text-xs font-medium text-[#2A1F1C]/70 shadow-sm"
-              >
-                {formatDate(pending.dateRange.start)} →{' '}
-                {formatDate(pending.dateRange.end)}
-                <svg
-                  width="10"
-                  height="10"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  aria-hidden="true"
-                >
-                  <path d="M3 8h10M9 4l4 4-4 4" />
-                </svg>
-              </button>
-            )}
           </section>
 
           {/* 주제 */}
