@@ -18,6 +18,15 @@ interface RefreshedTokens {
   refreshToken: string
 }
 
+// 토큰 없이 호출되는 공개 인증 API. 이 경로들의 401은 자격 증명 오류일 뿐
+// 세션 만료가 아니므로, 아래 인터셉터의 강제 로그아웃/리다이렉트 대상에서 제외한다.
+const PUBLIC_AUTH_PATHS = ['/auth/login', '/auth/signup', '/auth/id/check']
+
+function isPublicAuthRequest(url: string | undefined): boolean {
+  if (!url) return false
+  return PUBLIC_AUTH_PATHS.some((path) => url.includes(path))
+}
+
 // 여러 요청이 동시에 401을 받아도 /auth/refresh는 한 번만 호출한다.
 // refresh token은 재발급 시 회전(rotate)되어 이미 사용된 토큰으로 재요청하면
 // 서버가 전체 세션을 강제 로그아웃시키므로, 동시 refresh 호출 자체를 막아야 한다.
@@ -46,12 +55,16 @@ api.interceptors.response.use(
   async (error) => {
     const original = error.config
 
-    if (error.response?.status === 401 && !original._retry) {
+    if (
+      error.response?.status === 401 &&
+      !original._retry &&
+      !isPublicAuthRequest(original?.url)
+    ) {
       original._retry = true
 
       if (!tokenStore.getRefreshToken()) {
         tokenStore.clear()
-        window.location.href = '/'
+        if (window.location.pathname !== '/') window.location.href = '/'
         return Promise.reject(error)
       }
 
@@ -61,7 +74,7 @@ api.interceptors.response.use(
         return api(original)
       } catch {
         tokenStore.clear()
-        window.location.href = '/'
+        if (window.location.pathname !== '/') window.location.href = '/'
         return Promise.reject(error)
       }
     }
