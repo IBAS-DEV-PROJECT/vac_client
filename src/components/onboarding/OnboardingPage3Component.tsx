@@ -32,12 +32,12 @@ export default function OnboardingPage3Component({
         <p className="text-[13px] font-[400] text-[#2A1F1C8C] mb-[20px]">
           아직 연습이예요. 편하게 가볍게 한 번 써볼까요?
         </p>
-        <div className="w-[344px] h-[64px] px-[16px] py-[14px] bg-[#DDF0FA] text-[12px] font-[400] text-[#201E1D] mb-[20px]">
+        <div className="w-full h-[64px] px-[16px] py-[14px] bg-[#DDF0FA] text-[12px] font-[400] text-[#201E1D] mb-[20px]">
           고민은 취업, 관계, 돈, 건강처럼 <b>영역</b>으로 나눠서 적어볼 수
           있어요. 아래에서 골라보세요.
         </div>
       </div>
-      <section className="flex w-[352px] flex-col gap-5 mb-[20px]">
+      <section className="flex w-full flex-col gap-5 mb-[20px]">
         <TextArea
           label="무슨 고민인가요?"
           placeholder="예: A사 vs B사"
@@ -46,7 +46,7 @@ export default function OnboardingPage3Component({
           maxLength={50}
         />
       </section>
-      <section className="flex w-[352px] flex-col gap-3 mb-[20px]">
+      <section className="flex w-full flex-col gap-3 mb-[20px]">
         <h2 className="text-[13px] text-[#2A1F1C]/70">
           이 고민은 어떤 영역인가요?
         </h2>
@@ -62,7 +62,7 @@ export default function OnboardingPage3Component({
           ))}
         </div>
       </section>
-      <section className="flex w-[352px] flex-col gap-5 mb-[20px]">
+      <section className="flex w-full flex-col gap-5 mb-[20px]">
         <TextArea
           label="오늘, 어떤 판단을 내렸나요?"
           placeholder="예: 아직 못 정함/ A로 마음이 기움"
@@ -71,12 +71,12 @@ export default function OnboardingPage3Component({
           maxLength={50}
         />
       </section>
-      <div className="w-[344px] h-[64px] px-[16px] py-[14px] bg-[#DDF0FA] text-[12px] font-[400] text-[#201E1D] mb-[20px]">
+      <div className="w-full h-[64px] px-[16px] py-[14px] bg-[#DDF0FA] text-[12px] font-[400] text-[#201E1D] mb-[20px]">
         이유는 '성장', '안정', '재미'처럼 9가지 <b>가치</b> 중 가장 가까운
         하나로 정리돼요.
       </div>
 
-      <section className="flex w-[352px] flex-col gap-5 mb-[20px]">
+      <section className="flex w-full flex-col gap-5 mb-[20px]">
         <TextArea
           label="그건 왜인가요? "
           placeholder="한 줄이면 충분해요"
@@ -86,7 +86,7 @@ export default function OnboardingPage3Component({
           rows={3}
         />
       </section>
-      <section className="flex w-[352px] flex-col gap-3 mb-[20px]">
+      <section className="flex w-full flex-col gap-3 mb-[20px]">
         <h2 className="text-[13px] text-[#2A1F1C]/70">
           방금 그 이유, 가장 가까운 하나는?
         </h2>
