@@ -170,11 +170,13 @@ function InsightPage() {
   useEffect(() => {
     fetchInsight(periodOnlyFilters)
       .then(setSummaryData)
+      .catch(() => setIsError(true))
       .finally(() => setIsSummaryLoading(false))
-  }, [periodOnlyFilters])
+  }, [periodOnlyFilters, retryCount])
 
   const handleRetry = () => {
     setIsLoading(true)
+    setIsSummaryLoading(true)
     setIsError(false)
     setRetryCount((c) => c + 1)
   }
@@ -182,6 +184,12 @@ function InsightPage() {
   const handleApplyFilters = (f: InsightFilters) => {
     setIsLoading(true)
     setIsError(false)
+    const periodChanged =
+      f.period !== appliedFilters.period ||
+      f.dateRange?.start.getTime() !==
+        appliedFilters.dateRange?.start.getTime() ||
+      f.dateRange?.end.getTime() !== appliedFilters.dateRange?.end.getTime()
+    if (periodChanged) setIsSummaryLoading(true)
     setAppliedFilters({ ...f, topics: [...f.topics], values: [...f.values] })
     setIsFilterOpen(false)
   }
