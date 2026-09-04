@@ -16,6 +16,7 @@ interface RecordItemProps extends HTMLAttributes<HTMLDivElement> {
   /** ISO 형식 원본 날짜 (예: '2026-07-20') → '7월 20일'로 표시됨 */
   date: string
   topic?: string
+  decision?: string
   /** 사용 위치에 따른 제목 스타일. home: 13px 일반, insight: 16px 굵게 */
   variant?: RecordItemVariant
 }
@@ -25,6 +26,7 @@ function RecordItem({
   title,
   date,
   topic,
+  decision,
   variant = 'home',
   className = '',
   ...props
@@ -50,6 +52,11 @@ function RecordItem({
           <span className="truncate text-xs text-[#2A1F1C]/55">
             {topic ? `${topic} · ${formattedDate}` : formattedDate}
           </span>
+          {decision && (
+            <span className="truncate text-xs text-[#2A1F1C]/70">
+              {decision}
+            </span>
+          )}
         </div>
       </div>
 

@@ -8,7 +8,7 @@ interface HeaderProps {
 
 function Header({ title, onBack, rightSlot }: HeaderProps) {
   return (
-    <header className="flex h-[66px] w-full items-center gap-[14px] border-b-2 border-[#9AA4A8] bg-[#E1F5FE] px-6">
+    <header className="flex h-15 w-full items-center gap-3.5 border-b-2 border-[#3E272338] bg-[#E1F5FE] px-6">
       {onBack && (
         <button
           type="button"

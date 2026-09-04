@@ -60,5 +60,5 @@ export function getAuthErrorMessage(error: unknown): string {
     const data = error.response?.data as ApiErrorResponse | undefined
     if (data?.error?.message) return data.error.message
   }
-  return '알 수 없는 오류가 발생했어요. 잠시 후 다시 시도해주세요.'
+  return '알 수 없는 오류가 발생했어요.'
 }

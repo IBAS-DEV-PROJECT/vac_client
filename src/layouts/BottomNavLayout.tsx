@@ -1,7 +1,14 @@
-import { useState, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import BottomNav, {
   type NavValue,
 } from '@/components/common/navigation/BottomNav'
+
+const NAV_VALUES: NavValue[] = ['home', 'insight', 'setting']
+
+function isNavValue(v: string | null): v is NavValue {
+  return NAV_VALUES.includes(v as NavValue)
+}
 
 interface BottomNavLayoutProps {
   pages: Record<NavValue, ReactNode>
@@ -9,13 +16,20 @@ interface BottomNavLayoutProps {
 }
 
 function BottomNavLayout({ pages, defaultTab = 'home' }: BottomNavLayoutProps) {
-  const [activeTab, setActiveTab] = useState<NavValue>(defaultTab)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const tabParam = searchParams.get('tab')
+  const activeTab = isNavValue(tabParam) ? tabParam : defaultTab
+
+  const handleTabChange = (tab: NavValue) => {
+    setSearchParams({ tab }, { replace: true })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
 
   return (
-    <div className="flex h-dvh flex-col">
-      <main className="flex-1 overflow-y-auto">{pages[activeTab]}</main>
-      <div className="bg-[#E1F5FE] px-4 pb-4 pt-2">
-        <BottomNav value={activeTab} onChange={setActiveTab} />
+    <div>
+      <main className="pb-24">{pages[activeTab]}</main>
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 pt-2">
+        <BottomNav value={activeTab} onChange={handleTabChange} />
       </div>
     </div>
   )

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import LayerLogo from '@/assets/LayerLogo.png'
@@ -15,6 +15,12 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [alertMessage, setAlertMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (!alertMessage) return
+    const timer = setTimeout(() => setAlertMessage(''), 3000)
+    return () => clearTimeout(timer)
+  }, [alertMessage])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -41,7 +47,7 @@ export default function Login() {
       onSubmit={handleSubmit}
       className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[74px] z-1"
     >
-      <header className="w-[344px] h-[74px] mb-[5px] px-[28px]">
+      <header className="h-[74px] mb-[5px] px-[28px]">
         <img src={LayerLogo} alt="no image" className="h-[48px]" />
         <p className="text-[13px] font-[400] text-[#2A1F1C8C]">
           당신이 실제로 골라온 것을 봅니다.
@@ -49,7 +55,7 @@ export default function Login() {
       </header>
       <div className="grow-1 flex flex-col justify-between px-[28px] py-[48px]">
         <div>
-          <section className="flex w-[344px] flex-col gap-5 mb-[28px]">
+          <section className="flex w-full flex-col gap-5 mb-[28px]">
             <Input
               label="아이디"
               placeholder="아이디"

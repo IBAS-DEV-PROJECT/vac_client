@@ -16,7 +16,7 @@ export default function DeleteAccount(props: {
       <div className="fixed top-0 z-10 block w-[100%] h-[100%] bg-[#140B0A73]">
         <div className="flex flex-col justify-around items-stretch h-[100%]">
           <center>
-            <div className="w-[280px] h-[300px] rounded-[16px] p-[24px] bg-[#FFFFFF]">
+            <div className="w-[280px] rounded-[16px] p-[24px] bg-[#FFFFFF]">
               <h2 className="text-left text-[16px] text-[#201E1D] font-[700] mb-[14px]">
                 정말 탈퇴하시겠어요?
               </h2>

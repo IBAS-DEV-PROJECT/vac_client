@@ -20,7 +20,7 @@ function Home() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-full w-full items-center justify-center bg-[#E1F5FE]">
+      <div className="flex min-h-dvh w-full items-center justify-center bg-[#E1F5FE]">
         <p className="text-sm text-[#2A1F1C]/55">불러오는 중...</p>
       </div>
     )
@@ -28,7 +28,7 @@ function Home() {
 
   if (error || !data) {
     return (
-      <div className="flex min-h-full w-full items-center justify-center bg-[#E1F5FE]">
+      <div className="flex min-h-dvh w-full items-center justify-center bg-[#E1F5FE]">
         <p className="text-sm text-[#2A1F1C]/55">
           정보를 불러오지 못했어요. 잠시 후 다시 시도해주세요.
         </p>

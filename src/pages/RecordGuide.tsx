@@ -28,12 +28,12 @@ export default function RecordGuide() {
     useState<CategoryValue | null>(null)
 
   return (
-    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px] px-[24px]">
+    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE]">
       <Header title="기록 가이드" onBack={() => navigate(-1)} />
       <Tab items={TAB_ITEMS} value={activeTab} onChange={setActiveTab} />
 
       {activeTab === 'topic' ? (
-        <section className="flex w-full flex-col gap-3">
+        <section className="flex w-full flex-col gap-3 px-6">
           {/*active tab selected*/}
           <h2 className="text-[13px] text-[#2A1F1C]/70 mt-[17px] mb-[5px]">
             고민을 기록할 때 선택하는 주제예요.
@@ -51,7 +51,7 @@ export default function RecordGuide() {
           </div>
         </section>
       ) : (
-        <section className="flex w-full flex-col gap-3 mb-[20px]">
+        <section className="flex w-full flex-col gap-3 px-6 mb-5">
           {/*vlaue tab selected*/}
           <h2 className="text-[13px] text-[#2A1F1C]/70 mt-[17px] mb-[5px]">
             판단의 이유로 고를 수 있는 가치 축이예요.

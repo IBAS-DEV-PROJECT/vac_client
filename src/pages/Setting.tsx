@@ -51,9 +51,9 @@ export default function Setting() {
   }
 
   return (
-    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px]">
+    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE]">
       <Header title="설정" />
-      <div className="grow-1 flex flex-col justify-between px-[28px] pt-[8px]">
+      <div className="grow-1 flex flex-col justify-between px-6 pt-2">
         <div>
           <div className="flex flex-row space-between items-center">
             <section className="inline-block w-[100%] h-[75px] py-[16px] align-middle">
@@ -80,7 +80,7 @@ export default function Setting() {
               <img src={Arrow} alt="" className="w-[6px] h-[8px]" />
             </button>
           </div>
-          <div className="w-[100%] h-[2px] bg-[#3E272338] my-[20px]" />
+          <div className="w-[100%] h-0.5 bg-[#3E272338] my-5" />
           {apiError && (
             <div className="mb-[16px]">
               <ErrorToast message={apiError} />

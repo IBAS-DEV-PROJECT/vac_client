@@ -4,6 +4,7 @@ import { BASE_URL } from '@/utils/env'
 
 export const api = axios.create({
   baseURL: BASE_URL,
+  timeout: 10000,
 })
 
 // 요청마다 access token 주입
@@ -64,7 +65,8 @@ api.interceptors.response.use(
 
       if (!tokenStore.getRefreshToken()) {
         tokenStore.clear()
-        if (window.location.pathname !== '/') window.location.href = '/'
+        if (window.location.pathname !== '/login')
+          window.location.href = '/login'
         return Promise.reject(error)
       }
 
@@ -74,7 +76,8 @@ api.interceptors.response.use(
         return api(original)
       } catch {
         tokenStore.clear()
-        if (window.location.pathname !== '/') window.location.href = '/'
+        if (window.location.pathname !== '/login')
+          window.location.href = '/login'
         return Promise.reject(error)
       }
     }

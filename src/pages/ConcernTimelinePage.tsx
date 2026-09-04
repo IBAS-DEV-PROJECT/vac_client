@@ -43,7 +43,9 @@ function ConcernTimelinePage() {
   const concern = timelineData?.concern ?? state?.concern ?? ''
   const topic = timelineData?.topic ?? state?.topic
   const topicLabel = topic ? TOPIC_LABELS[topic] : ''
-  const records = timelineData?.records ?? []
+  const records = [...(timelineData?.records ?? [])].sort((a, b) =>
+    a.createdAt.localeCompare(b.createdAt),
+  )
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -79,7 +81,7 @@ function ConcernTimelinePage() {
         </div>
       </div>
 
-      <div className="h-px bg-[#3E2723]/15" />
+      <div className="h-px bg-[#3E272338]" />
 
       {/* 타임라인 */}
       {isLoading ? (

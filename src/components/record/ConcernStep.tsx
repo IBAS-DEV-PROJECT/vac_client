@@ -36,6 +36,7 @@ function ConcernStep({ onNext }: ConcernStepProps) {
     concern.trim().length > 0 &&
     !isConcernOver &&
     topic !== null &&
+    !(topic === '기타' && topicOther.trim().length === 0) &&
     !isTopicOtherOver
 
   return (

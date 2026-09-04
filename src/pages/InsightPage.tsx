@@ -67,17 +67,19 @@ function buildFilterSummary(filters: InsightFilters): string {
 }
 
 function deriveInsightCards(data: InsightData) {
-  return data.valueByTopic.map((item) => ({
-    topicKey: item.topic,
-    values: item.valueDistribution
-      .map(({ value, percentage }) => ({
-        key: VALUE_KEY_MAP[value],
-        percent: percentage,
-      }))
-      .filter((v) => v.key)
-      .slice(0, 4),
-    recordCount: item.count,
-  }))
+  return [...data.valueByTopic]
+    .sort((a, b) => b.count - a.count)
+    .map((item) => ({
+      topicKey: item.topic,
+      values: item.valueDistribution
+        .map(({ value, percentage }) => ({
+          key: VALUE_KEY_MAP[value],
+          percent: percentage,
+        }))
+        .filter((v) => v.key)
+        .slice(0, 4),
+      recordCount: item.count,
+    }))
 }
 
 function deriveTrendData(data: InsightData): TrendDataPoint[] {
@@ -144,11 +146,8 @@ function InsightPage() {
   const [insightData, setInsightData] = useState<InsightData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isError, setIsError] = useState(false)
-  const [summaryData, setSummaryData] = useState<InsightData | null>(null)
-  const [isSummaryLoading, setIsSummaryLoading] = useState(true)
   const [retryCount, setRetryCount] = useState(0)
 
-  // 주제별 가치 인사이트 + 가치변화추이: 전체 필터 적용
   useEffect(() => {
     fetchInsight(appliedFilters)
       .then(setInsightData)
@@ -156,27 +155,8 @@ function InsightPage() {
       .finally(() => setIsLoading(false))
   }, [appliedFilters, retryCount])
 
-  // 한눈에 보는 인사이트: 기간 필터만 적용
-  const periodOnlyFilters = useMemo<InsightFilters>(
-    () => ({
-      period: appliedFilters.period,
-      dateRange: appliedFilters.dateRange,
-      topics: ['전체'],
-      values: ['all'],
-    }),
-    [appliedFilters.period, appliedFilters.dateRange],
-  )
-
-  useEffect(() => {
-    fetchInsight(periodOnlyFilters)
-      .then(setSummaryData)
-      .catch(() => setIsError(true))
-      .finally(() => setIsSummaryLoading(false))
-  }, [periodOnlyFilters, retryCount])
-
   const handleRetry = () => {
     setIsLoading(true)
-    setIsSummaryLoading(true)
     setIsError(false)
     setRetryCount((c) => c + 1)
   }
@@ -184,12 +164,6 @@ function InsightPage() {
   const handleApplyFilters = (f: InsightFilters) => {
     setIsLoading(true)
     setIsError(false)
-    const periodChanged =
-      f.period !== appliedFilters.period ||
-      f.dateRange?.start.getTime() !==
-        appliedFilters.dateRange?.start.getTime() ||
-      f.dateRange?.end.getTime() !== appliedFilters.dateRange?.end.getTime()
-    if (periodChanged) setIsSummaryLoading(true)
     setAppliedFilters({ ...f, topics: [...f.topics], values: [...f.values] })
     setIsFilterOpen(false)
   }
@@ -221,13 +195,12 @@ function InsightPage() {
   const trendMaxIncrease = derived?.trendMaxIncrease ?? null
   const trendMaxDecrease = derived?.trendMaxDecrease ?? null
 
-  // 한눈에 보는 인사이트는 기간 필터만 적용된 summaryData 사용
-  const topTopicLabel = summaryData?.insight.mostTopic[0]
-    ? TOPIC_LABELS[summaryData.insight.mostTopic[0]]
-    : null
-  const topValueKey = summaryData?.insight.mostValue[0]
-    ? VALUE_KEY_MAP[summaryData.insight.mostValue[0]]
-    : null
+  const topTopicLabels = (insightData?.insight.mostTopic ?? []).map(
+    (t) => TOPIC_LABELS[t],
+  )
+  const topValueKeys = (insightData?.insight.mostValue ?? [])
+    .map((v) => VALUE_KEY_MAP[v])
+    .filter((k): k is ValueKey => !!k)
 
   const filteredTrendKeys = appliedFilters.values.includes('all')
     ? trendKeys
@@ -237,13 +210,16 @@ function InsightPage() {
 
   const hasTopicData = insightCards.length > 0
   const hasTrendData =
-    trendData.length > 0 && !!trendMaxIncrease && !!trendMaxDecrease
-  const hasInsightData = !!topTopicLabel && !!topValueKey
+    (insightData?.totalCount ?? 0) >= 2 &&
+    trendData.length > 0 &&
+    !!trendMaxIncrease &&
+    !!trendMaxDecrease
+  const hasInsightData = topTopicLabels.length > 0 && topValueKeys.length > 0
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
-  if (isLoading || isSummaryLoading) {
+  if (isLoading) {
     return (
-      <div className="flex min-h-full items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center">
         <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
       </div>
     )
@@ -251,7 +227,7 @@ function InsightPage() {
 
   if (isError) {
     return (
-      <div className="flex min-h-full flex-col items-center justify-center gap-2">
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-2">
         <p className="text-sm text-[#2A1F1C]/60">데이터를 불러오지 못했어요.</p>
         <button
           type="button"
@@ -265,7 +241,7 @@ function InsightPage() {
   }
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       {/* 페이지 헤더 */}
       <div className="px-5 pb-5 pt-8">
         <h1 className="text-2xl font-bold text-[#2A1F1C]">인사이트</h1>
@@ -355,7 +331,7 @@ function InsightPage() {
                         {...card}
                         onRecordClick={() => {
                           const f = {
-                            ...DEFAULT_FILTERS,
+                            ...appliedFilters,
                             topics: [card.topicKey],
                           }
                           navigate('/insight/records', {
@@ -422,8 +398,8 @@ function InsightPage() {
           <section>
             {hasInsightData ? (
               <InsightCard
-                topTopicLabel={topTopicLabel!}
-                topValueKey={topValueKey!}
+                topTopicLabels={topTopicLabels}
+                topValueKeys={topValueKeys}
               />
             ) : (
               <InsightSectionEmpty
