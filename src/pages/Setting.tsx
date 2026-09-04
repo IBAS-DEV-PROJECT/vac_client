@@ -51,7 +51,7 @@ export default function Setting() {
   }
 
   return (
-    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px]">
+    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE]">
       <Header title="설정" />
       <div className="grow-1 flex flex-col justify-between px-[28px] pt-[8px]">
         <div>
