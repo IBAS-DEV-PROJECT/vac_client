@@ -239,7 +239,10 @@ function InsightPage() {
 
   const hasTopicData = insightCards.length > 0
   const hasTrendData =
-    trendData.length > 0 && !!trendMaxIncrease && !!trendMaxDecrease
+    (insightData?.totalCount ?? 0) >= 2 &&
+    trendData.length > 0 &&
+    !!trendMaxIncrease &&
+    !!trendMaxDecrease
   const hasInsightData = !!topTopicLabel && !!topValueKey
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
