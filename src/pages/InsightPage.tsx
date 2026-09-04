@@ -67,17 +67,19 @@ function buildFilterSummary(filters: InsightFilters): string {
 }
 
 function deriveInsightCards(data: InsightData) {
-  return data.valueByTopic.map((item) => ({
-    topicKey: item.topic,
-    values: item.valueDistribution
-      .map(({ value, percentage }) => ({
-        key: VALUE_KEY_MAP[value],
-        percent: percentage,
-      }))
-      .filter((v) => v.key)
-      .slice(0, 4),
-    recordCount: item.count,
-  }))
+  return [...data.valueByTopic]
+    .sort((a, b) => b.count - a.count)
+    .map((item) => ({
+      topicKey: item.topic,
+      values: item.valueDistribution
+        .map(({ value, percentage }) => ({
+          key: VALUE_KEY_MAP[value],
+          percent: percentage,
+        }))
+        .filter((v) => v.key)
+        .slice(0, 4),
+      recordCount: item.count,
+    }))
 }
 
 function deriveTrendData(data: InsightData): TrendDataPoint[] {
