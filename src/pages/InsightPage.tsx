@@ -195,12 +195,12 @@ function InsightPage() {
   const trendMaxIncrease = derived?.trendMaxIncrease ?? null
   const trendMaxDecrease = derived?.trendMaxDecrease ?? null
 
-  const topTopicLabel = insightData?.insight.mostTopic[0]
-    ? TOPIC_LABELS[insightData.insight.mostTopic[0]]
-    : null
-  const topValueKey = insightData?.insight.mostValue[0]
-    ? VALUE_KEY_MAP[insightData.insight.mostValue[0]]
-    : null
+  const topTopicLabels = (insightData?.insight.mostTopic ?? []).map(
+    (t) => TOPIC_LABELS[t],
+  )
+  const topValueKeys = (insightData?.insight.mostValue ?? [])
+    .map((v) => VALUE_KEY_MAP[v])
+    .filter((k): k is ValueKey => !!k)
 
   const filteredTrendKeys = appliedFilters.values.includes('all')
     ? trendKeys
@@ -214,7 +214,7 @@ function InsightPage() {
     trendData.length > 0 &&
     !!trendMaxIncrease &&
     !!trendMaxDecrease
-  const hasInsightData = !!topTopicLabel && !!topValueKey
+  const hasInsightData = topTopicLabels.length > 0 && topValueKeys.length > 0
   const hasAllEmpty = !hasTopicData && !hasTrendData && !hasInsightData
 
   if (isLoading) {
@@ -398,8 +398,8 @@ function InsightPage() {
           <section>
             {hasInsightData ? (
               <InsightCard
-                topTopicLabel={topTopicLabel!}
-                topValueKey={topValueKey!}
+                topTopicLabels={topTopicLabels}
+                topValueKeys={topValueKeys}
               />
             ) : (
               <InsightSectionEmpty

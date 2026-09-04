@@ -1,14 +1,34 @@
 import { VALUE_COLORS, VALUE_LABELS, type ValueKey } from '@/constants/insights'
-import { eul } from '@/utils/korean'
+import { eul, wa } from '@/utils/korean'
 
 interface InsightCardProps {
-  topTopicLabel: string
-  topValueKey: ValueKey
+  topTopicLabels: string[]
+  topValueKeys: ValueKey[]
 }
 
-function InsightCard({ topTopicLabel, topValueKey }: InsightCardProps) {
-  const topValueLabel = VALUE_LABELS[topValueKey]
-  const topValueColor = VALUE_COLORS[topValueKey]
+function joinLabels(
+  labels: string[],
+  colorFn?: (label: string) => string,
+): React.ReactNode {
+  return labels.map((label, i) => (
+    <span key={label}>
+      <span
+        className="font-bold"
+        style={colorFn ? { color: colorFn(label) } : { color: '#2A1F1C' }}
+      >
+        '{label}'
+      </span>
+      {i < labels.length - 1 && `${wa(label)} `}
+    </span>
+  ))
+}
+
+function InsightCard({ topTopicLabels, topValueKeys }: InsightCardProps) {
+  const isTopicTied = topTopicLabels.length > 1
+  const isValueTied = topValueKeys.length > 1
+
+  const topValueLabels = topValueKeys.map((k) => VALUE_LABELS[k])
+  const primaryValueColor = VALUE_COLORS[topValueKeys[0]]
 
   return (
     <div className="mx-5 mb-5 rounded-2xl bg-white p-4 shadow-sm">
@@ -36,9 +56,15 @@ function InsightCard({ topTopicLabel, topValueKey }: InsightCardProps) {
             <path d="M21 13v2a4 4 0 0 1-4 4H3" />
           </svg>
           <p className="text-[13px] leading-snug text-gray-600">
-            가장 많이 고민한 주제는{' '}
-            <span className="font-bold text-[#2A1F1C]">'{topTopicLabel}'</span>
-            였어요.
+            가장 많이 고민한 주제는 {joinLabels(topTopicLabels)}
+            {isTopicTied ? (
+              <>
+                이었어요.{' '}
+                <span className="font-bold text-[#2A1F1C]">(동률)</span>
+              </>
+            ) : (
+              '였어요.'
+            )}
           </p>
         </div>
 
@@ -48,7 +74,7 @@ function InsightCard({ topTopicLabel, topValueKey }: InsightCardProps) {
             height="20"
             viewBox="0 0 24 24"
             fill="none"
-            stroke={topValueColor}
+            stroke={primaryValueColor}
             strokeWidth="1.8"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -56,14 +82,39 @@ function InsightCard({ topTopicLabel, topValueKey }: InsightCardProps) {
             aria-hidden="true"
           >
             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" />
-            <circle cx="12" cy="9" r="2.5" fill={topValueColor} stroke="none" />
+            <circle
+              cx="12"
+              cy="9"
+              r="2.5"
+              fill={primaryValueColor}
+              stroke="none"
+            />
           </svg>
           <p className="text-[13px] leading-snug text-gray-600">
-            그 고민의 대부분에서{' '}
-            <span className="font-bold" style={{ color: topValueColor }}>
-              '{topValueLabel}'
-            </span>
-            {eul(topValueLabel)} 가장 중요한 기준으로 선택했어요.
+            {isValueTied ? (
+              <>
+                그 고민들에서{' '}
+                {joinLabels(
+                  topValueLabels,
+                  (label) =>
+                    VALUE_COLORS[topValueKeys[topValueLabels.indexOf(label)]],
+                )}
+                {eul(topValueLabels[topValueLabels.length - 1])} 가장 중요한
+                기준으로 동일한 비율로 선택했어요.{' '}
+                <span className="font-bold text-[#2A1F1C]">(동률)</span>
+              </>
+            ) : (
+              <>
+                그 고민의 대부분에서{' '}
+                <span
+                  className="font-bold"
+                  style={{ color: primaryValueColor }}
+                >
+                  '{topValueLabels[0]}'
+                </span>
+                {eul(topValueLabels[0])} 가장 중요한 기준으로 선택했어요.
+              </>
+            )}
           </p>
         </div>
       </div>
