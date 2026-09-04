@@ -13,7 +13,7 @@ import {
   validatePasswordConfirm,
   validateUserId,
 } from '@/utils/validation'
-import { checkId, signup, getAuthErrorMessage } from '@/services/auth'
+import { checkId, signup, login, getAuthErrorMessage } from '@/services/auth'
 
 type DuplicateCheckResult = 'available' | 'unavailable' | null
 
@@ -98,6 +98,7 @@ export default function Register() {
     setIsSubmitting(true)
     try {
       await signup({ id: userId, nickname, password, passwordConfirm })
+      await login({ id: userId, password })
       navigate('/onboarding', { replace: true })
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
