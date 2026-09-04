@@ -94,7 +94,7 @@ function RecordPage() {
   const handleBack = () => {
     if (step > 1) {
       setStep(step - 1)
-    } else if (isContinue && activeConcern) {
+    } else if (isContinue && selectedConcern) {
       setSelectedConcern(null)
       setSearchParams({ tab: 'continue' }, { replace: true })
     } else {
