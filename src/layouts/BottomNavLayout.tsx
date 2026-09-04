@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import BottomNav, {
   type NavValue,
@@ -21,19 +21,15 @@ function BottomNavLayout({ pages, defaultTab = 'home' }: BottomNavLayoutProps) {
   const initialTab = isNavValue(tabParam) ? tabParam : defaultTab
 
   const [activeTab, setActiveTab] = useState<NavValue>(initialTab)
-  const mainRef = useRef<HTMLElement>(null)
-
   const handleTabChange = (tab: NavValue) => {
     setActiveTab(tab)
-    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   return (
-    <div className="flex h-dvh flex-col">
-      <main ref={mainRef} className="flex-1 overflow-y-auto">
-        {pages[activeTab]}
-      </main>
-      <div className="bg-white px-4 pb-4 pt-2">
+    <div>
+      <main className="pb-24">{pages[activeTab]}</main>
+      <div className="fixed bottom-0 left-0 right-0 px-4 pb-4 pt-2">
         <BottomNav value={activeTab} onChange={handleTabChange} />
       </div>
     </div>
