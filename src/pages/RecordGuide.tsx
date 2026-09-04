@@ -33,7 +33,7 @@ export default function RecordGuide() {
       <Tab items={TAB_ITEMS} value={activeTab} onChange={setActiveTab} />
 
       {activeTab === 'topic' ? (
-        <section className="flex w-full flex-col gap-3">
+        <section className="flex w-full flex-col gap-3 px-6">
           {/*active tab selected*/}
           <h2 className="text-[13px] text-[#2A1F1C]/70 mt-[17px] mb-[5px]">
             고민을 기록할 때 선택하는 주제예요.
@@ -51,7 +51,7 @@ export default function RecordGuide() {
           </div>
         </section>
       ) : (
-        <section className="flex w-full flex-col gap-3 mb-[20px]">
+        <section className="flex w-full flex-col gap-3 px-6 mb-5">
           {/*vlaue tab selected*/}
           <h2 className="text-[13px] text-[#2A1F1C]/70 mt-[17px] mb-[5px]">
             판단의 이유로 고를 수 있는 가치 축이예요.
