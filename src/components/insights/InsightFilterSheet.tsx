@@ -191,7 +191,7 @@ function InsightFilterSheet({
                       <path d="M2 7h12" />
                       <path d="M5 1v4M11 1v4" />
                     </svg>
-                    직접 선택
+                    캘린더
                   </button>
                 ) : (
                   <FilterButton
