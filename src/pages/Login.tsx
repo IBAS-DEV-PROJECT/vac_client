@@ -68,7 +68,7 @@ export default function Login() {
             />
           </section>
 
-          <Button type="submit" disabled={!id || !password || isSubmitting}>
+          <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? '로그인 중...' : '로그인'}
           </Button>
         </div>
