@@ -98,7 +98,7 @@ export default function Register() {
     setIsSubmitting(true)
     try {
       await signup({ id: userId, nickname, password, passwordConfirm })
-      navigate('/login', { replace: true })
+      navigate('/onboarding', { replace: true })
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
     } finally {
@@ -115,8 +115,8 @@ export default function Register() {
         <Header title="회원가입" onBack={() => navigate(-1)} />
         <div className="grow-1 flex flex-col justify-between px-[28px] py-[48px]">
           <div>
-            <section className="flex w-[344px] flex-col gap-5 mb-[28px]">
-              <section className="flex w-[344px] flex-col gap-3">
+            <section className="flex w-full flex-col gap-5 mb-7">
+              <section className="flex w-full flex-col gap-3">
                 <IdInput
                   placeholder="아이디"
                   value={userId}
