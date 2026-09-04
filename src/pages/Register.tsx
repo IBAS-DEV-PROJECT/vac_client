@@ -110,7 +110,7 @@ export default function Register() {
     <div className="w-[100%] h-[100%]">
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px]"
+        className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE]"
       >
         <Header title="회원가입" onBack={() => navigate(-1)} />
         <div className="grow-1 flex flex-col justify-between px-[28px] py-[48px]">
