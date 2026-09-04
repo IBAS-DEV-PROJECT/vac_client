@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useState, useEffect, type ChangeEvent, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import LayerLogo from '@/assets/LayerLogo.png'
@@ -15,6 +15,12 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [alertMessage, setAlertMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  useEffect(() => {
+    if (!alertMessage) return
+    const timer = setTimeout(() => setAlertMessage(''), 3000)
+    return () => clearTimeout(timer)
+  }, [alertMessage])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
