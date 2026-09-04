@@ -85,6 +85,14 @@ function App() {
         />
         <Route path="/test1" element={<Test1 />} />
         <Route path="/test2" element={<Test2 />} />
+        <Route
+          path="*"
+          element={
+            <ProtectedRoute>
+              <Navigate to="/" replace />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   )
