@@ -81,7 +81,7 @@ function ConcernTimelinePage() {
         </div>
       </div>
 
-      <div className="h-px bg-[#3E2723]/15" />
+      <div className="h-px bg-[#3E272338]" />
 
       {/* 타임라인 */}
       {isLoading ? (

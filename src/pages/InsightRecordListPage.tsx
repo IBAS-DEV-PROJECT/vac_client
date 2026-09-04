@@ -117,7 +117,7 @@ function InsightRecordListPage() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* 헤더 */}
-      <div className="flex items-center gap-3 px-4 py-4 shadow-sm">
+      <div className="flex h-15 items-center gap-3 border-b border-[#3E272338] px-4">
         <button
           type="button"
           onClick={() => navigate(-1)}
