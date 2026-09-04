@@ -80,7 +80,7 @@ export default function Setting() {
               <img src={Arrow} alt="" className="w-[6px] h-[8px]" />
             </button>
           </div>
-          <div className="w-[100%] h-px bg-[#3E272338] my-5" />
+          <div className="w-[100%] h-0.5 bg-[#3E272338] my-5" />
           {apiError && (
             <div className="mb-[16px]">
               <ErrorToast message={apiError} />
