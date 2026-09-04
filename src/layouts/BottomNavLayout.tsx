@@ -33,7 +33,7 @@ function BottomNavLayout({ pages, defaultTab = 'home' }: BottomNavLayoutProps) {
       <main ref={mainRef} className="flex-1 overflow-y-auto">
         {pages[activeTab]}
       </main>
-      <div className="bg-[#E1F5FE] px-4 pb-4 pt-2">
+      <div className="px-4 pb-4 pt-2">
         <BottomNav value={activeTab} onChange={handleTabChange} />
       </div>
     </div>
