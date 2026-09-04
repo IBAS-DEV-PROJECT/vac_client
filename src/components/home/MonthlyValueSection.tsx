@@ -38,11 +38,25 @@ function MonthlyValueSection({
           가치를 가장 많이 선택했어요.
         </p>
         <p className="text-[11px] text-[#2A1F1C]/55">
-          지난달보다 {topValue} 가치 선택이{' '}
-          <span className="font-bold" style={{ color }}>
-            {changeRateVsLastMonth}%
-          </span>{' '}
-          증가했어요!
+          {changeRateVsLastMonth > 0 ? (
+            <>
+              지난달보다 {topValue} 가치 선택이{' '}
+              <span className="font-bold" style={{ color }}>
+                {changeRateVsLastMonth}%
+              </span>{' '}
+              증가했어요!
+            </>
+          ) : changeRateVsLastMonth < 0 ? (
+            <>
+              지난달보다 {topValue} 가치 선택이{' '}
+              <span className="font-bold" style={{ color }}>
+                {Math.abs(changeRateVsLastMonth)}%
+              </span>{' '}
+              감소했어요.
+            </>
+          ) : (
+            <>지난달과 동일해요.</>
+          )}
         </p>
       </div>
     </div>
