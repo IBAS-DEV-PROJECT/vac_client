@@ -13,7 +13,7 @@ import {
   validatePasswordConfirm,
   validateUserId,
 } from '@/utils/validation'
-import { checkId, signup, getAuthErrorMessage } from '@/services/auth'
+import { checkId, signup, login, getAuthErrorMessage } from '@/services/auth'
 
 type DuplicateCheckResult = 'available' | 'unavailable' | null
 
@@ -98,7 +98,14 @@ export default function Register() {
     setIsSubmitting(true)
     try {
       await signup({ id: userId, nickname, password, passwordConfirm })
-      navigate('/login', { replace: true })
+
+      try {
+        const { activateOnboarding } = await login({ id: userId, password })
+        navigate(activateOnboarding ? '/onboarding' : '/', { replace: true })
+      } catch {
+        // 계정은 만들어졌지만 자동 로그인에 실패한 경우, 로그인 화면에서 다시 시도하게 한다.
+        navigate('/login', { replace: true })
+      }
     } catch (err) {
       setApiError(getAuthErrorMessage(err))
     } finally {
