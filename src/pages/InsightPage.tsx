@@ -331,7 +331,7 @@ function InsightPage() {
                         {...card}
                         onRecordClick={() => {
                           const f = {
-                            ...DEFAULT_FILTERS,
+                            ...appliedFilters,
                             topics: [card.topicKey],
                           }
                           navigate('/insight/records', {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
+import Button from '@/components/common/button/Button'
+import insightPlus from '@/assets/insightPlus.svg'
 import {
   TOPIC_LABELS,
   VALUE_KEY_MAP,
@@ -9,7 +11,6 @@ import {
 } from '@/constants/insights'
 import { type InsightFilters } from '@/types/insight'
 import type { TopicRecordItem } from '@/types/api'
-import { formatDate } from '@/utils/date'
 import { getDateRange } from '@/utils/insightFilter'
 import {
   fetchInsightRecords,
@@ -22,30 +23,40 @@ interface ConcernCard {
   concern: string
   topic: TopicKey
   valueKey: ValueKey
-  firstDate: string
+  latestDate: string
+  decision: string
 }
 
 function buildConcernCards(
   results: { topic: TopicKey; records: TopicRecordItem[] }[],
+  valueFilter: (ValueKey | 'all')[],
 ): ConcernCard[] {
   const seen = new Map<string, ConcernCard>()
 
   results.forEach(({ topic, records }) => {
     records.forEach((record) => {
+      if (!valueFilter.includes('all')) {
+        const recordValueKey = VALUE_KEY_MAP[record.value]
+        if (!valueFilter.includes(recordValueKey)) return
+      }
+
       const existing = seen.get(record.concernId)
-      if (!existing || record.recordDate < existing.firstDate) {
+      if (!existing || record.recordDate > existing.latestDate) {
         seen.set(record.concernId, {
           concernId: record.concernId,
           concern: record.concern,
           topic,
           valueKey: VALUE_KEY_MAP[record.value],
-          firstDate: record.recordDate,
+          latestDate: record.recordDate,
+          decision: record.decision,
         })
       }
     })
   })
 
-  return Array.from(seen.values())
+  return Array.from(seen.values()).sort((a, b) =>
+    b.latestDate.localeCompare(a.latestDate),
+  )
 }
 
 function InsightRecordListPage() {
@@ -79,6 +90,7 @@ function InsightRecordListPage() {
       .then((results) => {
         const cards = buildConcernCards(
           results.map((r) => ({ topic: r.topic, records: r.records })),
+          filters.values,
         )
         setConcernCards(cards)
       })
@@ -132,7 +144,6 @@ function InsightRecordListPage() {
         </h1>
       </div>
 
-      {/* 고민 목록 */}
       {isLoading ? (
         <div className="flex flex-1 items-center justify-center">
           <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
@@ -150,6 +161,30 @@ function InsightRecordListPage() {
             다시 시도
           </button>
         </div>
+      ) : concernCards.length === 0 ? (
+        <div className="flex flex-1 flex-col items-center justify-center gap-5 px-5 py-10">
+          <div className="flex flex-col items-center gap-4 text-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+              <img
+                src={insightPlus}
+                alt=""
+                aria-hidden="true"
+                className="h-10 w-10"
+              />
+            </div>
+            <div>
+              <p className="text-[15px] font-bold text-[#2A1F1C]">
+                선택한 조건에 맞는 기록이 아직 없어요
+              </p>
+              <p className="mt-1 text-sm text-[#2A1F1C]/60">
+                기록을 남기고 나만의 인사이트를 확인해보세요.
+              </p>
+            </div>
+            <div className="mt-1 w-48">
+              <Button onClick={() => navigate('/record')}>지금 기록하기</Button>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="mt-2 flex flex-col px-5">
           {concernCards.map((card) => (
@@ -158,7 +193,9 @@ function InsightRecordListPage() {
               valueKey={card.valueKey}
               title={card.concern}
               topic={TOPIC_LABELS[card.topic]}
-              date={formatDate(card.firstDate)}
+              date={card.latestDate}
+              decision={card.decision}
+              variant="insight"
               onClick={() => handleConcernClick(card)}
               className="cursor-pointer"
             />
