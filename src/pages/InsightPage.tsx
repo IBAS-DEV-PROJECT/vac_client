@@ -219,7 +219,7 @@ function InsightPage() {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-full items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center">
         <p className="text-sm text-[#2A1F1C]/50">불러오는 중...</p>
       </div>
     )
@@ -227,7 +227,7 @@ function InsightPage() {
 
   if (isError) {
     return (
-      <div className="flex min-h-full flex-col items-center justify-center gap-2">
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-2">
         <p className="text-sm text-[#2A1F1C]/60">데이터를 불러오지 못했어요.</p>
         <button
           type="button"
@@ -241,7 +241,7 @@ function InsightPage() {
   }
 
   return (
-    <div className="flex min-h-full flex-col">
+    <div className="flex min-h-dvh flex-col">
       {/* 페이지 헤더 */}
       <div className="px-5 pb-5 pt-8">
         <h1 className="text-2xl font-bold text-[#2A1F1C]">인사이트</h1>
