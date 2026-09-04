@@ -28,7 +28,7 @@ export default function RecordGuide() {
     useState<CategoryValue | null>(null)
 
   return (
-    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE] pt-[34px] px-[24px]">
+    <div className="flex flex-col items-stretch min-h-screen bg-[#E1F5FE]">
       <Header title="기록 가이드" onBack={() => navigate(-1)} />
       <Tab items={TAB_ITEMS} value={activeTab} onChange={setActiveTab} />
 
