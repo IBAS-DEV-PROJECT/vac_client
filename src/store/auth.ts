@@ -32,32 +32,6 @@ export const userStore = {
   },
 }
 
-async function devAutoLogin(): Promise<void> {
-  const id = import.meta.env.VITE_DEV_LOGIN_ID
-  const password = import.meta.env.VITE_DEV_LOGIN_PASSWORD
-  if (!id || !password) return
-
-  try {
-    const res = await fetch(`${BASE_URL}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, password }),
-    })
-    if (!res.ok) return
-    const { data } = await res.json()
-    if (
-      typeof data?.accessToken !== 'string' ||
-      typeof data?.refreshToken !== 'string'
-    )
-      return
-    tokenStore.setRefreshToken(data.refreshToken)
-    tokenStore.setAccessToken(data.accessToken)
-  } catch {
-    tokenStore.clear()
-    // 개발 자동 로그인 실패는 무시 — 앱 렌더링에 영향 없음
-  }
-}
-
 export async function initAuth(): Promise<void> {
   const refreshToken = tokenStore.getRefreshToken()
 
@@ -72,15 +46,9 @@ export async function initAuth(): Promise<void> {
       const { data } = await res.json()
       tokenStore.setAccessToken(data.accessToken)
       tokenStore.setRefreshToken(data.refreshToken)
-      return
     } catch {
       tokenStore.clear()
       userStore.set(null)
-      return
     }
-  }
-
-  if (import.meta.env.DEV) {
-    await devAutoLogin()
   }
 }
