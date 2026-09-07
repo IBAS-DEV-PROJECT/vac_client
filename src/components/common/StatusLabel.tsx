@@ -17,7 +17,9 @@ function StatusLabel({ status }: StatusLabelProps) {
           aria-hidden="true"
         />
       )}
-      <span className="text-[11px] font-semibold leading-none text-[#2A1F1C]">
+      <span
+        className={`text-[11px] font-semibold leading-none ${isPending ? 'text-[#2A1F1C]' : 'text-[#2A1F1C]/40'}`}
+      >
         {isPending ? '고민중' : '정리됨'}
       </span>
     </div>
