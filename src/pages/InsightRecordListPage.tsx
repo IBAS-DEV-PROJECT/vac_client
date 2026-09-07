@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
+import StatusLabel from '@/components/common/StatusLabel'
 import Button from '@/components/common/button/Button'
 import insightPlus from '@/assets/insightPlus.svg'
 import {
@@ -190,18 +191,24 @@ function InsightRecordListPage() {
       ) : (
         <div className="mt-2 flex flex-col px-5">
           {concernCards.map((card) => (
-            <RecordItem
+            <div
               key={card.concernId}
-              valueKey={card.valueKey}
-              title={card.concern}
-              topic={TOPIC_LABELS[card.topic]}
-              date={card.latestDate}
-              decision={card.decision}
-              variant="insight"
-              concernStatus={card.concernStatus}
+              className="flex items-center border-b border-[#3E2723]/22"
               onClick={() => handleConcernClick(card)}
-              className="cursor-pointer"
-            />
+            >
+              <StatusLabel status={card.concernStatus} />
+              <RecordItem
+                valueKey={card.valueKey}
+                title={card.concern}
+                topic={TOPIC_LABELS[card.topic]}
+                date={card.latestDate}
+                decision={card.decision}
+                variant="insight"
+                noBorder
+                showValueDot={false}
+                className="flex-1 cursor-pointer pl-4"
+              />
+            </div>
           ))}
         </div>
       )}
