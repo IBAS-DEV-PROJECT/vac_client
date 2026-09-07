@@ -1,5 +1,5 @@
 import { TOPIC_LABELS, type TopicKey } from '@/constants/insights'
-import { formatDate } from '@/utils/date'
+import { formatRelativeDate } from '@/utils/date'
 
 interface ConcernItemProps {
   title: string
@@ -22,7 +22,7 @@ function ConcernItem({
           {title}
         </span>
         <span className="text-[12px] text-[#2A1F1C]/55">
-          {TOPIC_LABELS[topic]} · 마지막 기록이 {formatDate(lastRecordDate)}에요
+          {TOPIC_LABELS[topic]} · {formatRelativeDate(lastRecordDate)}
         </span>
       </div>
       <button

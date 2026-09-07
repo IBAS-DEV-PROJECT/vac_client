@@ -2,6 +2,7 @@ import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import Button from '@/components/common/button/Button'
 import RecordValueButton from '@/components/common/button/RecordValueButton'
 import ConcernStatusToggle from '@/components/record/ConcernStatusToggle'
+import ConcernTitleBadge from '@/components/record/ConcernTitleBadge'
 import { VALUE_LABELS, type ValueKey } from '@/constants/insights'
 import { VALUE_DESCRIPTIONS } from '@/constants/values'
 import { type RecordForm } from '@/types/record'
@@ -14,11 +15,14 @@ interface ValueStepProps {
 
 function ValueStep({ isSubmitting }: ValueStepProps) {
   const { control } = useFormContext<RecordForm>()
+  const concern = useWatch({ control, name: 'concern' })
   const value = useWatch({ control, name: 'value' })
   const concernStatus = useWatch({ control, name: 'concernStatus' })
 
   return (
     <div className="flex flex-col gap-6 px-6 py-6">
+      <ConcernTitleBadge concern={concern} />
+
       <div className="flex flex-col gap-2">
         <p className="text-[13px] text-[#2A1F1C]/70">
           방금 그 이유, 가장 가까운 하나는?
