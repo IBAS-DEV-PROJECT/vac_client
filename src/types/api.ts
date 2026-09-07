@@ -58,6 +58,7 @@ export interface TopicRecordItem {
   concernId: string
   concern: string
   recordDate: string
+  concernStatus: 'PENDING' | 'RESOLVED'
 }
 
 export interface TopicRecordsData {

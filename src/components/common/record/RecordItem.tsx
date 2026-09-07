@@ -19,6 +19,7 @@ interface RecordItemProps extends HTMLAttributes<HTMLDivElement> {
   decision?: string
   /** 사용 위치에 따른 제목 스타일. home: 13px 일반, insight: 16px 굵게 */
   variant?: RecordItemVariant
+  concernStatus?: 'PENDING' | 'RESOLVED'
 }
 
 function RecordItem({
@@ -28,6 +29,7 @@ function RecordItem({
   topic,
   decision,
   variant = 'home',
+  concernStatus,
   className = '',
   ...props
 }: RecordItemProps) {
@@ -38,6 +40,24 @@ function RecordItem({
       {...props}
       className={`flex w-full items-center justify-between gap-3 border-b border-[#3E2723]/22 py-4 ${className}`}
     >
+      {concernStatus && (
+        <div className="flex w-9 shrink-0 flex-col items-center gap-0.5">
+          {concernStatus === 'PENDING' ? (
+            <span
+              className="h-1.5 w-1.5 rounded-full bg-[#2A1F1C]"
+              aria-hidden="true"
+            />
+          ) : (
+            <span
+              className="h-1.5 w-1.5 rounded-full border border-[#2A1F1C]/40"
+              aria-hidden="true"
+            />
+          )}
+          <span className="text-[11px] font-semibold leading-none text-[#2A1F1C]">
+            {concernStatus === 'PENDING' ? '고민중' : '정리됨'}
+          </span>
+        </div>
+      )}
       <div className="flex min-w-0 items-center gap-3">
         <span
           className="h-3 w-3 shrink-0 rounded-full"

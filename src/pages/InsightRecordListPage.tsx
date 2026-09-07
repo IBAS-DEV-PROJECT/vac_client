@@ -25,6 +25,7 @@ interface ConcernCard {
   valueKey: ValueKey
   latestDate: string
   decision: string
+  concernStatus: 'PENDING' | 'RESOLVED'
 }
 
 function buildConcernCards(
@@ -49,6 +50,7 @@ function buildConcernCards(
           valueKey: VALUE_KEY_MAP[record.value],
           latestDate: record.recordDate,
           decision: record.decision,
+          concernStatus: record.concernStatus,
         })
       }
     })
@@ -196,6 +198,7 @@ function InsightRecordListPage() {
               date={card.latestDate}
               decision={card.decision}
               variant="insight"
+              concernStatus={card.concernStatus}
               onClick={() => handleConcernClick(card)}
               className="cursor-pointer"
             />
