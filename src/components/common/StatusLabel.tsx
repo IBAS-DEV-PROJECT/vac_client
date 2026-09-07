@@ -5,7 +5,7 @@ interface StatusLabelProps {
 function StatusLabel({ status }: StatusLabelProps) {
   const isPending = status === 'PENDING'
   return (
-    <div className="flex w-9 shrink-0 flex-col items-center gap-0.5">
+    <div className="flex shrink-0 items-center gap-1">
       {isPending ? (
         <span
           className="h-1.5 w-1.5 rounded-full bg-[#2A1F1C]"
