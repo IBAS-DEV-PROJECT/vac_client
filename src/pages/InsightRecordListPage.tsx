@@ -202,7 +202,6 @@ function InsightRecordListPage() {
                 title={card.concern}
                 topic={TOPIC_LABELS[card.topic]}
                 date={card.latestDate}
-                decision={card.decision}
                 variant="insight"
                 noBorder
                 showValueDot={false}
