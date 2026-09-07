@@ -9,6 +9,7 @@ import {
 import type { ConcernTimelineData } from '@/types/api'
 import { formatDate } from '@/utils/date'
 import { fetchConcernTimeline } from '@/services/insight'
+import StatusLabel from '@/components/common/StatusLabel'
 
 function ConcernTimelinePage() {
   const navigate = useNavigate()
@@ -79,6 +80,11 @@ function ConcernTimelinePage() {
             {topicLabel} · 기록 {timelineData?.recordCount ?? 0}건
           </p>
         </div>
+        {timelineData?.concernStatus && (
+          <div className="ml-auto">
+            <StatusLabel status={timelineData.concernStatus} />
+          </div>
+        )}
       </div>
 
       <div className="h-px bg-[#3E272338]" />

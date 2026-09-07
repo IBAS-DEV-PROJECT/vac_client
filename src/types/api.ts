@@ -80,6 +80,7 @@ export interface ConcernTimelineData {
   concern: string
   topic: TopicKey
   records: TimelineRecordItem[]
+  concernStatus: 'PENDING' | 'RESOLVED'
   recordCount: number
 }
 
