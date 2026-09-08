@@ -191,9 +191,10 @@ function InsightRecordListPage() {
       ) : (
         <div className="mt-2 flex flex-col px-5">
           {concernCards.map((card) => (
-            <div
+            <button
               key={card.concernId}
-              className="flex items-center border-b border-[#3E2723]/22"
+              type="button"
+              className="flex w-full items-center border-b border-[#3E2723]/22 text-left"
               onClick={() => handleConcernClick(card)}
             >
               <StatusLabel status={card.concernStatus} />
@@ -205,9 +206,9 @@ function InsightRecordListPage() {
                 variant="insight"
                 noBorder
                 showValueDot={false}
-                className="flex-1 cursor-pointer pl-4"
+                className="flex-1 pl-4"
               />
-            </div>
+            </button>
           ))}
         </div>
       )}
