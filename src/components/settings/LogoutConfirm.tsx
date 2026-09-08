@@ -62,10 +62,7 @@ export default function LogoutConfirm({
   if (!isVisible) return null
 
   return (
-    <div
-      className="fixed inset-0 z-10 flex items-center justify-center bg-[#140B0A73]"
-      aria-hidden="true"
-    >
+    <div className="fixed inset-0 z-10 flex items-center justify-center bg-[#140B0A73]">
       <div
         ref={dialogRef}
         role="dialog"
