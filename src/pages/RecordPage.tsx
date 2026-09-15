@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FormProvider, useForm, useWatch } from 'react-hook-form'
 import Header from '@/components/common/header/Header'
 import Tab from '@/components/common/tab/Tab'
 import ConcernStep from '@/components/record/ConcernStep'
@@ -54,6 +54,8 @@ function RecordPage() {
     mode: 'onChange',
   })
 
+  const formConcern = useWatch({ control: methods.control, name: 'concern' })
+
   const isContinue = tab === 'continue'
 
   const {
@@ -94,7 +96,7 @@ function RecordPage() {
   const handleBack = () => {
     if (step > 1) {
       setStep(step - 1)
-    } else if (isContinue && selectedConcern) {
+    } else if (isContinue && activeConcern) {
       setSelectedConcern(null)
       setSearchParams({ tab: 'continue' }, { replace: true })
     } else {
@@ -165,7 +167,12 @@ function RecordPage() {
                 <>
                   {step === 1 && <ConcernStep onNext={() => setStep(2)} />}
                   {step === 2 && <JudgmentStep onNext={() => setStep(3)} />}
-                  {step === 3 && <ValueStep isSubmitting={isSubmitting} />}
+                  {step === 3 && (
+                    <ValueStep
+                      concern={formConcern}
+                      isSubmitting={isSubmitting}
+                    />
+                  )}
                 </>
               ) : activeConcern === null ? (
                 <ContinueListStep
@@ -185,7 +192,12 @@ function RecordPage() {
                       onNext={() => setStep(2)}
                     />
                   )}
-                  {step === 2 && <ValueStep isSubmitting={isSubmitting} />}
+                  {step === 2 && (
+                    <ValueStep
+                      concern={activeConcern.concern}
+                      isSubmitting={isSubmitting}
+                    />
+                  )}
                 </>
               )}
 
