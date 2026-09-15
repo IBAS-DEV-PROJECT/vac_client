@@ -10,12 +10,12 @@ import { type RecordForm } from '@/types/record'
 const VALUE_KEYS = Object.keys(VALUE_LABELS) as ValueKey[]
 
 interface ValueStepProps {
+  concern: string
   isSubmitting: boolean
 }
 
-function ValueStep({ isSubmitting }: ValueStepProps) {
+function ValueStep({ concern, isSubmitting }: ValueStepProps) {
   const { control } = useFormContext<RecordForm>()
-  const concern = useWatch({ control, name: 'concern' })
   const value = useWatch({ control, name: 'value' })
   const concernStatus = useWatch({ control, name: 'concernStatus' })
 
