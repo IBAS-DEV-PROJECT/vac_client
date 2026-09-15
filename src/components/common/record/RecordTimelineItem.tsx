@@ -12,10 +12,11 @@ function RecordTimelineItem({
   valueKey,
   title,
   date,
+  className = '',
   ...props
 }: RecordTimelineItemProps) {
   return (
-    <div {...props} className="flex w-full gap-3 py-3">
+    <div {...props} className={`flex w-full min-w-0 gap-3 py-3 ${className}`}>
       {/* 점 + 연결선 */}
       <div className="flex flex-col items-center self-stretch">
         <span
@@ -27,9 +28,9 @@ function RecordTimelineItem({
       </div>
 
       {/* 날짜 + 제목 + 뱃지 */}
-      <div className="flex min-w-0 flex-col items-start gap-1.5">
+      <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5">
         <span className="text-[11px] text-[#2A1F1C]/55">{date}</span>
-        <span className="truncate text-sm font-bold text-[#201E1D]">
+        <span className="w-full truncate text-sm font-bold text-[#201E1D]">
           {title}
         </span>
         <ValueBadge valueKey={valueKey} />
