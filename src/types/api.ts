@@ -58,6 +58,7 @@ export interface TopicRecordItem {
   concernId: string
   concern: string
   recordDate: string
+  concernStatus: 'PENDING' | 'RESOLVED'
 }
 
 export interface TopicRecordsData {
@@ -79,6 +80,7 @@ export interface ConcernTimelineData {
   concern: string
   topic: TopicKey
   records: TimelineRecordItem[]
+  concernStatus: 'PENDING' | 'RESOLVED'
   recordCount: number
 }
 

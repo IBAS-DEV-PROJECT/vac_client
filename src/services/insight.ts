@@ -39,6 +39,9 @@ export async function fetchInsight(
       .map((v) => VALUE_LABELS[v as ValueKey])
       .join(',')
   }
+  if (filters.status !== '전체') {
+    params.status = filters.status
+  }
 
   const { data } = await api.get<{ success: true; data: InsightData }>(
     '/insights',

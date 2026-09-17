@@ -4,7 +4,6 @@ import insightPlus from '@/assets/insightPlus.svg'
 import insightEmpty from '@/assets/insightEmpty.png'
 import valueEmpty from '@/assets/valueEmpty.png'
 import topicEmpty from '@/assets/topicEmpty.svg'
-import pencil from '@/assets/pencil.png'
 import Button from '@/components/common/button/Button'
 import Divider from '@/components/common/Divider'
 import InsightFilterSheet from '@/components/insights/InsightFilterSheet'
@@ -412,26 +411,6 @@ function InsightPage() {
               />
             )}
           </section>
-
-          {/* 하단 CTA */}
-          <div className="mx-5 mt-6">
-            <button
-              type="button"
-              onClick={() => navigate('/record')}
-              className="flex w-full items-center justify-center gap-2 rounded-[9px] bg-[#3E2723] px-5 py-4 text-white"
-            >
-              <img
-                src={pencil}
-                alt=""
-                aria-hidden="true"
-                className="w-4 h-4 object-contain"
-              />
-              <span className="text-[16px] font-extrabold">
-                지금 기록해서 인사이트 만들기
-              </span>
-              <span className="text-base">›</span>
-            </button>
-          </div>
         </div>
       )}
 

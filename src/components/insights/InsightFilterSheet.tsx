@@ -13,6 +13,7 @@ import {
   DEFAULT_FILTERS,
   type InsightFilters,
   type PeriodOption,
+  type StatusOption,
   type TopicOption,
 } from '@/types/insight'
 
@@ -28,6 +29,12 @@ const VALUE_OPTIONS = (Object.keys(VALUE_LABELS) as ValueKey[]).map((key) => ({
   key,
   label: VALUE_LABELS[key],
 }))
+
+const STATUS_OPTIONS: { key: StatusOption; label: string }[] = [
+  { key: '전체', label: '전체' },
+  { key: 'PENDING', label: '고민 중' },
+  { key: 'RESOLVED', label: '정리됨' },
+]
 
 interface InsightFilterSheetProps {
   onClose: () => void
@@ -97,6 +104,10 @@ function InsightFilterSheet({
         : [...filtered, value]
       return { ...prev, values: newValues }
     })
+  }
+
+  const handleStatusSelect = (status: StatusOption) => {
+    setPending((prev) => ({ ...prev, status }))
   }
 
   const handleReset = () => setPending(cloneFilters(DEFAULT_FILTERS))
@@ -240,6 +251,21 @@ function InsightFilterSheet({
                     pending.values.includes(key)
                   }
                   onClick={() => handleValueToggle(key)}
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* 상태 */}
+          <section className="flex flex-col gap-2">
+            <span className="text-xs font-medium text-gray-500">상태</span>
+            <div className="flex flex-wrap gap-2">
+              {STATUS_OPTIONS.map(({ key, label }) => (
+                <FilterButton
+                  key={key}
+                  label={label}
+                  isActive={pending.status === key}
+                  onClick={() => handleStatusSelect(key)}
                 />
               ))}
             </div>

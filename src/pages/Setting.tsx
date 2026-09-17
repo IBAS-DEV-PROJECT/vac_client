@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import Header from '@/components/common/header/Header'
 import DeleteAccount from '@/components/settings/DeleteAccount'
 import DeleteAccountAlert from '@/components/settings/DeleteAccountAlert'
+import LogoutConfirm from '@/components/settings/LogoutConfirm'
 import ErrorToast from '@/components/auth/ErrorToast'
 
 import Archive from '@/assets/Archive.png'
@@ -13,6 +14,7 @@ import { logout, deleteAccount, getAuthErrorMessage } from '@/services/auth'
 export default function Setting() {
   const navigate = useNavigate()
 
+  const [logoutConfirmShow, setLogoutConfirmShow] = useState(false)
   const [deleteAccountShow, setDeleteAccountShow] = useState(false)
   const [deleteAccountAlertShow, setDeleteAccountAlertShow] = useState(false)
   const [apiError, setApiError] = useState('')
@@ -87,7 +89,7 @@ export default function Setting() {
             </div>
           )}
           <button
-            onClick={handleLogout}
+            onClick={() => setLogoutConfirmShow(true)}
             className="w-[100%] h-[55px] text-[14px] text-left font-[400] text-[#201E1D] border-b-[1px] border-[#3E272338]"
           >
             로그아웃
@@ -106,6 +108,11 @@ export default function Setting() {
           </p>
         </center>
       </div>
+      <LogoutConfirm
+        isVisible={logoutConfirmShow}
+        onCancel={() => setLogoutConfirmShow(false)}
+        onConfirm={handleLogout}
+      />
       {/* Account Delete tab */}
       <DeleteAccount
         isVisible={deleteAccountShow}

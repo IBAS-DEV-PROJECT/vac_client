@@ -19,6 +19,10 @@ interface RecordItemProps extends HTMLAttributes<HTMLDivElement> {
   decision?: string
   /** 사용 위치에 따른 제목 스타일. home: 13px 일반, insight: 16px 굵게 */
   variant?: RecordItemVariant
+  /** true면 border-b 미적용. 외부 래퍼에서 border를 직접 줄 때 사용 */
+  noBorder?: boolean
+  /** false면 가치 색상 원 미노출 */
+  showValueDot?: boolean
 }
 
 function RecordItem({
@@ -28,6 +32,8 @@ function RecordItem({
   topic,
   decision,
   variant = 'home',
+  noBorder = false,
+  showValueDot = true,
   className = '',
   ...props
 }: RecordItemProps) {
@@ -36,14 +42,16 @@ function RecordItem({
   return (
     <div
       {...props}
-      className={`flex w-full items-center justify-between gap-3 border-b border-[#3E2723]/22 py-4 ${className}`}
+      className={`flex w-full items-center justify-between gap-3 py-4 ${noBorder ? '' : 'border-b border-[#3E2723]/22'} ${className}`}
     >
       <div className="flex min-w-0 items-center gap-3">
-        <span
-          className="h-3 w-3 shrink-0 rounded-full"
-          style={{ backgroundColor: `var(--color-${valueKey})` }}
-          aria-hidden="true"
-        />
+        {showValueDot && (
+          <span
+            className="h-3 w-3 shrink-0 rounded-full"
+            style={{ backgroundColor: `var(--color-${valueKey})` }}
+            aria-hidden="true"
+          />
+        )}
 
         <div className="flex min-w-0 flex-col gap-0.5">
           <span className={`truncate text-[#201E1D] ${TITLE_STYLE[variant]}`}>

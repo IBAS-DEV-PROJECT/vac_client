@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import RecordItem from '@/components/common/record/RecordItem'
+import StatusLabel from '@/components/common/StatusLabel'
 import Button from '@/components/common/button/Button'
 import insightPlus from '@/assets/insightPlus.svg'
 import {
@@ -25,6 +26,7 @@ interface ConcernCard {
   valueKey: ValueKey
   latestDate: string
   decision: string
+  concernStatus: 'PENDING' | 'RESOLVED'
 }
 
 function buildConcernCards(
@@ -49,6 +51,7 @@ function buildConcernCards(
           valueKey: VALUE_KEY_MAP[record.value],
           latestDate: record.recordDate,
           decision: record.decision,
+          concernStatus: record.concernStatus,
         })
       }
     })
@@ -188,17 +191,24 @@ function InsightRecordListPage() {
       ) : (
         <div className="mt-2 flex flex-col px-5">
           {concernCards.map((card) => (
-            <RecordItem
+            <button
               key={card.concernId}
-              valueKey={card.valueKey}
-              title={card.concern}
-              topic={TOPIC_LABELS[card.topic]}
-              date={card.latestDate}
-              decision={card.decision}
-              variant="insight"
+              type="button"
+              className="flex w-full items-center border-b border-[#3E2723]/22 text-left"
               onClick={() => handleConcernClick(card)}
-              className="cursor-pointer"
-            />
+            >
+              <StatusLabel status={card.concernStatus} />
+              <RecordItem
+                valueKey={card.valueKey}
+                title={card.concern}
+                topic={TOPIC_LABELS[card.topic]}
+                date={card.latestDate}
+                variant="insight"
+                noBorder
+                showValueDot={false}
+                className="flex-1 pl-4"
+              />
+            </button>
           ))}
         </div>
       )}
